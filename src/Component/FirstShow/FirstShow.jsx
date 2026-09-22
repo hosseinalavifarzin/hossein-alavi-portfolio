@@ -1,9 +1,10 @@
 import { useEffect, useState } from 'react';
 import { FaLinkedin } from 'react-icons/fa';
 import { HiOutlineMail, HiArrowDown } from 'react-icons/hi';
+import hosseinImg from '../../asset/img/hossein.jpeg';
 
 // Design illustration - UX/UI Designer
-const designImg = "https://img.freepik.com/free-vector/gradient-ui-ux-background_23-2149052117.jpg";
+const designImg = "Users\citynet\Desktop\portfolio\hossein-alavi-portfolio\src\asset\img\hossein.jpeg";
 
 const ROLES = ['Product Designer', 'UI/UX Designer', 'Mobile App Designer', 'Dashboard Expert'];
 
@@ -73,9 +74,9 @@ function FirstShow() {
                         </div>
 
                         <p className="text-theme-secondary text-base sm:text-lg max-w-xl mx-auto lg:mx-0 mb-8 sm:mb-10 leading-relaxed px-2 sm:px-0">
-                            A passionate <span className="text-primary-500 font-medium">Product Designer</span> with 
-                            over 5 years of experience making apps, websites, and dashboards simple and easy to use. 
-                            Specialized in <span className="text-accent-cyan">UI/UX Design</span> & <span className="text-accent-purple">User Experience</span>.
+                        A passionate <span className="text-primary-500 font-medium">Product Designer</span> who transforms
+                        complex ideas into clear, useful, and intuitive digital products.
+                        Specialized in <span className="text-accent-cyan">UI/UX Design</span> & <span className="text-accent-purple">User-Centered Product Design</span>.
                         </p>
 
                         <div className="flex flex-col sm:flex-row gap-4 justify-center lg:justify-start mb-10">
@@ -116,10 +117,10 @@ function FirstShow() {
                             <div className="relative w-48 h-48 xs:w-56 xs:h-56 sm:w-72 sm:h-72 md:w-80 md:h-80 lg:w-96 lg:h-96 rounded-full overflow-hidden gradient-border mx-auto">
                                 <div className="absolute inset-1 rounded-full overflow-hidden bg-theme-secondary">
                                     <img 
-                                        src={designImg} 
-                                        alt="Product Designer" 
-                                        className="w-full h-full object-cover"
-                                    />
+                                        src={hosseinImg} 
+                                        alt="Hossein Alavi" 
+                                        className="w-full h-full object-cover object-top scale-125"
+                                        />
                                 </div>
                             </div>
 
@@ -128,6 +129,13 @@ function FirstShow() {
                                 <span className="text-xl sm:text-2xl">🎨</span>
                                 <span className="text-xs sm:text-sm text-theme-secondary ml-1 sm:ml-2">UI/UX</span>
                             </div>
+                            <div className="hidden md:block absolute bottom-6 right-0 px-4 py-2 glass rounded-xl animate-float" style={{ animationDelay: '3s' }}>
+                                <span className="text-2xl">🧩</span>
+                                <span className="text-sm text-theme-secondary ml-2">
+                                 Product Design
+                                </span>
+                            </div>
+                            
                             <div className="hidden sm:block absolute top-6 sm:top-10 -right-2 sm:-right-4 px-3 py-1.5 sm:px-4 sm:py-2 glass rounded-xl animate-float" style={{animationDelay: '1s'}}>
                                 <span className="text-xl sm:text-2xl">📱</span>
                                 <span className="text-xs sm:text-sm text-theme-secondary ml-1 sm:ml-2">Mobile</span>

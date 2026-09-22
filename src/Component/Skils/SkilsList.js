@@ -1,127 +1,124 @@
+import figmaImg from '../../asset/img/Figma.png';
+import productDesignImg from '../../asset/img/ProductDesign.png';
+import designSystemsImg from '../../asset/img/DesignSystems.png';
+import prototypingImg from '../../asset/img/prototyping.png';
+import userFlowImg from '../../asset/img/userflow.png';
+
+import htmlImg from '../../asset/img/html5.png';
+import cssImg from '../../asset/img/css.png';
+import jsImg from '../../asset/img/js.jpeg';
+import tailwindImg from '../../asset/img/tail.png';
+import nextImg from '../../asset/img/next.png';
+import pythonImg from '../../asset/img/Python.png';
+
+import gitImg from '../../asset/img/git.png';
+import googleAnalyticsImg from '../../asset/img/googleanalytics.png';
+import clarityImg from '../../asset/img/clarity.png';
+import hotjarImg from '../../asset/img/hotjar.png';
+
 const skilList = [
-    // Design Skills
+    // Product Design
     {
-        title: "UI/UX Design",
-        url: "https://cdn-icons-png.flaticon.com/512/1055/1055687.png",
-        category: "design",
-        level: 95,
-        years: 5
+        title: 'Product Design',
+        url: productDesignImg,
+        category: ['design'],
+        level: 'Expert',
     },
     {
-        title: "Product Design",
-        url: "https://cdn-icons-png.flaticon.com/512/2897/2897785.png",
-        category: "design",
-        level: 95,
-        years: 5
+        title: 'Figma',
+        url: figmaImg,
+        category: ['design', 'tools'],
+        level: 'Expert',
     },
     {
-        title: "Mobile Design",
-        url: "https://cdn-icons-png.flaticon.com/512/2586/2586488.png",
-        category: "design",
-        level: 90,
-        years: 5
+        title: 'Adobe XD',
+        url: null,
+        shortLabel: 'XD',
+        category: ['design', 'tools'],
+        level: 'Advanced',
     },
     {
-        title: "Web Design",
-        url: "https://cdn-icons-png.flaticon.com/512/1006/1006363.png",
-        category: "design",
-        level: 92,
-        years: 5
+        title: 'Design Systems',
+        url: designSystemsImg,
+        category: ['design'],
+        level: 'Advanced',
     },
     {
-        title: "Interaction Design",
-        url: "https://cdn-icons-png.flaticon.com/512/3062/3062634.png",
-        category: "design",
-        level: 88,
-        years: 4
+        title: 'Prototyping',
+        url: prototypingImg,
+        category: ['design'],
+        level: 'Advanced',
     },
     {
-        title: "Prototyping",
-        url: "https://cdn-icons-png.flaticon.com/512/2621/2621303.png",
-        category: "design",
-        level: 92,
-        years: 5
+        title: 'User Flows',
+        url: userFlowImg,
+        category: ['design'],
+        level: 'Advanced',
+    },
+
+    // Development
+    {
+        title: 'HTML',
+        url: htmlImg,
+        category: ['development'],
+        level: 'Mid-Level',
     },
     {
-        title: "Wireframing",
-        url: "https://cdn-icons-png.flaticon.com/512/4727/4727496.png",
-        category: "design",
-        level: 90,
-        years: 5
+        title: 'CSS',
+        url: cssImg,
+        category: ['development'],
+        level: 'Mid-Level',
     },
     {
-        title: "User Research",
-        url: "https://cdn-icons-png.flaticon.com/512/3281/3281289.png",
-        category: "design",
-        level: 85,
-        years: 4
+        title: 'JavaScript',
+        url: jsImg,
+        category: ['development'],
+        level: 'Mid-Level',
     },
     {
-        title: "User Flow",
-        url: "https://cdn-icons-png.flaticon.com/512/2799/2799954.png",
-        category: "design",
-        level: 90,
-        years: 5
+        title: 'Tailwind CSS',
+        url: tailwindImg,
+        category: ['development'],
+        level: 'Mid-Level',
     },
+    {
+        title: 'Python',
+        url: pythonImg,
+        category: ['development'],
+        level: 'Mid-Level',
+    },
+    {
+        title: 'Next.js',
+        url: nextImg,
+        category: ['development'],
+        level: 'Familiar',
+    },
+
     // Tools
     {
-        title: "Figma",
-        url: "https://cdn.jsdelivr.net/gh/devicons/devicon/icons/figma/figma-original.svg",
-        category: "tools",
-        level: 95,
-        years: 5
+        title: 'Git',
+        url: gitImg,
+        category: ['tools'],
+        level: 'Mid-Level',
     },
     {
-        title: "Adobe XD",
-        url: "https://cdn.jsdelivr.net/gh/devicons/devicon/icons/xd/xd-plain.svg",
-        category: "tools",
-        level: 88,
-        years: 4
+        title: 'Google Analytics',
+        url: googleAnalyticsImg,
+        category: ['tools'],
+        level: 'Familiar',
     },
     {
-        title: "Photoshop",
-        url: "https://cdn.jsdelivr.net/gh/devicons/devicon/icons/photoshop/photoshop-plain.svg",
-        category: "tools",
-        level: 85,
-        years: 5
+        title: 'Microsoft Clarity',
+        url: clarityImg,
+        category: ['tools'],
+        level: 'Familiar',
     },
     {
-        title: "Illustrator",
-        url: "https://cdn.jsdelivr.net/gh/devicons/devicon/icons/illustrator/illustrator-plain.svg",
-        category: "tools",
-        level: 80,
-        years: 4
+        title: 'Hotjar',
+        url: hotjarImg,
+        category: ['tools'],
+        level: 'Familiar',
     },
-    {
-        title: "Jira",
-        url: "https://cdn.jsdelivr.net/gh/devicons/devicon/icons/jira/jira-original.svg",
-        category: "tools",
-        level: 85,
-        years: 4
-    },
-    {
-        title: "Hotjar",
-        url: "https://cdn-icons-png.flaticon.com/512/5969/5969059.png",
-        category: "tools",
-        level: 80,
-        years: 3
-    },
-    // Frontend (Basic)
-    {
-        title: "HTML",
-        url: "https://cdn.jsdelivr.net/gh/devicons/devicon/icons/html5/html5-original.svg",
-        category: "frontend",
-        level: 60,
-        years: 2
-    },
-    {
-        title: "CSS",
-        url: "https://cdn.jsdelivr.net/gh/devicons/devicon/icons/css3/css3-original.svg",
-        category: "frontend",
-        level: 55,
-        years: 2
-    },
-]
+];
 
-export default skilList
-
+export default skilList;
