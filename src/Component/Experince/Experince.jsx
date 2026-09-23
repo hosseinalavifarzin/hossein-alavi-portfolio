@@ -1,5 +1,4 @@
 import { useEffect, useRef, useState } from 'react';
-import { Link } from 'react-router-dom';
 
 import {
     HiLocationMarker,
@@ -19,16 +18,22 @@ const ExperienceCard = ({
 }) => {
     const isEven = index % 2 === 0;
 
+
     return (
         <div className="relative sm:pl-16 md:pl-0">
 
             {!isLast && (
+
                 <div className="hidden sm:block absolute left-6 md:left-1/2 top-16 bottom-0 w-0.5 bg-gradient-to-b from-primary-500 via-accent-cyan to-primary-500/30 md:-translate-x-1/2"></div>
+
             )}
+
 
             <div
                 className={`flex flex-col md:flex-row items-start md:items-center gap-4 sm:gap-8 ${
-                    isEven ? 'md:flex-row' : 'md:flex-row-reverse'
+                    isEven
+                        ? 'md:flex-row'
+                        : 'md:flex-row-reverse'
                 }`}
             >
 
@@ -37,7 +42,9 @@ const ExperienceCard = ({
 
                     <div
                         className={`relative transition-all duration-700 ${
-                            isVisible ? 'scale-100' : 'scale-0'
+                            isVisible
+                                ? 'scale-100'
+                                : 'scale-0'
                         }`}
                         style={{
                             transitionDelay: `${index * 150}ms`
@@ -45,6 +52,7 @@ const ExperienceCard = ({
                     >
 
                         <div className="absolute -inset-2 bg-gradient-to-r from-primary-500 to-accent-cyan rounded-full opacity-30 blur-md animate-pulse"></div>
+
 
                         <div className="relative w-12 h-12 rounded-full bg-theme-card border-4 border-primary-500 flex items-center justify-center shadow-glow-green">
 
@@ -75,43 +83,39 @@ const ExperienceCard = ({
 
                     <div className="glass rounded-xl sm:rounded-2xl p-5 sm:p-6 hover:bg-primary-500/5 transition-all duration-300 group relative overflow-hidden">
 
-                        {/* Side Accent */}
+                        {/* Accent */}
                         <div
                             className={`absolute top-0 ${
-                                isEven ? 'right-0' : 'left-0'
+                                isEven
+                                    ? 'right-0'
+                                    : 'left-0'
                             } w-1 h-full bg-gradient-to-b from-primary-500 via-accent-cyan to-accent-purple`}
                         ></div>
 
 
-                        {/* Duration */}
+                        {/* Date */}
                         <div className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-primary-500/10 border border-primary-500/20 mb-4">
 
                             <HiCalendar className="text-primary-500" />
 
                             <span className="text-xs sm:text-sm font-medium text-primary-500">
+
                                 {experience.date}
+
                             </span>
 
                         </div>
 
 
                         {/* Company */}
-                        <h3 className="text-lg sm:text-xl font-bold text-theme-primary mb-1 group-hover:text-primary-500 transition-colors">
+                        <h3 className="text-lg sm:text-xl font-bold text-theme-primary mb-3 group-hover:text-primary-500 transition-colors">
 
                             {experience.company}
 
                         </h3>
 
 
-                        {/* Project */}
-                        <p className="text-sm sm:text-base font-medium text-accent-cyan mb-4">
-
-                            {experience.projectTitle}
-
-                        </p>
-
-
-                        {/* Role / Location */}
+                        {/* Position and Location */}
                         <div
                             className={`flex items-center gap-2 sm:gap-3 mb-4 text-xs sm:text-sm text-theme-secondary flex-wrap ${
                                 isEven
@@ -128,6 +132,7 @@ const ExperienceCard = ({
 
 
                             {experience.location && (
+
                                 <div className="flex items-center gap-1">
 
                                     <HiLocationMarker className="text-accent-purple" />
@@ -137,6 +142,7 @@ const ExperienceCard = ({
                                     </span>
 
                                 </div>
+
                             )}
 
                         </div>
@@ -158,7 +164,7 @@ const ExperienceCard = ({
 
                         {/* Skills */}
                         <div
-                            className={`flex flex-wrap gap-2 mb-6 ${
+                            className={`flex flex-wrap gap-2 ${
                                 isEven
                                     ? 'md:justify-end'
                                     : 'md:justify-start'
@@ -166,34 +172,19 @@ const ExperienceCard = ({
                         >
 
                             {experience.skills.map((skill) => (
+
                                 <span
                                     key={skill}
-                                    className="px-2 sm:px-3 py-1 text-[10px] sm:text-xs font-medium rounded-lg bg-black/5 dark:bg-white/5 text-theme-secondary border border-black/10 dark:border-white/10 hover:border-primary-500/50 hover:text-primary-500 transition-colors"
+                                    className="px-2 sm:px-3 py-1 text-[10px] sm:text-xs font-medium rounded-lg bg-black/5 dark:bg-white/5 text-theme-secondary border border-black/10 dark:border-white/10"
                                 >
 
                                     {skill}
 
                                 </span>
+
                             ))}
 
                         </div>
-
-
-                        {/* Case Study Button */}
-                        <Link
-                            to={`/projects/${experience.id}`}
-                            className={`inline-flex items-center gap-2 text-xs sm:text-sm font-semibold text-primary-500 hover:text-primary-400 transition-colors group/link ${
-                                isEven ? 'md:flex-row-reverse' : ''
-                            }`}
-                        >
-
-                            <span>
-                                View Case Study
-                            </span>
-
-                            <HiArrowRight className="transition-transform duration-300 group-hover/link:translate-x-1" />
-
-                        </Link>
 
                     </div>
 
@@ -216,11 +207,14 @@ function Experience() {
 
 
     useEffect(() => {
+
         const observer = new IntersectionObserver(
             ([entry]) => {
+
                 if (entry.isIntersecting) {
                     setIsVisible(true);
                 }
+
             },
             {
                 threshold: 0.1
@@ -272,7 +266,7 @@ function Experience() {
 
                     <span className="inline-block px-4 py-2 rounded-full glass-light text-primary-500 text-xs sm:text-sm font-medium mb-4">
 
-                        Selected Work & Experience
+                        Work Experience
 
                     </span>
 
@@ -280,11 +274,11 @@ function Experience() {
                     <h2 className="section-title">
 
                         <span className="text-theme-primary">
-                            Products I've Helped{' '}
+                            My Professional{' '}
                         </span>
 
                         <span className="gradient-text">
-                            Shape
+                            Journey
                         </span>
 
                     </h2>
@@ -292,22 +286,22 @@ function Experience() {
 
                     <p className="section-subtitle px-2 sm:px-0">
 
-                        A selection of products I've worked on across B2B
-                        platforms, travel, logistics, insurance, booking,
-                        and internal operations.
+                        Product design experience across tourism,
+                        logistics, booking, insurance, B2B products,
+                        and internal operational tools.
 
                     </p>
 
                 </div>
 
 
-                {/* Timeline */}
+                {/* Experience Timeline */}
                 <div className="relative space-y-12 sm:space-y-16 md:space-y-24 overflow-hidden">
 
                     {exList.map((experience, index) => (
 
                         <ExperienceCard
-                            key={experience.id}
+                            key={`${experience.company}-${index}`}
                             experience={experience}
                             index={index}
                             isVisible={isVisible}
@@ -340,16 +334,19 @@ function Experience() {
 
                         </div>
 
+
                         <span className="text-primary-500 font-medium text-sm sm:text-base mb-2">
 
-                            Still Building
+                            Present Day
 
                         </span>
 
+
                         <p className="text-theme-secondary max-w-lg text-sm sm:text-base px-4 sm:px-0">
 
-                            I continue to work on complex digital products
-                            and improve the way I approach product problems.
+                            Currently working on complex digital products
+                            and continuously improving how I approach
+                            product problems.
 
                         </p>
 
@@ -358,18 +355,12 @@ function Experience() {
 
                     <div className="mt-10">
 
-                        <p className="text-theme-muted text-sm sm:text-base mb-4">
-
-                            Interested in working together?
-
-                        </p>
-
                         <a
-                            href="#contact"
+                            href="#projects"
                             className="btn-primary inline-flex items-center gap-2"
                         >
 
-                            Let's Connect
+                            Explore Selected Projects
 
                             <HiArrowRight />
 
