@@ -1,3 +1,4 @@
+import projectImages from '../../data/projectImages';
 const exList = [
     {
         id: "tourism-b2b",
