@@ -296,7 +296,7 @@ function Experience() {
 
 
                 {/* Experience Timeline */}
-                <div className="relative space-y-12 sm:space-y-16 md:space-y-24 overflow-hidden">
+                <div className="relative space-y-12 sm:space-y-16 md:space-y-24 overflow-hidden py-6 ">
 
                     {exList.map((experience, index) => (
 
