@@ -1,5 +1,5 @@
 @import url('https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,100..1000;1,9..40,100..1000&family=JetBrains+Mono:ital,wght@0,100..800;1,100..800&family=Outfit:wght@100..900&family=Vazirmatn:wght@100..900&display=swap');
-
+@import url('https://fonts.googleapis.com/css2?family=Vazirmatn:wght@300;400;500;600;700;800&display=swap');
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
@@ -234,3 +234,27 @@ code {
 [dir="rtl"] { font-family: 'Vazirmatn', 'DM Sans', sans-serif; }
 [dir="rtl"] h1, [dir="rtl"] h2, [dir="rtl"] h3, [dir="rtl"] h4, [dir="rtl"] h5, [dir="rtl"] h6 { font-family: 'Vazirmatn', 'Outfit', sans-serif; }
 [dir="rtl"] .font-mono { font-family: 'Vazirmatn', 'JetBrains Mono', monospace; }
+
+/* =========================================
+   Persian Typography
+========================================= */
+
+html[lang='fa'],
+html[lang='fa'] body {
+    font-family: 'Vazirmatn', sans-serif;
+}
+
+
+/* Elements that use the custom heading font */
+html[lang='fa'] .font-heading {
+    font-family: 'Vazirmatn', sans-serif !important;
+}
+
+
+/* Form elements */
+html[lang='fa'] button,
+html[lang='fa'] input,
+html[lang='fa'] textarea,
+html[lang='fa'] select {
+    font-family: 'Vazirmatn', sans-serif;
+}

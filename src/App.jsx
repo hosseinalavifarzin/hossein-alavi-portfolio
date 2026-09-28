@@ -7,38 +7,49 @@ import {
 } from 'react-router-dom';
 
 import Home from './page/Home/Home';
-
 import ProjectDetails from './page/ProjectDetails/ProjectDetails';
 
 import {
     ThemeProvider
 } from './context/ThemeContext';
 
+import {
+    LanguageProvider
+} from './context/LanguageContext';
+
 
 function App() {
+
     return (
+
         <ThemeProvider>
 
-            <BrowserRouter>
+            <LanguageProvider>
 
-                <Routes>
+                <BrowserRouter>
 
-                    <Route
-                        path="/"
-                        element={<Home />}
-                    />
+                    <Routes>
 
-                    <Route
-                        path="/projects/:projectId"
-                        element={<ProjectDetails />}
-                    />
+                        <Route
+                            path="/"
+                            element={<Home />}
+                        />
 
-                </Routes>
+                        <Route
+                            path="/projects/:projectId"
+                            element={<ProjectDetails />}
+                        />
 
-            </BrowserRouter>
+                    </Routes>
+
+                </BrowserRouter>
+
+            </LanguageProvider>
 
         </ThemeProvider>
+
     );
+
 }
 
 

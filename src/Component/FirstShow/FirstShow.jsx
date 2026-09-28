@@ -88,7 +88,7 @@ function FirstShow() {
                                 Get In Touch
                             </a>
                             <a 
-                                href="#experience" 
+                                href="#projects" 
                                 className="btn-outline flex items-center justify-center gap-2"
                             >
                                 View My Work
