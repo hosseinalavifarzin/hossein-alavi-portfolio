@@ -1,0 +1,15 @@
+{
+  "short_name": "Hossein.",
+  "name": "Hossein Alavi | Product Designer",
+  "icons": [
+    {
+      "src": "favicon.svg",
+      "sizes": "any",
+      "type": "image/svg+xml"
+    }
+  ],
+  "start_url": ".",
+  "display": "standalone",
+  "theme_color": "#11111b",
+  "background_color": "#11111b"
+}
