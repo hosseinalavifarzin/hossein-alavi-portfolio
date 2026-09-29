@@ -1,7 +1,7 @@
 {
   "files": {
-    "main.css": "/hossein-alavi-portfolio/static/css/main.26a3d0a7.css",
-    "main.js": "/hossein-alavi-portfolio/static/js/main.c6a17236.js",
+    "main.css": "/hossein-alavi-portfolio/static/css/main.4480ca42.css",
+    "main.js": "/hossein-alavi-portfolio/static/js/main.3684496c.js",
     "static/media/darzi4.png": "/hossein-alavi-portfolio/static/media/darzi4.bb286ef938dd895763c5.png",
     "static/media/tipax1.png": "/hossein-alavi-portfolio/static/media/tipax1.b9bd20dc206dfe23587b.png",
     "static/media/darzi1.png": "/hossein-alavi-portfolio/static/media/darzi1.001bd0ac0f0002c9bf31.png",
@@ -44,11 +44,11 @@
     "static/media/prototyping.png": "/hossein-alavi-portfolio/static/media/prototyping.b1583fb2f10afa30e3e9.png",
     "static/media/hotjar.png": "/hossein-alavi-portfolio/static/media/hotjar.1d9a9997093cb0f102b2.png",
     "index.html": "/hossein-alavi-portfolio/index.html",
-    "main.26a3d0a7.css.map": "/hossein-alavi-portfolio/static/css/main.26a3d0a7.css.map",
-    "main.c6a17236.js.map": "/hossein-alavi-portfolio/static/js/main.c6a17236.js.map"
+    "main.4480ca42.css.map": "/hossein-alavi-portfolio/static/css/main.4480ca42.css.map",
+    "main.3684496c.js.map": "/hossein-alavi-portfolio/static/js/main.3684496c.js.map"
   },
   "entrypoints": [
-    "static/css/main.26a3d0a7.css",
-    "static/js/main.c6a17236.js"
+    "static/css/main.4480ca42.css",
+    "static/js/main.3684496c.js"
   ]
 }
