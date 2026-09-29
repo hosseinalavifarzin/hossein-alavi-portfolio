@@ -1,128 +1,159 @@
 const exList = [
+
+    // =========================================================
+    // CITYNET
+    // =========================================================
     {
-        company: "Tourism B2B Platform",
+        date: "Present",
+
+        company: "Citynet",
 
         position: "Product Designer",
 
-        location: "Remote",
-
-        date: "Ongoing",
-
-        skills: [
-            "B2B Product Design",
-            "Platform Redesign",
-            "Product Flows",
-            "Mentoring"
-        ],
+        location: "On-site",
 
         description:
-            "Leading the redesign of a core B2B platform used by agencies and partners to sell tourism services. Improving key product flows and usability while contributing to additional internal products and mentoring a junior designer."
+            "Redesigning the core foundation of Citynet's travel-tech ecosystem, including B2B travel sales products, admin and management systems, reporting tools, and internal products. I also created the design system and shared product structure to keep experiences consistent across the ecosystem.",
+
+        skills: [
+            "Product Design",
+            "B2B",
+            "Travel Tech",
+            "Design System",
+            "Admin Systems",
+            "Reporting",
+            "Internal Tools"
+        ]
     },
 
 
+    // =========================================================
+    // TIPAX
+    // =========================================================
     {
+        date: "1 Year",
+
         company: "Tosan Techno / Tipax",
 
         position: "Product Designer",
 
         location: "Remote",
 
-        date: "Ongoing",
+        description:
+            "Designed a complex internal logistics product for Tipax, focusing on operational workflows, information hierarchy, reusable interaction patterns, and making dense logistics processes easier to understand and manage.",
 
         skills: [
+            "Product Design",
             "Logistics",
             "Internal Tools",
-            "Operational Workflows",
-            "Product Collaboration"
-        ],
-
-        description:
-            "Designed a logistics management product for internal operational teams. Focused on simplifying complex workflows and collaborated remotely with product and development teams throughout design and implementation."
+            "Operational UX",
+            "Complex Systems",
+            "UX Design"
+        ]
     },
 
 
+    // =========================================================
+    // 3 CLICK
+    // =========================================================
     {
+        date: "1.5 Years",
+
         company: "3 Click Group",
 
         position: "Product Designer",
 
         location: "Tehran, Iran",
 
-        date: "1.5 Years",
+        description:
+            "Worked across the redesign of the travel website, booking experiences, CMS, booking panel, and design system. The goal was to create a more consistent product ecosystem while improving both customer-facing and internal experiences.",
 
         skills: [
+            "Product Design",
+            "Travel",
             "Booking",
             "CMS",
-            "Product Design",
-            "Design System"
-        ],
-
-        description:
-            "Redesigned the company's digital experience, designed an internal CMS and booking products for teams and partner agencies, and created a design system to improve consistency across products."
+            "Design System",
+            "UX/UI"
+        ]
     },
 
 
+    // =========================================================
+    // TOPTOURS
+    // =========================================================
     {
+        date: "1.3 Years",
+
         company: "Toptours",
 
         position: "Product Designer",
 
         location: "Tehran, Iran",
 
-        date: "1.3 Years",
-
-        skills: [
-            "B2B Product",
-            "Ticketing",
-            "White-Label",
-            "Design System"
-        ],
-
         description:
-            "Designed a B2B ticketing product supporting booking, cancellation, tracking, and daily operations. Also designed a white-label structure for different business clients and contributed to the product design system."
-    },
-
-
-    {
-        company: "Freelance",
-
-        position: "Freelance Product Designer",
-
-        location: "Remote",
-
-        date: "2 Years",
+            "Designed B2B travel products for ticket sales and daily agency operations, including booking, cancellation, tracking, and operational workflows. I also worked on white-label products and a shared design system.",
 
         skills: [
             "Product Design",
-            "Web",
-            "Mobile",
-            "Dashboards"
-        ],
-
-        description:
-            "Designed websites, mobile applications, and dashboards for startups, working from early requirements through product flows, interface design, responsive experiences, and developer handoff."
+            "B2B",
+            "Travel Tech",
+            "Booking Systems",
+            "White-label",
+            "Design System"
+        ]
     },
 
 
+    // =========================================================
+    // CHATR PASARGAD
+    // =========================================================
     {
-        company: "Chatr Pasargad Co.",
+        date: "1 Year",
+
+        company: "Chatr Pasargad",
 
         position: "Product Designer",
 
         location: "Remote",
 
-        date: "1 Year",
+        description:
+            "Designed a mobile product for insurance agents, focusing on making insurance-related workflows clearer, more accessible, and easier to manage through a mobile experience.",
 
         skills: [
-            "Mobile Product",
+            "Product Design",
+            "Mobile App",
             "Insurance",
-            "Product Flows",
-            "Developer Collaboration"
-        ],
+            "UX Design",
+            "UI Design"
+        ]
+    },
+
+
+    // =========================================================
+    // FREELANCE
+    // =========================================================
+    {
+        date: "2 Years",
+
+        company: "Freelance",
+
+        position: "UI/UX & Product Designer",
+
+        location: "Remote",
 
         description:
-            "Designed a mobile product for Pasargad Insurance agents, helping users access insurance information, track payments, and use essential services through clearer mobile workflows."
+            "Worked on web and mobile product design projects, collaborating with different clients to turn product requirements and ideas into clear, usable digital experiences.",
+
+        skills: [
+            "Product Design",
+            "UI/UX",
+            "Web Design",
+            "Mobile Design",
+            "Prototyping"
+        ]
     }
+
 ];
 
 

@@ -1,11 +1,7 @@
 import './App.css';
 
-import {
-    BrowserRouter,
-    Routes,
-    Route
-} from 'react-router-dom';
-
+//import {BrowserRouter,Routes,Route} from 'react-router-dom';
+import { HashRouter, Routes, Route } from 'react-router-dom';
 import Home from './page/Home/Home';
 import ProjectDetails from './page/ProjectDetails/ProjectDetails';
 
@@ -26,7 +22,7 @@ function App() {
 
             <LanguageProvider>
 
-                <BrowserRouter>
+                <HashRouter>
 
                     <Routes>
 
@@ -42,7 +38,7 @@ function App() {
 
                     </Routes>
 
-                </BrowserRouter>
+                </HashRouter>
 
             </LanguageProvider>
 
