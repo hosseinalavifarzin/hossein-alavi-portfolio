@@ -114,6 +114,7 @@ function Projects() {
                             <Link
                                 key={project.id}
                                 to={`/projects/${project.id}`}
+                                aria-label={`View ${project.title} product design case study`}
                                 className={`group block transition-all duration-700 ${
                                     isVisible
                                         ? 'opacity-100 translate-y-0'
@@ -133,7 +134,7 @@ function Projects() {
 
                                             <img
                                                 src={coverImage}
-                                                alt={project.title}
+                                                alt={`${project.title} product design case study`}
                                                 className="w-full h-full object-contain rounded-xl transition-transform duration-500 group-hover:scale-[1.02]"
                                             />
 

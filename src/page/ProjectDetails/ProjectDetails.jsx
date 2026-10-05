@@ -68,6 +68,303 @@ function ProjectDetails() {
 
 
 
+    useEffect(() => {
+
+        if (!project) {
+
+            return undefined;
+
+        }
+
+
+
+        const seoTitle =
+
+            project.seoTitle ||
+
+            `${project.title} | Product Design Case Study | Hossein Alavi`;
+
+
+
+        const seoDescription =
+
+            project.seoDescription ||
+
+            project.description ||
+
+            'Product design case study by Hossein Alavi.';
+
+
+
+        const previousTitle = document.title;
+
+
+
+        const metaDescription = document.querySelector(
+
+            'meta[name="description"]'
+
+        );
+
+
+
+        const ogTitle = document.querySelector(
+
+            'meta[property="og:title"]'
+
+        );
+
+
+
+        const ogDescription = document.querySelector(
+
+            'meta[property="og:description"]'
+
+        );
+
+
+
+        const twitterTitle = document.querySelector(
+
+            'meta[name="twitter:title"]'
+
+        );
+
+
+
+        const twitterDescription = document.querySelector(
+
+            'meta[name="twitter:description"]'
+
+        );
+
+
+
+        const previousDescription =
+
+            metaDescription?.getAttribute('content');
+
+
+
+        const previousOgTitle =
+
+            ogTitle?.getAttribute('content');
+
+
+
+        const previousOgDescription =
+
+            ogDescription?.getAttribute('content');
+
+
+
+        const previousTwitterTitle =
+
+            twitterTitle?.getAttribute('content');
+
+
+
+        const previousTwitterDescription =
+
+            twitterDescription?.getAttribute('content');
+
+
+
+        document.title = seoTitle;
+
+
+
+        if (metaDescription) {
+
+            metaDescription.setAttribute(
+
+                'content',
+
+                seoDescription
+
+            );
+
+        }
+
+
+
+        if (ogTitle) {
+
+            ogTitle.setAttribute(
+
+                'content',
+
+                seoTitle
+
+            );
+
+        }
+
+
+
+        if (ogDescription) {
+
+            ogDescription.setAttribute(
+
+                'content',
+
+                seoDescription
+
+            );
+
+        }
+
+
+
+        if (twitterTitle) {
+
+            twitterTitle.setAttribute(
+
+                'content',
+
+                seoTitle
+
+            );
+
+        }
+
+
+
+        if (twitterDescription) {
+
+            twitterDescription.setAttribute(
+
+                'content',
+
+                seoDescription
+
+            );
+
+        }
+
+
+
+        return () => {
+
+            document.title = previousTitle;
+
+
+
+            if (
+
+                metaDescription &&
+
+                previousDescription !== null &&
+
+                previousDescription !== undefined
+
+            ) {
+
+                metaDescription.setAttribute(
+
+                    'content',
+
+                    previousDescription
+
+                );
+
+            }
+
+
+
+            if (
+
+                ogTitle &&
+
+                previousOgTitle !== null &&
+
+                previousOgTitle !== undefined
+
+            ) {
+
+                ogTitle.setAttribute(
+
+                    'content',
+
+                    previousOgTitle
+
+                );
+
+            }
+
+
+
+            if (
+
+                ogDescription &&
+
+                previousOgDescription !== null &&
+
+                previousOgDescription !== undefined
+
+            ) {
+
+                ogDescription.setAttribute(
+
+                    'content',
+
+                    previousOgDescription
+
+                );
+
+            }
+
+
+
+            if (
+
+                twitterTitle &&
+
+                previousTwitterTitle !== null &&
+
+                previousTwitterTitle !== undefined
+
+            ) {
+
+                twitterTitle.setAttribute(
+
+                    'content',
+
+                    previousTwitterTitle
+
+                );
+
+            }
+
+
+
+            if (
+
+                twitterDescription &&
+
+                previousTwitterDescription !== null &&
+
+                previousTwitterDescription !== undefined
+
+            ) {
+
+                twitterDescription.setAttribute(
+
+                    'content',
+
+                    previousTwitterDescription
+
+                );
+
+            }
+
+        };
+
+    }, [project]);
+
+
+
+
 
 
     useEffect(() => {
