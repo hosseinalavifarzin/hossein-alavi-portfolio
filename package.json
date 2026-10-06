@@ -20,6 +20,7 @@
   },
   "scripts": {
     "start": "react-scripts start",
+    "prebuild": "node scripts/generate-blog-data.js",
     "build": "react-scripts build",
     "postbuild": "node scripts/generate-static-routes.js",
     "test": "react-scripts test",

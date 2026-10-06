@@ -28,14 +28,6 @@ show_preview_links: false
 
 # =========================================================
 # MEDIA
-#
-# Uploaded images:
-#
-# Repository:
-# public/blog/media/
-#
-# Website:
-# /blog/media/
 # =========================================================
 
 media_folder: "public/blog/media"
@@ -45,14 +37,6 @@ public_folder: "/blog/media"
 
 # =========================================================
 # IMAGE PROCESSING
-#
-# Images uploaded from CMS will:
-#
-# - Convert to WebP
-# - Resize to max width 1800px
-# - Keep original aspect ratio
-# - Compress
-# - Remove metadata
 # =========================================================
 
 media_processing:
@@ -72,7 +56,7 @@ media_processing:
 
 
 # =========================================================
-# SLUG SETTINGS
+# SLUG
 # =========================================================
 
 slug:
@@ -86,10 +70,6 @@ slug:
 # =========================================================
 
 collections:
-
-  # =======================================================
-  # BLOG ARTICLES
-  # =======================================================
 
   - name: "articles"
 
@@ -111,15 +91,11 @@ collections:
 
     slug: "{{fields.slug}}"
 
-    summary: "{{fields.fa.title}}"
+    summary: "{{fields.slug}}"
 
     editor:
       preview: false
 
-
-    # =====================================================
-    # ARTICLE FIELDS
-    # =====================================================
 
     fields:
 
@@ -138,27 +114,6 @@ collections:
         pattern:
           - "^[a-z0-9]+(?:-[a-z0-9]+)*$"
           - "Use lowercase English letters, numbers and hyphens only."
-
-
-      # ===================================================
-      # STATUS
-      # ===================================================
-
-      - label: "Status"
-
-        name: "status"
-
-        widget: "select"
-
-        default: "draft"
-
-        options:
-
-          - label: "Draft"
-            value: "draft"
-
-          - label: "Published"
-            value: "published"
 
 
       # ===================================================
@@ -224,7 +179,7 @@ collections:
 
         format: "YYYY-MM-DD"
 
-        hint: "Only set this when the article is actually published."
+        hint: "Set the real publication date. Leave empty until the article is actually published."
 
 
       # ===================================================
@@ -241,7 +196,7 @@ collections:
 
 
       # ===================================================
-      # COVER IMAGE
+      # COVER
       # ===================================================
 
       - label: "Cover Image"
@@ -254,7 +209,7 @@ collections:
 
         choose_url: false
 
-        hint: "Used on the Blog card, article header and social sharing."
+        hint: "Used for the Blog card, article hero and social sharing."
 
         media_library:
 
@@ -266,7 +221,7 @@ collections:
 
 
       # ===================================================
-      # PERSIAN VERSION
+      # PERSIAN
       # ===================================================
 
       - label: "Persian Version"
@@ -280,10 +235,6 @@ collections:
 
         fields:
 
-          # -------------------------------------------------
-          # ENABLE
-          # -------------------------------------------------
-
           - label: "Enable Persian"
 
             name: "enabled"
@@ -293,42 +244,6 @@ collections:
             default: true
 
 
-          # -------------------------------------------------
-          # TITLE
-          #
-          # We automatically use this for:
-          #
-          # Article H1
-          # Blog Card Title
-          # SEO Title
-          # Open Graph Title
-          # Twitter Title
-          # BlogPosting Headline
-          # -------------------------------------------------
-
-          - label: "Persian Title"
-
-            name: "title"
-
-            widget: "string"
-
-            required: false
-
-            hint: "Final article title. SEO title will be generated automatically from this."
-
-
-          # -------------------------------------------------
-          # DESCRIPTION
-          #
-          # We automatically use this for:
-          #
-          # Blog Card Description
-          # Meta Description
-          # Open Graph Description
-          # Twitter Description
-          # BlogPosting Description
-          # -------------------------------------------------
-
           - label: "Persian Description"
 
             name: "description"
@@ -337,12 +252,8 @@ collections:
 
             required: false
 
-            hint: "Short summary of the article. SEO description will be generated automatically from this."
+            hint: "Short summary. Used automatically for the Blog card, meta description, Open Graph and structured data."
 
-
-          # -------------------------------------------------
-          # CONTENT
-          # -------------------------------------------------
 
           - label: "Persian Article"
 
@@ -375,11 +286,11 @@ collections:
               - image
               - code-block
 
-            hint: "Write or paste the full Persian article here. You can upload images directly inside the article."
+            hint: "Start the article with one H1. That H1 automatically becomes the article title and SEO title."
 
 
       # ===================================================
-      # ENGLISH VERSION
+      # ENGLISH
       # ===================================================
 
       - label: "English Version"
@@ -393,10 +304,6 @@ collections:
 
         fields:
 
-          # -------------------------------------------------
-          # ENABLE
-          # -------------------------------------------------
-
           - label: "Enable English"
 
             name: "enabled"
@@ -406,25 +313,6 @@ collections:
             default: false
 
 
-          # -------------------------------------------------
-          # TITLE
-          # -------------------------------------------------
-
-          - label: "English Title"
-
-            name: "title"
-
-            widget: "string"
-
-            required: false
-
-            hint: "Final English article title. SEO title will be generated automatically from this."
-
-
-          # -------------------------------------------------
-          # DESCRIPTION
-          # -------------------------------------------------
-
           - label: "English Description"
 
             name: "description"
@@ -433,12 +321,8 @@ collections:
 
             required: false
 
-            hint: "Short English summary. SEO description will be generated automatically from this."
+            hint: "Short summary. Used automatically for the Blog card, meta description, Open Graph and structured data."
 
-
-          # -------------------------------------------------
-          # CONTENT
-          # -------------------------------------------------
 
           - label: "English Article"
 
@@ -471,4 +355,4 @@ collections:
               - image
               - code-block
 
-            hint: "Write or paste the full English article here. You can upload images directly inside the article."
+            hint: "Start the article with one H1. That H1 automatically becomes the article title and SEO title."
