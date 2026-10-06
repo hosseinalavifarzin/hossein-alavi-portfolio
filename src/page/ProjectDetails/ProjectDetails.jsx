@@ -96,6 +96,12 @@ function ProjectDetails() {
 
 
 
+        const canonicalUrl =
+
+            `https://hosseinalavifarzin.ir/projects/${project.id}/`;
+
+
+
         const previousTitle = document.title;
 
 
@@ -140,6 +146,22 @@ function ProjectDetails() {
 
 
 
+        const canonical = document.querySelector(
+
+            'link[rel="canonical"]'
+
+        );
+
+
+
+        const ogUrl = document.querySelector(
+
+            'meta[property="og:url"]'
+
+        );
+
+
+
         const previousDescription =
 
             metaDescription?.getAttribute('content');
@@ -167,6 +189,18 @@ function ProjectDetails() {
         const previousTwitterDescription =
 
             twitterDescription?.getAttribute('content');
+
+
+
+        const previousCanonical =
+
+            canonical?.getAttribute('href');
+
+
+
+        const previousOgUrl =
+
+            ogUrl?.getAttribute('content');
 
 
 
@@ -237,6 +271,34 @@ function ProjectDetails() {
                 'content',
 
                 seoDescription
+
+            );
+
+        }
+
+
+
+        if (canonical) {
+
+            canonical.setAttribute(
+
+                'href',
+
+                canonicalUrl
+
+            );
+
+        }
+
+
+
+        if (ogUrl) {
+
+            ogUrl.setAttribute(
+
+                'content',
+
+                canonicalUrl
 
             );
 
@@ -353,6 +415,50 @@ function ProjectDetails() {
                     'content',
 
                     previousTwitterDescription
+
+                );
+
+            }
+
+
+
+            if (
+
+                canonical &&
+
+                previousCanonical !== null &&
+
+                previousCanonical !== undefined
+
+            ) {
+
+                canonical.setAttribute(
+
+                    'href',
+
+                    previousCanonical
+
+                );
+
+            }
+
+
+
+            if (
+
+                ogUrl &&
+
+                previousOgUrl !== null &&
+
+                previousOgUrl !== undefined
+
+            ) {
+
+                ogUrl.setAttribute(
+
+                    'content',
+
+                    previousOgUrl
 
                 );
 
