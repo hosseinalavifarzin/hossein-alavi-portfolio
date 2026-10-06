@@ -589,7 +589,7 @@ function ProjectDetails() {
 
                     <Link
 
-                        to="/"
+                        to="/portfolio"
 
                         className="btn-primary inline-flex items-center gap-2"
 
@@ -857,7 +857,7 @@ function ProjectDetails() {
 
                     <Link
 
-                        to="/"
+                        to="/portfolio"
 
                         className="
 
@@ -3517,7 +3517,7 @@ function ProjectDetails() {
 
                         <Link
 
-                            to="/"
+                            to="/portfolio"
 
                             className="
 

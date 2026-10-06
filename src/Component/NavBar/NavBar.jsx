@@ -1,5 +1,7 @@
 import { useEffect, useState } from 'react';
 
+import { useNavigate } from 'react-router-dom';
+
 import {
   Disclosure,
   DisclosureButton,
@@ -41,9 +43,7 @@ const scrollToSection = (sectionId) => {
   const section =
     document.getElementById(sectionId);
 
-
   if (!section) return;
-
 
   const navbarOffset = 85;
 
@@ -51,7 +51,6 @@ const scrollToSection = (sectionId) => {
     section.getBoundingClientRect().top +
     window.pageYOffset -
     navbarOffset;
-
 
   window.scrollTo({
     top: sectionPosition,
@@ -68,32 +67,44 @@ const navigation = [
 
   {
     name: 'Home',
-    href: '#home'
+    type: 'route',
+    to: '/'
   },
 
   {
     name: 'About',
-    href: '#about'
+    type: 'section',
+    id: 'about'
   },
 
   {
     name: 'Skills',
-    href: '#skills'
+    type: 'section',
+    id: 'skills'
   },
 
   {
     name: 'Experience',
-    href: '#experience'
+    type: 'section',
+    id: 'experience'
   },
 
   {
     name: 'Projects',
-    href: '#projects'
+    type: 'section',
+    id: 'projects'
+  },
+
+  {
+    name: 'Blog',
+    type: 'route',
+    to: '/blog'
   },
 
   {
     name: 'Contact',
-    href: '#contact'
+    type: 'section',
+    id: 'contact'
   }
 
 ];
@@ -252,11 +263,30 @@ export default function NavBar() {
   const [showGame, setShowGame] =
     useState(false);
 
-
   const {
     isDark,
     toggleTheme
   } = useTheme();
+
+  const navigate = useNavigate();
+
+
+  // =======================================================
+  // NAVIGATION HANDLER
+  // =======================================================
+  const handleNavigation = (item) => {
+
+    if (item.type === 'route') {
+
+      navigate(item.to);
+
+      return;
+
+    }
+
+    scrollToSection(item.id);
+
+  };
 
 
   // =======================================================
@@ -328,6 +358,7 @@ export default function NavBar() {
 
 
   return (
+
     <>
 
       <Disclosure
@@ -407,8 +438,7 @@ export default function NavBar() {
                     transition-transform
                     duration-300
                     group-hover:scale-110
-                  "
-                  >
+                  ">
 
                     H
 
@@ -423,8 +453,7 @@ export default function NavBar() {
                     text-theme-primary
                     hidden
                     sm:block
-                  "
-                  >
+                  ">
 
                     Hossein
 
@@ -450,26 +479,28 @@ export default function NavBar() {
 
                   {navigation.map((item) => {
 
-                    const sectionId =
-                      item.href.substring(1);
-
                     const isActive =
-                      activeSection === sectionId;
+                      item.type === 'section' &&
+                      activeSection === item.id;
+
+
+                    const href =
+                      item.type === 'route'
+                        ? item.to
+                        : `#${item.id}`;
 
 
                     return (
 
                       <a
                         key={item.name}
-                        href={item.href}
+                        href={href}
 
                         onClick={(e) => {
 
                           e.preventDefault();
 
-                          scrollToSection(
-                            sectionId
-                          );
+                          handleNavigation(item);
 
                         }}
 
@@ -742,11 +773,9 @@ export default function NavBar() {
 
                 {navigation.map((item) => {
 
-                  const sectionId =
-                    item.href.substring(1);
-
                   const isActive =
-                    activeSection === sectionId;
+                    item.type === 'section' &&
+                    activeSection === item.id;
 
 
                   return (
@@ -758,9 +787,7 @@ export default function NavBar() {
 
                       onClick={() => {
 
-                        scrollToSection(
-                          sectionId
-                        );
+                        handleNavigation(item);
 
                       }}
 
@@ -912,6 +939,7 @@ export default function NavBar() {
       )}
 
     </>
+
   );
 
 }

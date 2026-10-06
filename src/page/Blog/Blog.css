@@ -1,0 +1,364 @@
+@import url('https://fonts.googleapis.com/css2?family=Vazirmatn:wght@400;500;600;700;800&display=swap');
+
+
+/* =========================================================
+   SITE CHROME
+   HEADER / FOOTER MUST NEVER CHANGE WITH BLOG LANGUAGE
+========================================================= */
+
+.blog-site-chrome {
+    direction: ltr;
+}
+
+
+/* =========================================================
+   PERSIAN BLOG TYPOGRAPHY
+   IMPORTANT:
+   ONLY BLOG CONTENT GETS THE PERSIAN FONT
+========================================================= */
+
+.blog-content-fa {
+    font-family:
+        'Vazirmatn',
+        sans-serif;
+}
+
+
+/* Persian text should not inherit
+   English-style letter spacing */
+.blog-content-fa h1,
+.blog-content-fa h2,
+.blog-content-fa h3,
+.blog-content-fa h4,
+.blog-content-fa p,
+.blog-content-fa button,
+.blog-content-fa span {
+    letter-spacing: normal;
+}
+
+
+/* =========================================================
+   LANGUAGE TOOLBAR
+========================================================= */
+
+.blog-language-toolbar {
+    position: relative;
+    min-height: 44px;
+}
+
+
+/* =========================================================
+   LANGUAGE SWITCH
+========================================================= */
+
+.language-switch-fa-label {
+    font-family:
+        'Vazirmatn',
+        sans-serif;
+}
+
+
+/* =========================================================
+   VIEW TRANSITION NAMES
+========================================================= */
+
+.blog-hero-localized {
+    view-transition-name:
+        blog-hero-localized;
+}
+
+
+.blog-list-localized {
+    view-transition-name:
+        blog-list-localized;
+}
+
+
+/* =========================================================
+   IMPORTANT:
+   NEVER ANIMATE THE PAGE ROOT.
+
+   This prevents:
+   - Navbar movement
+   - Theme button movement
+   - Download CV movement
+   - Header flickering
+   - Footer flickering
+========================================================= */
+
+::view-transition-old(root),
+::view-transition-new(root) {
+    animation: none !important;
+
+    mix-blend-mode: normal;
+}
+
+
+::view-transition-group(root) {
+    animation: none !important;
+}
+
+
+/* =========================================================
+   HERO LANGUAGE TRANSITION
+========================================================= */
+
+::view-transition-old(
+    blog-hero-localized
+) {
+    animation:
+        blog-language-out
+        220ms
+        cubic-bezier(
+            0.4,
+            0,
+            1,
+            1
+        )
+        both;
+}
+
+
+::view-transition-new(
+    blog-hero-localized
+) {
+    animation:
+        blog-language-in
+        560ms
+        cubic-bezier(
+            0.16,
+            1,
+            0.3,
+            1
+        )
+        both;
+
+    mix-blend-mode:
+        normal;
+}
+
+
+/* =========================================================
+   ARTICLE AREA LANGUAGE TRANSITION
+========================================================= */
+
+::view-transition-old(
+    blog-list-localized
+) {
+    animation:
+        blog-language-out
+        180ms
+        cubic-bezier(
+            0.4,
+            0,
+            1,
+            1
+        )
+        both;
+}
+
+
+::view-transition-new(
+    blog-list-localized
+) {
+    animation:
+        blog-language-in
+        620ms
+        cubic-bezier(
+            0.16,
+            1,
+            0.3,
+            1
+        )
+        40ms
+        both;
+
+    mix-blend-mode:
+        normal;
+}
+
+
+/* =========================================================
+   KEEP SIZE / POSITION STABLE DURING TRANSITION
+========================================================= */
+
+::view-transition-group(
+    blog-hero-localized
+),
+::view-transition-group(
+    blog-list-localized
+) {
+    animation-timing-function:
+        cubic-bezier(
+            0.16,
+            1,
+            0.3,
+            1
+        );
+}
+
+
+/* =========================================================
+   LANGUAGE OUT
+========================================================= */
+
+@keyframes blog-language-out {
+
+    from {
+        opacity: 1;
+
+        filter:
+            blur(0);
+
+        transform:
+            translateY(0)
+            scale(1);
+    }
+
+
+    to {
+        opacity: 0;
+
+        filter:
+            blur(5px);
+
+        transform:
+            translateY(-5px)
+            scale(0.995);
+    }
+
+}
+
+
+/* =========================================================
+   LANGUAGE IN
+========================================================= */
+
+@keyframes blog-language-in {
+
+    from {
+        opacity: 0;
+
+        filter:
+            blur(8px);
+
+        transform:
+            translateY(10px)
+            scale(0.995);
+    }
+
+
+    to {
+        opacity: 1;
+
+        filter:
+            blur(0);
+
+        transform:
+            translateY(0)
+            scale(1);
+    }
+
+}
+
+
+/* =========================================================
+   FALLBACK FOR BROWSERS WITHOUT VIEW TRANSITIONS
+========================================================= */
+
+@supports not (
+    view-transition-name:
+        blog-hero-localized
+) {
+
+    .blog-hero-localized {
+        animation:
+            blog-fallback-enter
+            420ms
+            cubic-bezier(
+                0.16,
+                1,
+                0.3,
+                1
+            )
+            both;
+    }
+
+
+    .blog-list-localized {
+        animation:
+            blog-fallback-enter
+            480ms
+            cubic-bezier(
+                0.16,
+                1,
+                0.3,
+                1
+            )
+            both;
+    }
+
+}
+
+
+@keyframes blog-fallback-enter {
+
+    from {
+        opacity: 0;
+
+        filter:
+            blur(6px);
+
+        transform:
+            translateY(8px);
+    }
+
+
+    to {
+        opacity: 1;
+
+        filter:
+            blur(0);
+
+        transform:
+            translateY(0);
+    }
+
+}
+
+
+/* =========================================================
+   REDUCED MOTION
+========================================================= */
+
+@media (
+    prefers-reduced-motion:
+    reduce
+) {
+
+    .blog-hero-localized,
+    .blog-list-localized {
+        animation: none !important;
+    }
+
+
+    ::view-transition-old(
+        blog-hero-localized
+    ),
+
+    ::view-transition-new(
+        blog-hero-localized
+    ),
+
+    ::view-transition-old(
+        blog-list-localized
+    ),
+
+    ::view-transition-new(
+        blog-list-localized
+    ) {
+        animation-duration:
+            0.01ms !important;
+    }
+
+}

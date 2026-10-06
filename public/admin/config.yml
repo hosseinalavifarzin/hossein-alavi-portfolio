@@ -1,0 +1,474 @@
+# =========================================================
+# HOSSEIN ALAVI BLOG CMS
+# =========================================================
+
+
+# =========================================================
+# BACKEND
+# =========================================================
+
+backend:
+  name: turbo-github
+  turbo_site_id: cd26d520-546a-44ae-8846-36aa071481f7
+  branch: main
+
+
+# =========================================================
+# WEBSITE
+# =========================================================
+
+site_url: "https://hosseinalavifarzin.ir"
+
+display_url: "https://hosseinalavifarzin.ir"
+
+publish_mode: simple
+
+show_preview_links: false
+
+
+# =========================================================
+# MEDIA
+#
+# Uploaded images:
+#
+# Repository:
+# public/blog/media/
+#
+# Website:
+# /blog/media/
+# =========================================================
+
+media_folder: "public/blog/media"
+
+public_folder: "/blog/media"
+
+
+# =========================================================
+# IMAGE PROCESSING
+#
+# Images uploaded from CMS will:
+#
+# - Convert to WebP
+# - Resize to max width 1800px
+# - Keep original aspect ratio
+# - Compress
+# - Remove metadata
+# =========================================================
+
+media_processing:
+  enabled: true
+
+  format:
+    enabled: true
+    default: webp
+
+  quality: 84
+
+  strip_metadata: true
+
+  width: 1800
+
+  height: null
+
+
+# =========================================================
+# SLUG SETTINGS
+# =========================================================
+
+slug:
+  encoding: ascii
+  clean_accents: true
+  sanitize_replacement: "-"
+
+
+# =========================================================
+# COLLECTIONS
+# =========================================================
+
+collections:
+
+  # =======================================================
+  # BLOG ARTICLES
+  # =======================================================
+
+  - name: "articles"
+
+    label: "Blog Articles"
+
+    label_singular: "Blog Article"
+
+    description: "Create and manage Persian and English Product Design articles."
+
+    folder: "content/blog"
+
+    create: true
+
+    extension: "json"
+
+    format: "json"
+
+    identifier_field: "slug"
+
+    slug: "{{fields.slug}}"
+
+    summary: "{{fields.fa.title}}"
+
+    editor:
+      preview: false
+
+
+    # =====================================================
+    # ARTICLE FIELDS
+    # =====================================================
+
+    fields:
+
+      # ===================================================
+      # SLUG
+      # ===================================================
+
+      - label: "Slug"
+
+        name: "slug"
+
+        widget: "string"
+
+        hint: "English only. Example: product-design-problem-space"
+
+        pattern:
+          - "^[a-z0-9]+(?:-[a-z0-9]+)*$"
+          - "Use lowercase English letters, numbers and hyphens only."
+
+
+      # ===================================================
+      # STATUS
+      # ===================================================
+
+      - label: "Status"
+
+        name: "status"
+
+        widget: "select"
+
+        default: "draft"
+
+        options:
+
+          - label: "Draft"
+            value: "draft"
+
+          - label: "Published"
+            value: "published"
+
+
+      # ===================================================
+      # CATEGORY
+      # ===================================================
+
+      - label: "Category"
+
+        name: "category"
+
+        widget: "select"
+
+        default: "problem-framing"
+
+        options:
+
+          - label: "Product Discovery"
+            value: "product-discovery"
+
+          - label: "User Research"
+            value: "user-research"
+
+          - label: "Problem Framing"
+            value: "problem-framing"
+
+          - label: "Product Thinking"
+            value: "product-thinking"
+
+          - label: "Design Systems"
+            value: "design-systems"
+
+
+      # ===================================================
+      # FEATURED
+      # ===================================================
+
+      - label: "Featured Article"
+
+        name: "featured"
+
+        widget: "boolean"
+
+        default: false
+
+        required: false
+
+
+      # ===================================================
+      # PUBLISH DATE
+      # ===================================================
+
+      - label: "Publish Date"
+
+        name: "publishedAt"
+
+        widget: "datetime"
+
+        required: false
+
+        date_format: "YYYY-MM-DD"
+
+        time_format: false
+
+        format: "YYYY-MM-DD"
+
+        hint: "Only set this when the article is actually published."
+
+
+      # ===================================================
+      # AUTHOR
+      # ===================================================
+
+      - label: "Author"
+
+        name: "author"
+
+        widget: "hidden"
+
+        default: "Hossein Alavi"
+
+
+      # ===================================================
+      # COVER IMAGE
+      # ===================================================
+
+      - label: "Cover Image"
+
+        name: "cover"
+
+        widget: "image"
+
+        required: false
+
+        choose_url: false
+
+        hint: "Used on the Blog card, article header and social sharing."
+
+        media_library:
+
+          config:
+
+            multiple: false
+
+            max_file_size: 8388608
+
+
+      # ===================================================
+      # PERSIAN VERSION
+      # ===================================================
+
+      - label: "Persian Version"
+
+        name: "fa"
+
+        widget: "object"
+
+        collapsed: false
+
+
+        fields:
+
+          # -------------------------------------------------
+          # ENABLE
+          # -------------------------------------------------
+
+          - label: "Enable Persian"
+
+            name: "enabled"
+
+            widget: "boolean"
+
+            default: true
+
+
+          # -------------------------------------------------
+          # TITLE
+          #
+          # We automatically use this for:
+          #
+          # Article H1
+          # Blog Card Title
+          # SEO Title
+          # Open Graph Title
+          # Twitter Title
+          # BlogPosting Headline
+          # -------------------------------------------------
+
+          - label: "Persian Title"
+
+            name: "title"
+
+            widget: "string"
+
+            required: false
+
+            hint: "Final article title. SEO title will be generated automatically from this."
+
+
+          # -------------------------------------------------
+          # DESCRIPTION
+          #
+          # We automatically use this for:
+          #
+          # Blog Card Description
+          # Meta Description
+          # Open Graph Description
+          # Twitter Description
+          # BlogPosting Description
+          # -------------------------------------------------
+
+          - label: "Persian Description"
+
+            name: "description"
+
+            widget: "text"
+
+            required: false
+
+            hint: "Short summary of the article. SEO description will be generated automatically from this."
+
+
+          # -------------------------------------------------
+          # CONTENT
+          # -------------------------------------------------
+
+          - label: "Persian Article"
+
+            name: "body"
+
+            widget: "richtext"
+
+            required: false
+
+            minimal: false
+
+            modes:
+              - rich_text
+              - raw
+
+            buttons:
+              - bold
+              - italic
+              - strikethrough
+              - code
+              - link
+              - heading-two
+              - heading-three
+              - heading-four
+              - quote
+              - bulleted-list
+              - numbered-list
+
+            editor_components:
+              - image
+              - code-block
+
+            hint: "Write or paste the full Persian article here. You can upload images directly inside the article."
+
+
+      # ===================================================
+      # ENGLISH VERSION
+      # ===================================================
+
+      - label: "English Version"
+
+        name: "en"
+
+        widget: "object"
+
+        collapsed: true
+
+
+        fields:
+
+          # -------------------------------------------------
+          # ENABLE
+          # -------------------------------------------------
+
+          - label: "Enable English"
+
+            name: "enabled"
+
+            widget: "boolean"
+
+            default: false
+
+
+          # -------------------------------------------------
+          # TITLE
+          # -------------------------------------------------
+
+          - label: "English Title"
+
+            name: "title"
+
+            widget: "string"
+
+            required: false
+
+            hint: "Final English article title. SEO title will be generated automatically from this."
+
+
+          # -------------------------------------------------
+          # DESCRIPTION
+          # -------------------------------------------------
+
+          - label: "English Description"
+
+            name: "description"
+
+            widget: "text"
+
+            required: false
+
+            hint: "Short English summary. SEO description will be generated automatically from this."
+
+
+          # -------------------------------------------------
+          # CONTENT
+          # -------------------------------------------------
+
+          - label: "English Article"
+
+            name: "body"
+
+            widget: "richtext"
+
+            required: false
+
+            minimal: false
+
+            modes:
+              - rich_text
+              - raw
+
+            buttons:
+              - bold
+              - italic
+              - strikethrough
+              - code
+              - link
+              - heading-two
+              - heading-three
+              - heading-four
+              - quote
+              - bulleted-list
+              - numbered-list
+
+            editor_components:
+              - image
+              - code-block
+
+            hint: "Write or paste the full English article here. You can upload images directly inside the article."

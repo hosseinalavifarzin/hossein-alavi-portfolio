@@ -3,10 +3,13 @@ import './App.css';
 import {
     BrowserRouter,
     Routes,
-    Route
+    Route,
+    Navigate
 } from 'react-router-dom';
 
+import MainHome from './page/MainHome/MainHome';
 import Home from './page/Home/Home';
+import Blog from './page/Blog/Blog';
 import ProjectDetails from './page/ProjectDetails/ProjectDetails';
 
 import {
@@ -32,7 +35,27 @@ function App() {
 
                         <Route
                             path="/"
+                            element={<MainHome />}
+                        />
+
+                        <Route
+                            path="/portfolio"
                             element={<Home />}
+                        />
+
+                        <Route
+                            path="/blog"
+                            element={
+                                <Navigate
+                                    to="/blog/en"
+                                    replace
+                                />
+                            }
+                        />
+
+                        <Route
+                            path="/blog/:language"
+                            element={<Blog />}
                         />
 
                         <Route
