@@ -6,506 +6,42 @@ const path = require('path');
 // CONFIG
 // =========================================================
 
-const buildDirectory =
-    path.join(__dirname, '..', 'build');
-
-const sourceIndex =
-    path.join(buildDirectory, 'index.html');
-
-const sitemapPath =
-    path.join(buildDirectory, 'sitemap.xml');
-
-const baseUrl =
+const BASE_URL =
     'https://hosseinalavifarzin.ir';
 
-const profileImage =
-    `${baseUrl}/hossein.jpeg`;
+
+const ROOT_DIR =
+    path.resolve(
+        __dirname,
+        '..'
+    );
+
+
+const BUILD_DIR =
+    path.join(
+        ROOT_DIR,
+        'build'
+    );
+
+
+const TEMPLATE_PATH =
+    path.join(
+        BUILD_DIR,
+        'index.html'
+    );
+
+
+const BLOG_DATA_PATH =
+    path.join(
+        ROOT_DIR,
+        'src',
+        'generated',
+        'blogPosts.json'
+    );
 
 
 // =========================================================
-// ROUTES
-// =========================================================
-
-const routes = [
-
-    // =====================================================
-    // PORTFOLIO
-    // =====================================================
-    {
-        path:
-            'portfolio',
-
-        title:
-            'Product Design Portfolio | Hossein Alavi',
-
-        description:
-            'Product design portfolio of Hossein Alavi featuring case studies across logistics, travel technology, B2B platforms, internal tools, booking products, and design systems.',
-
-        canonicalPath:
-            'portfolio',
-
-        language:
-            'en',
-
-        /*
-         * The global website shell always stays LTR.
-         * Persian Blog content handles RTL inside React.
-         */
-        direction:
-            'ltr',
-
-        robots:
-            'index, follow, max-image-preview:large',
-
-        ogLocale:
-            'en_US',
-
-        schemaType:
-            'CollectionPage',
-
-        changefreq:
-            'monthly',
-
-        priority:
-            '0.9'
-    },
-
-
-    // =====================================================
-    // BLOG GATEWAY
-    //
-    // /blog/ is NOT an indexable page.
-    // React redirects it to /blog/en/
-    // =====================================================
-    {
-        path:
-            'blog',
-
-        title:
-            'Product Design Blog | Hossein Alavi',
-
-        description:
-            'Product design articles by Hossein Alavi about user research, problem framing, product thinking, design systems, UX, and complex digital products.',
-
-        canonicalPath:
-            'blog/en',
-
-        language:
-            'en',
-
-        direction:
-            'ltr',
-
-        robots:
-            'noindex, follow',
-
-        ogLocale:
-            'en_US',
-
-        schemaType:
-            null,
-
-        alternateLanguages: {
-            en:
-                'blog/en',
-
-            fa:
-                'blog/fa',
-
-            'x-default':
-                'blog/en'
-        },
-
-        includeInSitemap:
-            false
-    },
-
-
-    // =====================================================
-    // BLOG — ENGLISH
-    // =====================================================
-    {
-        path:
-            'blog/en',
-
-        title:
-            'Product Design Blog | Hossein Alavi',
-
-        description:
-            'Product design articles by Hossein Alavi about user research, problem framing, product thinking, design systems, UX, and complex digital products.',
-
-        canonicalPath:
-            'blog/en',
-
-        language:
-            'en',
-
-        direction:
-            'ltr',
-
-        robots:
-            'index, follow, max-image-preview:large',
-
-        ogLocale:
-            'en_US',
-
-        ogLocaleAlternate:
-            'fa_IR',
-
-        schemaType:
-            'Blog',
-
-        alternateLanguages: {
-            en:
-                'blog/en',
-
-            fa:
-                'blog/fa',
-
-            'x-default':
-                'blog/en'
-        },
-
-        changefreq:
-            'weekly',
-
-        priority:
-            '0.8'
-    },
-
-
-    // =====================================================
-    // BLOG — PERSIAN
-    // =====================================================
-    {
-        path:
-            'blog/fa',
-
-        title:
-            'بلاگ طراحی محصول | حسین علوی',
-
-        description:
-            'مقاله‌های حسین علوی درباره طراحی محصول، تحقیق کاربر، تعریف مسئله، تفکر محصول، سیستم طراحی و تجربه کاربری.',
-
-        canonicalPath:
-            'blog/fa',
-
-        language:
-            'fa',
-
-        /*
-         * IMPORTANT:
-         * Keep the global document shell LTR.
-         *
-         * Blog.jsx applies:
-         *
-         * dir="rtl"
-         *
-         * only to Persian Blog content.
-         *
-         * This prevents Navbar / Theme Toggle /
-         * Download CV / scrollbar layout jumps.
-         */
-        direction:
-            'ltr',
-
-        robots:
-            'index, follow, max-image-preview:large',
-
-        ogLocale:
-            'fa_IR',
-
-        ogLocaleAlternate:
-            'en_US',
-
-        schemaType:
-            'Blog',
-
-        alternateLanguages: {
-            en:
-                'blog/en',
-
-            fa:
-                'blog/fa',
-
-            'x-default':
-                'blog/en'
-        },
-
-        changefreq:
-            'weekly',
-
-        priority:
-            '0.8'
-    },
-
-
-    // =====================================================
-    // TIPAX
-    // =====================================================
-    {
-        path:
-            'projects/tipax',
-
-        title:
-            'Tipax Logistics Platform | Product Design Case Study | Hossein Alavi',
-
-        description:
-            'Product design case study by Hossein Alavi for an internal Tipax logistics operations platform, focused on complex workflows, information hierarchy, and scalable interaction patterns.',
-
-        canonicalPath:
-            'projects/tipax',
-
-        language:
-            'en',
-
-        direction:
-            'ltr',
-
-        robots:
-            'index, follow, max-image-preview:large',
-
-        ogLocale:
-            'en_US',
-
-        schemaType:
-            'CreativeWork',
-
-        changefreq:
-            'monthly',
-
-        priority:
-            '0.8'
-    },
-
-
-    // =====================================================
-    // CITYNET
-    // =====================================================
-    {
-        path:
-            'projects/citynet',
-
-        title:
-            'Citynet Travel-Tech Ecosystem | Product Design Case Study | Hossein Alavi',
-
-        description:
-            'Product design case study by Hossein Alavi for Citynet, covering a travel-tech product ecosystem, B2B and B2C experiences, internal tools, reporting, and a scalable design system.',
-
-        canonicalPath:
-            'projects/citynet',
-
-        language:
-            'en',
-
-        direction:
-            'ltr',
-
-        robots:
-            'index, follow, max-image-preview:large',
-
-        ogLocale:
-            'en_US',
-
-        schemaType:
-            'CreativeWork',
-
-        changefreq:
-            'monthly',
-
-        priority:
-            '0.8'
-    },
-
-
-    // =====================================================
-    // BLULEXI
-    // =====================================================
-    {
-        path:
-            'projects/blue',
-
-        title:
-            'BluLexi AI Language Learning Platform | Product Design Case Study | Hossein Alavi',
-
-        description:
-            'Product design case study by Hossein Alavi for BluLexi, an AI-assisted language learning platform connecting assessment, practice, feedback, progress, and exam preparation.',
-
-        canonicalPath:
-            'projects/blue',
-
-        language:
-            'en',
-
-        direction:
-            'ltr',
-
-        robots:
-            'index, follow, max-image-preview:large',
-
-        ogLocale:
-            'en_US',
-
-        schemaType:
-            'CreativeWork',
-
-        changefreq:
-            'monthly',
-
-        priority:
-            '0.8'
-    },
-
-
-    // =====================================================
-    // 3CLICK
-    // =====================================================
-    {
-        path:
-            'projects/3click',
-
-        title:
-            '3Click Travel Booking Redesign | Product Design Case Study | Hossein Alavi',
-
-        description:
-            'Product design case study by Hossein Alavi for 3Click, covering travel booking experiences, customer-facing products, CMS tools, internal workflows, and a shared design system.',
-
-        canonicalPath:
-            'projects/3click',
-
-        language:
-            'en',
-
-        direction:
-            'ltr',
-
-        robots:
-            'index, follow, max-image-preview:large',
-
-        ogLocale:
-            'en_US',
-
-        schemaType:
-            'CreativeWork',
-
-        changefreq:
-            'monthly',
-
-        priority:
-            '0.8'
-    },
-
-
-    // =====================================================
-    // DARZI
-    // =====================================================
-    {
-        path:
-            'projects/darzi',
-
-        title:
-            'Darzi Automotive E-commerce | Product Design Case Study | Hossein Alavi',
-
-        description:
-            'Product design case study by Hossein Alavi for Darzi, a premium automotive e-commerce experience focused on product confidence, craftsmanship, usability, and brand experience.',
-
-        canonicalPath:
-            'projects/darzi',
-
-        language:
-            'en',
-
-        direction:
-            'ltr',
-
-        robots:
-            'index, follow, max-image-preview:large',
-
-        ogLocale:
-            'en_US',
-
-        schemaType:
-            'CreativeWork',
-
-        changefreq:
-            'monthly',
-
-        priority:
-            '0.8'
-    },
-
-
-    // =====================================================
-    // YAHOO BOOKING
-    // =====================================================
-    {
-        path:
-            'projects/yahoo',
-
-        title:
-            'Yahoo Booking | Accommodation Product Design Case Study | Hossein Alavi',
-
-        description:
-            'Product design case study by Hossein Alavi for a localized accommodation booking platform designed around Persian, RTL, travel discovery, comparison, and booking experiences.',
-
-        canonicalPath:
-            'projects/yahoo',
-
-        language:
-            'en',
-
-        direction:
-            'ltr',
-
-        robots:
-            'index, follow, max-image-preview:large',
-
-        ogLocale:
-            'en_US',
-
-        schemaType:
-            'CreativeWork',
-
-        changefreq:
-            'monthly',
-
-        priority:
-            '0.8'
-    }
-
-];
-
-
-// =========================================================
-// URL
-// =========================================================
-
-function createAbsoluteUrl(
-    routePath = ''
-) {
-
-    const cleanPath =
-        String(routePath)
-            .replace(/^\/+/, '')
-            .replace(/\/+$/, '');
-
-
-    if (
-        !cleanPath
-    ) {
-
-        return `${baseUrl}/`;
-
-    }
-
-
-    return `${baseUrl}/${cleanPath}/`;
-
-}
-
-
-// =========================================================
-// ESCAPE HTML
+// HELPERS
 // =========================================================
 
 function escapeHtml(
@@ -513,1242 +49,733 @@ function escapeHtml(
 ) {
 
     return String(value)
-        .replace(/&/g, '&amp;')
-        .replace(/"/g, '&quot;')
-        .replace(/'/g, '&#39;')
-        .replace(/</g, '&lt;')
-        .replace(/>/g, '&gt;');
+        .replace(
+            /&/g,
+            '&amp;'
+        )
+        .replace(
+            /</g,
+            '&lt;'
+        )
+        .replace(
+            />/g,
+            '&gt;'
+        )
+        .replace(
+            /"/g,
+            '&quot;'
+        )
+        .replace(
+            /'/g,
+            '&#039;'
+        );
 
 }
 
 
-// =========================================================
-// ESCAPE XML
-// =========================================================
-
-function escapeXml(
+function absoluteUrl(
     value = ''
 ) {
 
-    return String(value)
-        .replace(/&/g, '&amp;')
-        .replace(/"/g, '&quot;')
-        .replace(/'/g, '&apos;')
-        .replace(/</g, '&lt;')
-        .replace(/>/g, '&gt;');
+    if (!value) {
+        return '';
+    }
 
-}
-
-
-// =========================================================
-// REPLACE OR INSERT HEAD TAG
-// =========================================================
-
-function replaceHeadTag(
-    html,
-    selectorRegex,
-    replacement
-) {
 
     if (
-        selectorRegex.test(html)
+        /^https?:\/\//i.test(
+            value
+        )
     ) {
 
-        return html.replace(
-            selectorRegex,
-            replacement
-        );
+        return value;
 
     }
 
 
-    return html.replace(
-        '</head>',
-        `    ${replacement}\n  </head>`
+    return `${BASE_URL}${
+        value.startsWith('/')
+            ? value
+            : `/${value}`
+    }`;
+
+}
+
+
+function normalizeRoute(
+    route
+) {
+
+    if (
+        !route ||
+        route === '/'
+    ) {
+
+        return '/';
+
+    }
+
+
+    return `/${
+        route
+            .replace(
+                /^\/+|\/+$/g,
+                ''
+            )
+    }/`;
+
+}
+
+
+function routeToDirectory(
+    route
+) {
+
+    const normalized =
+        normalizeRoute(
+            route
+        );
+
+
+    if (
+        normalized === '/'
+    ) {
+
+        return BUILD_DIR;
+
+    }
+
+
+    return path.join(
+        BUILD_DIR,
+        ...normalized
+            .split('/')
+            .filter(Boolean)
     );
 
 }
 
 
-// =========================================================
-// HTML LANG / DIR
-//
-// Preserve any other existing <html> attributes.
-// =========================================================
-
-function setHtmlAttributes(
-    html,
-    language,
-    direction
+function writeRoute(
+    route,
+    html
 ) {
 
-    return html.replace(
-        /<html\b([^>]*)>/i,
-
-        (
-            match,
-            attributes = ''
-        ) => {
-
-            const cleanedAttributes =
-                attributes
-                    .replace(
-                        /\s+lang=(["'])[^"']*\1/i,
-                        ''
-                    )
-                    .replace(
-                        /\s+dir=(["'])[^"']*\1/i,
-                        ''
-                    );
+    const directory =
+        routeToDirectory(
+            route
+        );
 
 
-            return (
-                `<html${cleanedAttributes} lang="${escapeHtml(language)}" dir="${escapeHtml(direction)}">`
-            );
-
+    fs.mkdirSync(
+        directory,
+        {
+            recursive: true
         }
     );
 
+
+    fs.writeFileSync(
+        path.join(
+            directory,
+            'index.html'
+        ),
+        html,
+        'utf8'
+    );
+
+
+    console.log(
+        `Generated: ${normalizeRoute(route)}`
+    );
+
 }
 
 
 // =========================================================
-// TITLE
+// REMOVE EXISTING SEO TAGS FROM CRA TEMPLATE
 // =========================================================
 
-function replaceTitle(
-    html,
-    title
+function cleanHeadSeo(
+    html
 ) {
 
-    const escapedTitle =
+    return html
+
+        // Title
+        .replace(
+            /<title>[\s\S]*?<\/title>/gi,
+            ''
+        )
+
+        // Description
+        .replace(
+            /<meta[^>]+name=["']description["'][^>]*>/gi,
+            ''
+        )
+
+        // Robots
+        .replace(
+            /<meta[^>]+name=["']robots["'][^>]*>/gi,
+            ''
+        )
+
+        // Canonical
+        .replace(
+            /<link[^>]+rel=["']canonical["'][^>]*>/gi,
+            ''
+        )
+
+        // hreflang
+        .replace(
+            /<link[^>]+rel=["']alternate["'][^>]+hreflang=["'][^"']+["'][^>]*>/gi,
+            ''
+        )
+
+        // Open Graph
+        .replace(
+            /<meta[^>]+property=["']og:[^"']+["'][^>]*>/gi,
+            ''
+        )
+
+        // Twitter
+        .replace(
+            /<meta[^>]+name=["']twitter:[^"']+["'][^>]*>/gi,
+            ''
+        )
+
+        // Existing BlogPosting schema
+        .replace(
+            /<script[^>]+id=["']blogposting-jsonld["'][^>]*>[\s\S]*?<\/script>/gi,
+            ''
+        );
+
+}
+
+
+// =========================================================
+// INJECT INTO HEAD
+// =========================================================
+
+function injectIntoHead(
+    template,
+    markup
+) {
+
+    const cleanTemplate =
+        cleanHeadSeo(
+            template
+        );
+
+
+    return cleanTemplate.replace(
+        '</head>',
+        `${markup}\n</head>`
+    );
+
+}
+
+
+// =========================================================
+// GENERIC PAGE SEO
+// =========================================================
+
+function createPageHtml({
+    template,
+    title,
+    description,
+    canonical,
+    robots = 'index, follow, max-image-preview:large',
+    language = 'en',
+    ogType = 'website',
+    image = '',
+    alternates = []
+}) {
+
+    const safeTitle =
         escapeHtml(
             title
         );
 
 
-    if (
-        /<title>[\s\S]*?<\/title>/i.test(
-            html
-        )
-    ) {
-
-        return html.replace(
-            /<title>[\s\S]*?<\/title>/i,
-
-            `<title>${escapedTitle}</title>`
+    const safeDescription =
+        escapeHtml(
+            description
         );
 
-    }
+
+    const safeCanonical =
+        escapeHtml(
+            canonical
+        );
 
 
-    return html.replace(
-        '</head>',
-
-        `    <title>${escapedTitle}</title>\n  </head>`
-    );
-
-}
-
-
-// =========================================================
-// REMOVE EXISTING HREFLANG LINKS
-//
-// This avoids duplicate hreflang tags copied from
-// the source homepage.
-// =========================================================
-
-function removeAlternateLanguages(
-    html
-) {
-
-    return html.replace(
-        /\s*<link\b(?=[^>]*\brel=["']alternate["'])(?=[^>]*\bhreflang=["'][^"']+["'])[^>]*>\s*/gi,
-        '\n'
-    );
-
-}
+    const imageUrl =
+        image
+            ? absoluteUrl(
+                image
+            )
+            : '';
 
 
-// =========================================================
-// ADD HREFLANG
-// =========================================================
-
-function addAlternateLanguages(
-    html,
-    alternateLanguages
-) {
-
-    if (
-        !alternateLanguages
-    ) {
-
-        return html;
-
-    }
-
-
-    const links =
-        Object.entries(
-            alternateLanguages
-        )
+    const alternateTags =
+        alternates
             .map(
-                ([
-                    language,
-                    routePath
-                ]) => {
-
-                    const href =
-                        createAbsoluteUrl(
-                            routePath
-                        );
-
-
-                    return (
-                        `    <link rel="alternate" hreflang="${escapeHtml(language)}" href="${escapeHtml(href)}" />`
-                    );
-
-                }
+                ({
+                    hreflang,
+                    href
+                }) =>
+                    `<link rel="alternate" hreflang="${escapeHtml(
+                        hreflang
+                    )}" href="${escapeHtml(
+                        href
+                    )}" />`
             )
             .join('\n');
 
 
-    return html.replace(
-        '</head>',
+    const imageTags =
+        imageUrl
 
-        `${links}\n  </head>`
+            ? `
+<meta property="og:image" content="${escapeHtml(
+                imageUrl
+            )}" />
+<meta name="twitter:image" content="${escapeHtml(
+                imageUrl
+            )}" />`
+
+            : '';
+
+
+    const markup =
+`
+<title>${safeTitle}</title>
+
+<meta
+    name="description"
+    content="${safeDescription}"
+/>
+
+<meta
+    name="robots"
+    content="${escapeHtml(
+        robots
+    )}"
+/>
+
+<link
+    rel="canonical"
+    href="${safeCanonical}"
+/>
+
+${alternateTags}
+
+<meta
+    property="og:type"
+    content="${escapeHtml(
+        ogType
+    )}"
+/>
+
+<meta
+    property="og:title"
+    content="${safeTitle}"
+/>
+
+<meta
+    property="og:description"
+    content="${safeDescription}"
+/>
+
+<meta
+    property="og:url"
+    content="${safeCanonical}"
+/>
+
+<meta
+    property="og:locale"
+    content="${
+        language === 'fa'
+            ? 'fa_IR'
+            : 'en_US'
+    }"
+/>
+
+${imageTags}
+
+<meta
+    name="twitter:card"
+    content="summary_large_image"
+/>
+
+<meta
+    name="twitter:title"
+    content="${safeTitle}"
+/>
+
+<meta
+    name="twitter:description"
+    content="${safeDescription}"
+/>
+`;
+
+
+    return injectIntoHead(
+        template,
+        markup
     );
 
 }
 
 
 // =========================================================
-// REMOVE OG ALTERNATE LOCALES
+// ARTICLE HTML
 // =========================================================
 
-function removeOgLocaleAlternates(
-    html
-) {
+function createArticleHtml({
+    template,
+    post,
+    language
+}) {
 
-    return html.replace(
-        /\s*<meta[^>]+property=["']og:locale:alternate["'][^>]*>\s*/gi,
-        '\n'
-    );
-
-}
+    const content =
+        post?.[language];
 
 
-// =========================================================
-// PERSON SCHEMA
-// =========================================================
-
-function createPersonSchema() {
-
-    return {
-
-        '@type':
-            'Person',
-
-        '@id':
-            `${baseUrl}/#hossein-alavi`,
-
-        name:
-            'Hossein Alavi',
-
-        alternateName:
-            'حسین علوی',
-
-        jobTitle:
-            'Product Designer',
-
-        url:
-            `${baseUrl}/`,
-
-        image: {
-
-            '@type':
-                'ImageObject',
-
-            '@id':
-                `${baseUrl}/#profile-image`,
-
-            url:
-                profileImage,
-
-            contentUrl:
-                profileImage,
-
-            caption:
-                'Hossein Alavi, Product Designer'
-
-        }
-
-    };
-
-}
+    if (!content) {
+        return null;
+    }
 
 
-// =========================================================
-// WEBSITE SCHEMA
-// =========================================================
-
-function createWebsiteSchema() {
-
-    return {
-
-        '@type':
-            'WebSite',
-
-        '@id':
-            `${baseUrl}/#website`,
-
-        url:
-            `${baseUrl}/`,
-
-        name:
-            'Hossein Alavi',
-
-        alternateName:
-            'Hossein Alavi Product Design',
-
-        inLanguage: [
-            'en',
-            'fa'
-        ]
-
-    };
-
-}
+    const canonical =
+        `${BASE_URL}/blog/${language}/${post.slug}/`;
 
 
-// =========================================================
-// PAGE SCHEMA
-// =========================================================
-
-function createPageSchema(
-    route,
-    routeUrl
-) {
-
-    const personId =
-        `${baseUrl}/#hossein-alavi`;
-
-    const websiteId =
-        `${baseUrl}/#website`;
+    const title =
+        `${content.title} | Hossein Alavi`;
 
 
-    // =====================================================
-    // BLOG
-    // =====================================================
+    const description =
+        content.description ||
+        'Product design article by Hossein Alavi.';
+
+
+    const imageUrl =
+        post.cover
+            ? absoluteUrl(
+                post.cover
+            )
+            : '';
+
+
+    const hasEnglish =
+        Boolean(
+            post.languages?.en &&
+            post.en
+        );
+
+
+    const hasPersian =
+        Boolean(
+            post.languages?.fa &&
+            post.fa
+        );
+
+
+    const defaultLanguage =
+        hasEnglish
+            ? 'en'
+            : 'fa';
+
+
+    const alternates = [];
+
 
     if (
-        route.schemaType ===
-        'Blog'
+        hasEnglish
     ) {
 
-        return {
+        alternates.push({
+            hreflang:
+                'en',
 
-            '@type':
-                'Blog',
-
-            '@id':
-                `${routeUrl}#blog`,
-
-            url:
-                routeUrl,
-
-            name:
-                route.title,
-
-            description:
-                route.description,
-
-            inLanguage:
-                route.language,
-
-            author: {
-                '@id':
-                    personId
-            },
-
-            publisher: {
-                '@id':
-                    personId
-            },
-
-            isPartOf: {
-                '@id':
-                    websiteId
-            }
-
-        };
+            href:
+                `${BASE_URL}/blog/en/${post.slug}/`
+        });
 
     }
 
 
-    // =====================================================
-    // PORTFOLIO
-    // =====================================================
-
     if (
-        route.schemaType ===
-        'CollectionPage'
+        hasPersian
     ) {
 
-        return {
+        alternates.push({
+            hreflang:
+                'fa',
 
-            '@type':
-                'CollectionPage',
-
-            '@id':
-                `${routeUrl}#webpage`,
-
-            url:
-                routeUrl,
-
-            name:
-                route.title,
-
-            description:
-                route.description,
-
-            inLanguage:
-                route.language,
-
-            about: {
-                '@id':
-                    personId
-            },
-
-            author: {
-                '@id':
-                    personId
-            },
-
-            isPartOf: {
-                '@id':
-                    websiteId
-            }
-
-        };
+            href:
+                `${BASE_URL}/blog/fa/${post.slug}/`
+        });
 
     }
 
 
-    // =====================================================
-    // CASE STUDY
-    // =====================================================
+    alternates.push({
+        hreflang:
+            'x-default',
 
-    if (
-        route.schemaType ===
-        'CreativeWork'
-    ) {
+        href:
+            `${BASE_URL}/blog/${defaultLanguage}/${post.slug}/`
+    });
 
-        return {
+
+    const structuredData = {
+
+        '@context':
+            'https://schema.org',
+
+        '@type':
+            'BlogPosting',
+
+        headline:
+            content.title,
+
+        description:
+            description,
+
+        url:
+            canonical,
+
+        mainEntityOfPage: {
 
             '@type':
                 'WebPage',
 
             '@id':
-                `${routeUrl}#webpage`,
+                canonical
 
-            url:
-                routeUrl,
-
-            name:
-                route.title,
-
-            description:
-                route.description,
-
-            inLanguage:
-                route.language,
-
-            author: {
-                '@id':
-                    personId
-            },
-
-            isPartOf: {
-                '@id':
-                    websiteId
-            },
-
-            mainEntity: {
-
-                '@type':
-                    'CreativeWork',
-
-                '@id':
-                    `${routeUrl}#case-study`,
-
-                url:
-                    routeUrl,
-
-                name:
-                    route.title,
-
-                description:
-                    route.description,
-
-                inLanguage:
-                    route.language,
-
-                author: {
-                    '@id':
-                        personId
-                }
-
-            }
-
-        };
-
-    }
-
-
-    // =====================================================
-    // DEFAULT
-    // =====================================================
-
-    return {
-
-        '@type':
-            'WebPage',
-
-        '@id':
-            `${routeUrl}#webpage`,
-
-        url:
-            routeUrl,
-
-        name:
-            route.title,
-
-        description:
-            route.description,
-
-        inLanguage:
-            route.language,
+        },
 
         author: {
-            '@id':
-                personId
-        },
 
-        isPartOf: {
-            '@id':
-                websiteId
-        }
+            '@type':
+                'Person',
 
-    };
+            name:
+                post.author ||
+                'Hossein Alavi',
 
-}
-
-
-// =========================================================
-// COMPLETE STRUCTURED DATA
-// =========================================================
-
-function createStructuredData(
-    route,
-    routeUrl
-) {
-
-    return {
-
-        '@context':
-            'https://schema.org',
-
-        '@graph': [
-
-            createWebsiteSchema(),
-
-            createPersonSchema(),
-
-            createPageSchema(
-                route,
-                routeUrl
-            )
-
-        ]
-
-    };
-
-}
-
-
-// =========================================================
-// REMOVE ALL OLD JSON-LD
-//
-// Important:
-// Do not leave homepage ProfilePage JSON-LD
-// inside Portfolio / Blog / Project pages.
-// =========================================================
-
-function removeStructuredData(
-    html
-) {
-
-    return html.replace(
-        /\s*<script\b[^>]*type=["']application\/ld\+json["'][^>]*>[\s\S]*?<\/script>\s*/gi,
-        '\n'
-    );
-
-}
-
-
-// =========================================================
-// ADD ROUTE STRUCTURED DATA
-// =========================================================
-
-function addStructuredData(
-    html,
-    structuredData
-) {
-
-    const replacement =
-        `    <script type="application/ld+json">
-${JSON.stringify(
-            structuredData,
-            null,
-            2
-        )}
-    </script>`;
-
-
-    return html.replace(
-        '</head>',
-
-        `${replacement}\n  </head>`
-    );
-
-}
-
-
-// =========================================================
-// GENERATE STATIC ROUTE
-// =========================================================
-
-function generateRoute(
-    sourceHtml,
-    route
-) {
-
-    const routeDirectory =
-        path.join(
-            buildDirectory,
-            ...route.path.split('/')
-        );
-
-
-    const routeIndex =
-        path.join(
-            routeDirectory,
-            'index.html'
-        );
-
-
-    const canonicalUrl =
-        createAbsoluteUrl(
-            route.canonicalPath ||
-            route.path
-        );
-
-
-    const title =
-        escapeHtml(
-            route.title
-        );
-
-
-    const description =
-        escapeHtml(
-            route.description
-        );
-
-
-    let html =
-        sourceHtml;
-
-
-    // =====================================================
-    // HTML LANGUAGE + DIRECTION
-    // =====================================================
-
-    html =
-        setHtmlAttributes(
-            html,
-            route.language || 'en',
-            route.direction || 'ltr'
-        );
-
-
-    // =====================================================
-    // TITLE
-    // =====================================================
-
-    html =
-        replaceTitle(
-            html,
-            route.title
-        );
-
-
-    // =====================================================
-    // DESCRIPTION
-    // =====================================================
-
-    html =
-        replaceHeadTag(
-
-            html,
-
-            /<meta[^>]+name=["']description["'][^>]*>/i,
-
-            `<meta name="description" content="${description}" />`
-
-        );
-
-
-    // =====================================================
-    // ROBOTS
-    // =====================================================
-
-    html =
-        replaceHeadTag(
-
-            html,
-
-            /<meta[^>]+name=["']robots["'][^>]*>/i,
-
-            `<meta name="robots" content="${escapeHtml(
-                route.robots ||
-                'index, follow, max-image-preview:large'
-            )}" />`
-
-        );
-
-
-    // =====================================================
-    // CANONICAL
-    // =====================================================
-
-    html =
-        replaceHeadTag(
-
-            html,
-
-            /<link[^>]+rel=["']canonical["'][^>]*>/i,
-
-            `<link rel="canonical" href="${canonicalUrl}" />`
-
-        );
-
-
-    // =====================================================
-    // OPEN GRAPH TYPE
-    // =====================================================
-
-    html =
-        replaceHeadTag(
-
-            html,
-
-            /<meta[^>]+property=["']og:type["'][^>]*>/i,
-
-            '<meta property="og:type" content="website" />'
-
-        );
-
-
-    // =====================================================
-    // OPEN GRAPH TITLE
-    // =====================================================
-
-    html =
-        replaceHeadTag(
-
-            html,
-
-            /<meta[^>]+property=["']og:title["'][^>]*>/i,
-
-            `<meta property="og:title" content="${title}" />`
-
-        );
-
-
-    // =====================================================
-    // OPEN GRAPH DESCRIPTION
-    // =====================================================
-
-    html =
-        replaceHeadTag(
-
-            html,
-
-            /<meta[^>]+property=["']og:description["'][^>]*>/i,
-
-            `<meta property="og:description" content="${description}" />`
-
-        );
-
-
-    // =====================================================
-    // OPEN GRAPH URL
-    // =====================================================
-
-    html =
-        replaceHeadTag(
-
-            html,
-
-            /<meta[^>]+property=["']og:url["'][^>]*>/i,
-
-            `<meta property="og:url" content="${canonicalUrl}" />`
-
-        );
-
-
-    // =====================================================
-    // OPEN GRAPH IMAGE
-    // =====================================================
-
-    html =
-        replaceHeadTag(
-
-            html,
-
-            /<meta[^>]+property=["']og:image["'][^>]*>/i,
-
-            `<meta property="og:image" content="${profileImage}" />`
-
-        );
-
-
-    // =====================================================
-    // OPEN GRAPH IMAGE ALT
-    // =====================================================
-
-    html =
-        replaceHeadTag(
-
-            html,
-
-            /<meta[^>]+property=["']og:image:alt["'][^>]*>/i,
-
-            '<meta property="og:image:alt" content="Hossein Alavi, Product Designer" />'
-
-        );
-
-
-    // =====================================================
-    // OPEN GRAPH LOCALE
-    // =====================================================
-
-    html =
-        replaceHeadTag(
-
-            html,
-
-            /<meta[^>]+property=["']og:locale["'][^>]*>/i,
-
-            `<meta property="og:locale" content="${escapeHtml(
-                route.ogLocale ||
-                'en_US'
-            )}" />`
-
-        );
-
-
-    // =====================================================
-    // REMOVE OLD OG ALTERNATE LOCALES
-    // =====================================================
-
-    html =
-        removeOgLocaleAlternates(
-            html
-        );
-
-
-    // =====================================================
-    // ADD OG ALTERNATE LOCALE
-    // =====================================================
-
-    if (
-        route.ogLocaleAlternate
-    ) {
-
-        html =
-            html.replace(
-
-                '</head>',
-
-                `    <meta property="og:locale:alternate" content="${escapeHtml(
-                    route.ogLocaleAlternate
-                )}" />\n  </head>`
-
-            );
-
-    }
-
-
-    // =====================================================
-    // TWITTER CARD
-    // =====================================================
-
-    html =
-        replaceHeadTag(
-
-            html,
-
-            /<meta[^>]+name=["']twitter:card["'][^>]*>/i,
-
-            '<meta name="twitter:card" content="summary_large_image" />'
-
-        );
-
-
-    // =====================================================
-    // TWITTER TITLE
-    // =====================================================
-
-    html =
-        replaceHeadTag(
-
-            html,
-
-            /<meta[^>]+name=["']twitter:title["'][^>]*>/i,
-
-            `<meta name="twitter:title" content="${title}" />`
-
-        );
-
-
-    // =====================================================
-    // TWITTER DESCRIPTION
-    // =====================================================
-
-    html =
-        replaceHeadTag(
-
-            html,
-
-            /<meta[^>]+name=["']twitter:description["'][^>]*>/i,
-
-            `<meta name="twitter:description" content="${description}" />`
-
-        );
-
-
-    // =====================================================
-    // TWITTER IMAGE
-    // =====================================================
-
-    html =
-        replaceHeadTag(
-
-            html,
-
-            /<meta[^>]+name=["']twitter:image["'][^>]*>/i,
-
-            `<meta name="twitter:image" content="${profileImage}" />`
-
-        );
-
-
-    // =====================================================
-    // TWITTER IMAGE ALT
-    // =====================================================
-
-    html =
-        replaceHeadTag(
-
-            html,
-
-            /<meta[^>]+name=["']twitter:image:alt["'][^>]*>/i,
-
-            '<meta name="twitter:image:alt" content="Hossein Alavi, Product Designer" />'
-
-        );
-
-
-    // =====================================================
-    // HREFLANG
-    // =====================================================
-
-    html =
-        removeAlternateLanguages(
-            html
-        );
-
-
-    html =
-        addAlternateLanguages(
-            html,
-            route.alternateLanguages
-        );
-
-
-    // =====================================================
-    // STRUCTURED DATA
-    // =====================================================
-
-    html =
-        removeStructuredData(
-            html
-        );
-
-
-    if (
-        route.schemaType
-    ) {
-
-        html =
-            addStructuredData(
-
-                html,
-
-                createStructuredData(
-                    route,
-                    canonicalUrl
-                )
-
-            );
-
-    }
-
-
-    // =====================================================
-    // CREATE DIRECTORY
-    // =====================================================
-
-    fs.mkdirSync(
-
-        routeDirectory,
-
-        {
-            recursive:
-                true
-        }
-
-    );
-
-
-    // =====================================================
-    // WRITE FILE
-    // =====================================================
-
-    fs.writeFileSync(
-
-        routeIndex,
-
-        html,
-
-        'utf8'
-
-    );
-
-
-    console.log(
-        `Created SEO route: /${route.path}/`
-    );
-
-}
-
-
-// =========================================================
-// GENERATE SITEMAP
-// =========================================================
-
-function generateSitemap() {
-
-    const sitemapRoutes = [
-
-        // Homepage
-        {
             url:
-                `${baseUrl}/`,
+                BASE_URL
 
-            changefreq:
-                'monthly',
-
-            priority:
-                '1.0'
         },
 
+        publisher: {
 
-        // Generated routes
-        ...routes
-            .filter(
-                (route) =>
-                    route.includeInSitemap !==
-                    false
-            )
-            .map(
-                (route) => ({
+            '@type':
+                'Person',
 
-                    url:
-                        createAbsoluteUrl(
-                            route.path
-                        ),
+            name:
+                'Hossein Alavi',
 
-                    changefreq:
-                        route.changefreq ||
-                        'monthly',
+            url:
+                BASE_URL
 
-                    priority:
-                        route.priority ||
-                        '0.8',
+        },
 
-                    alternateLanguages:
-                        route.alternateLanguages
+        inLanguage:
+            language
 
-                })
-            )
-
-    ];
+    };
 
 
-    const entries =
-        sitemapRoutes
-            .map(
-                (route) => {
+    if (
+        imageUrl
+    ) {
 
-                    const alternateLinks =
-                        route.alternateLanguages
+        structuredData.image =
+            imageUrl;
 
-                            ? Object.entries(
-                                route.alternateLanguages
-                            )
-                                .map(
-                                    ([
-                                        language,
-                                        alternatePath
-                                    ]) => {
-
-                                        const alternateUrl =
-                                            createAbsoluteUrl(
-                                                alternatePath
-                                            );
+    }
 
 
-                                        return (
-                                            `    <xhtml:link rel="alternate" hreflang="${escapeXml(language)}" href="${escapeXml(alternateUrl)}" />`
-                                        );
+    /*
+     * Never invent dates.
+     * Only include datePublished
+     * when the CMS actually provides one.
+     */
 
-                                    }
-                                )
-                                .join('\n')
+    if (
+        post.publishedAt
+    ) {
 
-                            : '';
+        structuredData.datePublished =
+            post.publishedAt;
 
-
-                    return [
-                        '  <url>',
-
-                        `    <loc>${escapeXml(
-                            route.url
-                        )}</loc>`,
-
-                        alternateLinks,
-
-                        `    <changefreq>${escapeXml(
-                            route.changefreq
-                        )}</changefreq>`,
-
-                        `    <priority>${escapeXml(
-                            route.priority
-                        )}</priority>`,
-
-                        '  </url>'
-
-                    ]
-                        .filter(Boolean)
-                        .join('\n');
-
-                }
-            )
-            .join('\n\n');
+    }
 
 
-    const sitemap =
-        `<?xml version="1.0" encoding="UTF-8"?>
-<urlset
-    xmlns="http://www.sitemaps.org/schemas/sitemap/0.9"
-    xmlns:xhtml="http://www.w3.org/1999/xhtml"
->
+    const pageHtml =
+        createPageHtml({
+            template,
+            title,
+            description,
+            canonical,
+            language,
+            ogType:
+                'article',
+            image:
+                post.cover || '',
+            alternates
+        });
 
-${entries}
 
-</urlset>
+    const articleExtras =
+`
+${
+    post.publishedAt
+        ? `
+<meta
+    property="article:published_time"
+    content="${escapeHtml(
+        post.publishedAt
+    )}"
+/>`
+        : ''
+}
+
+<script
+    type="application/ld+json"
+    id="blogposting-jsonld"
+>${JSON.stringify(
+        structuredData
+    ).replace(
+        /</g,
+        '\\u003c'
+    )}</script>
 `;
 
 
-    fs.writeFileSync(
-
-        sitemapPath,
-
-        sitemap,
-
-        'utf8'
-
-    );
-
-
-    console.log(
-        'Created sitemap.xml'
+    return pageHtml.replace(
+        '</head>',
+        `${articleExtras}\n</head>`
     );
 
 }
 
 
 // =========================================================
-// VALIDATE BUILD
+// LOAD BUILD
 // =========================================================
 
 if (
     !fs.existsSync(
-        sourceIndex
+        TEMPLATE_PATH
     )
 ) {
 
-    console.error('');
     console.error(
-        'build/index.html was not found.'
+        '\n❌ build/index.html not found.'
     );
 
+
     console.error(
-        'Run npm run build first.'
+        'Run react-scripts build before generate-static-routes.js.\n'
     );
 
-    console.error('');
 
     process.exit(1);
 
 }
 
 
-// =========================================================
-// READ SOURCE
-// =========================================================
-
-const sourceHtml =
+const template =
     fs.readFileSync(
-        sourceIndex,
+        TEMPLATE_PATH,
         'utf8'
     );
 
 
 // =========================================================
-// GENERATE ALL STATIC ROUTES
+// LOAD BLOG POSTS
 // =========================================================
 
-routes.forEach(
+let blogPosts = [];
+
+
+if (
+    fs.existsSync(
+        BLOG_DATA_PATH
+    )
+) {
+
+    try {
+
+        blogPosts =
+            JSON.parse(
+                fs.readFileSync(
+                    BLOG_DATA_PATH,
+                    'utf8'
+                )
+            );
+
+
+        if (
+            !Array.isArray(
+                blogPosts
+            )
+        ) {
+
+            blogPosts =
+                [];
+
+        }
+
+    } catch (error) {
+
+        console.error(
+            '❌ Could not read blogPosts.json'
+        );
+
+
+        console.error(
+            error
+        );
+
+
+        process.exit(1);
+
+    }
+
+}
+
+
+// =========================================================
+// NORMAL STATIC ROUTES
+// =========================================================
+
+const plainRoutes = [
+
+    '/portfolio/',
+
+    '/projects/tipax/',
+    '/projects/citynet/',
+    '/projects/blue/',
+    '/projects/3click/',
+    '/projects/darzi/',
+    '/projects/yahoo/'
+
+];
+
+
+plainRoutes.forEach(
     (route) => {
 
-        generateRoute(
-            sourceHtml,
-            route
+        writeRoute(
+            route,
+            template
         );
 
     }
@@ -1756,27 +783,387 @@ routes.forEach(
 
 
 // =========================================================
-// GENERATE SITEMAP
+// BLOG GATEWAY
+// /blog/ redirects in React to /blog/en/
+// Keep gateway noindex.
 // =========================================================
 
-generateSitemap();
+const blogGatewayHtml =
+    createPageHtml({
+
+        template,
+
+        title:
+            'Product Design Blog | Hossein Alavi',
+
+        description:
+            'Product design articles by Hossein Alavi.',
+
+        canonical:
+            `${BASE_URL}/blog/en/`,
+
+        robots:
+            'noindex, follow',
+
+        language:
+            'en',
+
+        alternates: [
+
+            {
+                hreflang:
+                    'en',
+
+                href:
+                    `${BASE_URL}/blog/en/`
+            },
+
+            {
+                hreflang:
+                    'fa',
+
+                href:
+                    `${BASE_URL}/blog/fa/`
+            },
+
+            {
+                hreflang:
+                    'x-default',
+
+                href:
+                    `${BASE_URL}/blog/en/`
+            }
+
+        ]
+
+    });
+
+
+writeRoute(
+    '/blog/',
+    blogGatewayHtml
+);
 
 
 // =========================================================
-// SUCCESS
+// ENGLISH BLOG INDEX
 // =========================================================
 
-console.log('');
-console.log(
-    'Static SEO routes generated successfully.'
+const englishBlogHtml =
+    createPageHtml({
+
+        template,
+
+        title:
+            'Product Design Blog | Hossein Alavi',
+
+        description:
+            'Articles and notes by Hossein Alavi about product design, user research, problem framing, product thinking, and design systems.',
+
+        canonical:
+            `${BASE_URL}/blog/en/`,
+
+        language:
+            'en',
+
+        alternates: [
+
+            {
+                hreflang:
+                    'en',
+
+                href:
+                    `${BASE_URL}/blog/en/`
+            },
+
+            {
+                hreflang:
+                    'fa',
+
+                href:
+                    `${BASE_URL}/blog/fa/`
+            },
+
+            {
+                hreflang:
+                    'x-default',
+
+                href:
+                    `${BASE_URL}/blog/en/`
+            }
+
+        ]
+
+    });
+
+
+writeRoute(
+    '/blog/en/',
+    englishBlogHtml
 );
 
-console.log(
-    `Generated ${routes.length} static routes.`
+
+// =========================================================
+// PERSIAN BLOG INDEX
+// =========================================================
+
+const persianBlogHtml =
+    createPageHtml({
+
+        template,
+
+        title:
+            'بلاگ طراحی محصول | حسین علوی',
+
+        description:
+            'یادداشت‌ها و مقاله‌های حسین علوی درباره طراحی محصول، تحقیق کاربر، تعریف مسئله، تفکر محصول و سیستم‌های طراحی.',
+
+        canonical:
+            `${BASE_URL}/blog/fa/`,
+
+        language:
+            'fa',
+
+        alternates: [
+
+            {
+                hreflang:
+                    'en',
+
+                href:
+                    `${BASE_URL}/blog/en/`
+            },
+
+            {
+                hreflang:
+                    'fa',
+
+                href:
+                    `${BASE_URL}/blog/fa/`
+            },
+
+            {
+                hreflang:
+                    'x-default',
+
+                href:
+                    `${BASE_URL}/blog/en/`
+            }
+
+        ]
+
+    });
+
+
+writeRoute(
+    '/blog/fa/',
+    persianBlogHtml
 );
 
-console.log(
-    'Sitemap generated successfully.'
+
+// =========================================================
+// ARTICLE STATIC ROUTES
+// =========================================================
+
+const articleUrls = [];
+
+
+blogPosts.forEach(
+    (post) => {
+
+        if (
+            !post ||
+            !post.slug
+        ) {
+
+            return;
+
+        }
+
+
+        // ---------------------------------------------
+        // EN
+        // ---------------------------------------------
+
+        if (
+            post.languages?.en &&
+            post.en &&
+            post.en.enabled !== false
+        ) {
+
+            const route =
+                `/blog/en/${post.slug}/`;
+
+
+            const html =
+                createArticleHtml({
+                    template,
+                    post,
+                    language:
+                        'en'
+                });
+
+
+            if (
+                html
+            ) {
+
+                writeRoute(
+                    route,
+                    html
+                );
+
+
+                articleUrls.push(
+                    `${BASE_URL}${route}`
+                );
+
+            }
+
+        }
+
+
+        // ---------------------------------------------
+        // FA
+        // ---------------------------------------------
+
+        if (
+            post.languages?.fa &&
+            post.fa &&
+            post.fa.enabled !== false
+        ) {
+
+            const route =
+                `/blog/fa/${post.slug}/`;
+
+
+            const html =
+                createArticleHtml({
+                    template,
+                    post,
+                    language:
+                        'fa'
+                });
+
+
+            if (
+                html
+            ) {
+
+                writeRoute(
+                    route,
+                    html
+                );
+
+
+                articleUrls.push(
+                    `${BASE_URL}${route}`
+                );
+
+            }
+
+        }
+
+    }
 );
 
-console.log('');
+
+// =========================================================
+// SITEMAP
+// =========================================================
+
+const sitemapUrls = [
+
+    `${BASE_URL}/`,
+    `${BASE_URL}/portfolio/`,
+
+    `${BASE_URL}/blog/en/`,
+    `${BASE_URL}/blog/fa/`,
+
+    `${BASE_URL}/projects/tipax/`,
+    `${BASE_URL}/projects/citynet/`,
+    `${BASE_URL}/projects/blue/`,
+    `${BASE_URL}/projects/3click/`,
+    `${BASE_URL}/projects/darzi/`,
+    `${BASE_URL}/projects/yahoo/`,
+
+    ...articleUrls
+
+];
+
+
+// Remove duplicates
+const uniqueSitemapUrls =
+    [
+        ...new Set(
+            sitemapUrls
+        )
+    ];
+
+
+const sitemap =
+`<?xml version="1.0" encoding="UTF-8"?>
+<urlset
+    xmlns="http://www.sitemaps.org/schemas/sitemap/0.9"
+>
+${uniqueSitemapUrls
+    .map(
+        (url) =>
+`    <url>
+        <loc>${escapeHtml(url)}</loc>
+    </url>`
+    )
+    .join('\n')}
+</urlset>
+`;
+
+
+fs.writeFileSync(
+    path.join(
+        BUILD_DIR,
+        'sitemap.xml'
+    ),
+    sitemap,
+    'utf8'
+);
+
+
+// =========================================================
+// ROBOTS.TXT
+// =========================================================
+
+const robots =
+`User-agent: *
+Allow: /
+
+Sitemap: ${BASE_URL}/sitemap.xml
+`;
+
+
+fs.writeFileSync(
+    path.join(
+        BUILD_DIR,
+        'robots.txt'
+    ),
+    robots,
+    'utf8'
+);
+
+
+// =========================================================
+// FINISH
+// =========================================================
+
+console.log('\n✅ Static routes generated.');
+console.log(
+    `✅ Blog articles: ${articleUrls.length}`
+);
+console.log(
+    `✅ Sitemap URLs: ${uniqueSitemapUrls.length}`
+);
+console.log(
+    '✅ sitemap.xml generated.'
+);
+console.log(
+    '✅ robots.txt generated.\n'
+);
