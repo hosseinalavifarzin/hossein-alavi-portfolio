@@ -7,10 +7,17 @@ import {
     Navigate
 } from 'react-router-dom';
 
+
 import MainHome from './page/MainHome/MainHome';
+
 import Home from './page/Home/Home';
+
 import Blog from './page/Blog/Blog';
+
+import BlogPost from './page/BlogPost/BlogPost';
+
 import ProjectDetails from './page/ProjectDetails/ProjectDetails';
+
 
 import {
     ThemeProvider
@@ -35,13 +42,19 @@ function App() {
 
                         <Route
                             path="/"
-                            element={<MainHome />}
+                            element={
+                                <MainHome />
+                            }
                         />
+
 
                         <Route
                             path="/portfolio"
-                            element={<Home />}
+                            element={
+                                <Home />
+                            }
                         />
+
 
                         <Route
                             path="/blog"
@@ -53,14 +66,28 @@ function App() {
                             }
                         />
 
+
                         <Route
                             path="/blog/:language"
-                            element={<Blog />}
+                            element={
+                                <Blog />
+                            }
                         />
+
+
+                        <Route
+                            path="/blog/:language/:slug"
+                            element={
+                                <BlogPost />
+                            }
+                        />
+
 
                         <Route
                             path="/projects/:projectId"
-                            element={<ProjectDetails />}
+                            element={
+                                <ProjectDetails />
+                            }
                         />
 
                     </Routes>

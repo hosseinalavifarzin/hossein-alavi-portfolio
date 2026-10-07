@@ -1,752 +1,866 @@
 import {
     useEffect,
-    useLayoutEffect,
+    useMemo,
     useState
 } from 'react';
 
 import {
+    Link,
     Navigate,
     useParams
 } from 'react-router-dom';
 
-import MainNavBar
-    from '../../Component/MainNavBar/MainNavBar';
+import {
+    HiArrowLeft,
+    HiArrowRight,
+    HiCalendar,
+    HiClock
+} from 'react-icons/hi';
 
-import LanguageSwitch
-    from '../../Component/LanguageSwitch/LanguageSwitch';
+import MainNavBar from '../../Component/MainNavBar/MainNavBar';
+import Footer from '../../Component/footer/Footer';
+import LanguageSwitch from '../../Component/LanguageSwitch/LanguageSwitch';
 
-import Footer
-    from '../../Component/footer/Footer';
+import blogPosts from '../../generated/blogPosts.json';
+
+import {
+    BLOG_CATEGORIES,
+    getBlogCategoryLabel
+} from '../../data/blogCategories';
 
 import './Blog.css';
 
 
-// =========================================================
-// CATEGORIES
-// =========================================================
-
-const categories = [
-
-    {
-        id: 'all',
-        en: 'All',
-        fa: 'همه'
-    },
-
-    {
-        id: 'product-discovery',
-        en: 'Product Discovery',
-        fa: 'کشف محصول'
-    },
-
-    {
-        id: 'user-research',
-        en: 'User Research',
-        fa: 'تحقیق کاربر'
-    },
-
-    {
-        id: 'problem-framing',
-        en: 'Problem Framing',
-        fa: 'تعریف مسئله'
-    },
-
-    {
-        id: 'product-thinking',
-        en: 'Product Thinking',
-        fa: 'تفکر محصول'
-    },
-
-    {
-        id: 'design-systems',
-        en: 'Design Systems',
-        fa: 'سیستم طراحی'
-    }
-
-];
+const BASE_URL =
+    'https://hosseinalavifarzin.ir';
 
 
 // =========================================================
-// CONTENT
+// READ TIME
 // =========================================================
 
-const content = {
-
-    en: {
-
-        badge:
-            'Blog',
-
-        title:
-            'Product Design',
-
-        highlightedTitle:
-            'Notes & Thinking',
-
-        description:
-            'Practical articles about product design, user research, problem framing, product thinking, design systems, and complex digital products.',
-
-        sectionTitle:
-            'Product Design Articles',
-
-        empty:
-            'Articles in this category will appear here. We are building a focused collection of practical product design content.'
-
-    },
-
-
-    fa: {
-
-        badge:
-            'بلاگ',
-
-        title:
-            'یادداشت‌های',
-
-        highlightedTitle:
-            'طراحی محصول',
-
-        description:
-            'مقاله‌هایی کاربردی درباره طراحی محصول، تحقیق کاربر، تعریف مسئله، تفکر محصول، سیستم‌های طراحی و ساخت تجربه‌های دیجیتال بهتر.',
-
-        sectionTitle:
-            'مقاله‌های طراحی محصول',
-
-        empty:
-            'مقاله‌های این دسته در این بخش نمایش داده می‌شوند. هدف این بلاگ ساخت مجموعه‌ای کاربردی و عمیق درباره طراحی محصول است.'
-
-    }
-
-};
-
-
-// =========================================================
-// HELPERS
-// =========================================================
-
-function restoreAttribute(
-    element,
-    attribute,
-    value
+function getReadTimeLabel(
+    minutes,
+    language
 ) {
 
+    if (!minutes) {
+        return '';
+    }
+
+
     if (
-        value === null
+        language === 'fa'
     ) {
 
-        element.removeAttribute(
-            attribute
-        );
+        const number =
+            new Intl.NumberFormat(
+                'fa-IR'
+            ).format(
+                minutes
+            );
 
-        return;
+
+        return `${number} دقیقه`;
 
     }
 
 
-    element.setAttribute(
-        attribute,
-        value
+    return `${minutes} min`;
+
+}
+
+
+// =========================================================
+// DATE
+// =========================================================
+
+function formatDate(
+    date,
+    language
+) {
+
+    if (!date) {
+        return '';
+    }
+
+
+    try {
+
+        const value =
+            new Date(
+                `${date}T00:00:00Z`
+            );
+
+
+        return new Intl.DateTimeFormat(
+            language === 'fa'
+                ? 'fa-IR'
+                : 'en-US',
+            {
+                year: 'numeric',
+                month: 'short',
+                day: 'numeric',
+                timeZone: 'UTC'
+            }
+        ).format(
+            value
+        );
+
+    } catch (error) {
+
+        return date;
+
+    }
+
+}
+
+
+// =========================================================
+// META
+// =========================================================
+
+function setMeta(
+    selector,
+    attributes
+) {
+
+    let element =
+        document.head.querySelector(
+            selector
+        );
+
+
+    if (!element) {
+
+        element =
+            document.createElement(
+                'meta'
+            );
+
+        document.head.appendChild(
+            element
+        );
+
+    }
+
+
+    Object.entries(
+        attributes
+    ).forEach(
+        ([key, value]) => {
+
+            element.setAttribute(
+                key,
+                value
+            );
+
+        }
     );
 
 }
 
 
 // =========================================================
-// BLOG
+// CANONICAL
+// =========================================================
+
+function setCanonical(
+    href
+) {
+
+    let canonical =
+        document.head.querySelector(
+            'link[rel="canonical"]'
+        );
+
+
+    if (!canonical) {
+
+        canonical =
+            document.createElement(
+                'link'
+            );
+
+        canonical.rel =
+            'canonical';
+
+        document.head.appendChild(
+            canonical
+        );
+
+    }
+
+
+    canonical.href =
+        href;
+
+}
+
+
+// =========================================================
+// HREFLANG
+// =========================================================
+
+function setLanguageAlternates() {
+
+    document.head
+        .querySelectorAll(
+            'link[data-blog-index-hreflang="true"]'
+        )
+        .forEach(
+            (element) => {
+
+                element.remove();
+
+            }
+        );
+
+
+    const addAlternate = (
+        language,
+        href
+    ) => {
+
+        const link =
+            document.createElement(
+                'link'
+            );
+
+
+        link.rel =
+            'alternate';
+
+        link.hreflang =
+            language;
+
+        link.href =
+            href;
+
+        link.setAttribute(
+            'data-blog-index-hreflang',
+            'true'
+        );
+
+
+        document.head.appendChild(
+            link
+        );
+
+    };
+
+
+    addAlternate(
+        'en',
+        `${BASE_URL}/blog/en/`
+    );
+
+
+    addAlternate(
+        'fa',
+        `${BASE_URL}/blog/fa/`
+    );
+
+
+    addAlternate(
+        'x-default',
+        `${BASE_URL}/blog/en/`
+    );
+
+}
+
+
+// =========================================================
+// BLOG CARD
+// =========================================================
+
+function BlogCard({
+    post,
+    language
+}) {
+
+    const isPersian =
+        language === 'fa';
+
+
+    const content =
+        post?.[language];
+
+
+    if (!content) {
+        return null;
+    }
+
+
+    const category =
+        getBlogCategoryLabel(
+            post.category,
+            language
+        );
+
+
+    return (
+
+        <article className="blog-card">
+
+            <Link
+                to={`/blog/${language}/${post.slug}`}
+                className="blog-card-link"
+            >
+
+                {/* =========================================
+                    IMAGE WITH INNER PADDING
+                ========================================== */}
+
+                <div className="blog-card-media">
+
+                    <div className="blog-card-image">
+
+                        {post.cover ? (
+
+                            <img
+                                src={post.cover}
+                                alt={content.title}
+                                loading="lazy"
+                                decoding="async"
+                            />
+
+                        ) : (
+
+                            <div className="blog-card-placeholder">
+
+                                <span>
+                                    H.
+                                </span>
+
+                            </div>
+
+                        )}
+
+                    </div>
+
+                </div>
+
+
+                {/* =========================================
+                    CONTENT
+                ========================================== */}
+
+                <div className="blog-card-content">
+
+                    {/* META */}
+
+                    <div className="blog-card-meta">
+
+                        <span className="blog-card-category">
+
+                            <span
+                                className="blog-card-category-dot"
+                                aria-hidden="true"
+                            />
+
+
+                            <span>
+
+                                {category}
+
+                            </span>
+
+                        </span>
+
+
+                        {content.readTimeMinutes && (
+
+                            <span className="blog-card-read-time">
+
+                                <HiClock />
+
+
+                                <span>
+
+                                    {getReadTimeLabel(
+                                        content.readTimeMinutes,
+                                        language
+                                    )}
+
+                                </span>
+
+                            </span>
+
+                        )}
+
+                    </div>
+
+
+                    {/* TITLE */}
+
+                    <h2 className="blog-card-title">
+
+                        {content.title}
+
+                    </h2>
+
+
+                    {/* DESCRIPTION */}
+
+                    {content.description && (
+
+                        <p className="blog-card-description">
+
+                            {content.description}
+
+                        </p>
+
+                    )}
+
+
+                    {/* FOOTER */}
+
+                    <div className="blog-card-footer">
+
+                        <div className="blog-card-footer-left">
+
+                            {post.publishedAt && (
+
+                                <span className="blog-card-date">
+
+                                    <HiCalendar />
+
+
+                                    <span>
+
+                                        {formatDate(
+                                            post.publishedAt,
+                                            language
+                                        )}
+
+                                    </span>
+
+                                </span>
+
+                            )}
+
+                        </div>
+
+
+                        <span className="blog-card-action">
+
+                            <span>
+
+                                {
+                                    isPersian
+                                        ? 'مطالعه مقاله'
+                                        : 'Read article'
+                                }
+
+                            </span>
+
+
+                            <span className="blog-card-action-icon">
+
+                                {isPersian ? (
+
+                                    <HiArrowLeft />
+
+                                ) : (
+
+                                    <HiArrowRight />
+
+                                )}
+
+                            </span>
+
+                        </span>
+
+                    </div>
+
+                </div>
+
+            </Link>
+
+        </article>
+
+    );
+
+}
+
+
+// =========================================================
+// BLOG PAGE
 // =========================================================
 
 function Blog() {
 
     const {
-        language: routeLanguage
+        language
     } = useParams();
 
 
-    const isValidLanguage =
-        routeLanguage === 'en' ||
-        routeLanguage === 'fa';
-
-
-    const language =
-        routeLanguage === 'fa'
-            ? 'fa'
-            : 'en';
+    const validLanguage =
+        language === 'fa' ||
+        language === 'en';
 
 
     const isPersian =
         language === 'fa';
 
 
-    const currentContent =
-        content[language];
+    const direction =
+        isPersian
+            ? 'rtl'
+            : 'ltr';
 
 
-    const [activeCategory, setActiveCategory] =
-        useState('all');
+    const [
+        activeCategory,
+        setActiveCategory
+    ] = useState('all');
 
 
     // =====================================================
-    // STABLE SITE SHELL
+    // AVAILABLE POSTS
     // =====================================================
 
-    useLayoutEffect(() => {
+    const availablePosts =
+        useMemo(
+            () => {
 
-        if (
-            !isValidLanguage
-        ) {
-            return undefined;
-        }
+                if (
+                    !validLanguage
+                ) {
+
+                    return [];
+
+                }
 
 
-        const htmlElement =
-            document.documentElement;
+                return blogPosts.filter(
+                    (post) => {
+
+                        const content =
+                            post?.[language];
 
 
-        const previousLang =
-            htmlElement.getAttribute(
-                'lang'
+                        return Boolean(
+                            content &&
+                            content.enabled !== false &&
+                            content.title
+                        );
+
+                    }
+                );
+
+            },
+            [
+                language,
+                validLanguage
+            ]
+        );
+
+
+    // =====================================================
+    // FILTERED POSTS
+    // =====================================================
+
+    const filteredPosts =
+        useMemo(
+            () => {
+
+                if (
+                    activeCategory === 'all'
+                ) {
+
+                    return availablePosts;
+
+                }
+
+
+                return availablePosts.filter(
+                    (post) =>
+                        post.category ===
+                        activeCategory
+                );
+
+            },
+            [
+                availablePosts,
+                activeCategory
+            ]
+        );
+
+
+    // =====================================================
+    // CATEGORY COUNTS
+    // =====================================================
+
+    const categoryCounts =
+        useMemo(
+            () => {
+
+                const counts = {
+
+                    all:
+                        availablePosts.length
+
+                };
+
+
+                availablePosts.forEach(
+                    (post) => {
+
+                        counts[
+                            post.category
+                        ] =
+                            (
+                                counts[
+                                    post.category
+                                ] ||
+                                0
+                            ) + 1;
+
+                    }
+                );
+
+
+                return counts;
+
+            },
+            [
+                availablePosts
+            ]
+        );
+
+
+    // =====================================================
+    // ACTIVE CATEGORY LABEL
+    // =====================================================
+
+    const activeCategoryLabel =
+        activeCategory === 'all'
+
+            ? (
+                isPersian
+                    ? 'همه نوشته‌ها'
+                    : 'All articles'
+            )
+
+            : getBlogCategoryLabel(
+                activeCategory,
+                language
             );
 
 
-        const previousDirection =
-            htmlElement.getAttribute(
-                'dir'
+    // =====================================================
+    // RESET FILTER AFTER LANGUAGE CHANGE
+    // =====================================================
+
+    useEffect(
+        () => {
+
+            setActiveCategory(
+                'all'
             );
 
-
-        /*
-         * Important:
-         *
-         * The website shell always remains LTR.
-         *
-         * Persian RTL is applied only to the
-         * localized Blog content.
-         *
-         * This prevents Navbar movement,
-         * scrollbar movement and layout jumps.
-         */
-
-        htmlElement.setAttribute(
-            'lang',
+        },
+        [
             language
-        );
-
-
-        htmlElement.setAttribute(
-            'dir',
-            'ltr'
-        );
-
-
-        return () => {
-
-            restoreAttribute(
-                htmlElement,
-                'lang',
-                previousLang
-            );
-
-
-            restoreAttribute(
-                htmlElement,
-                'dir',
-                previousDirection
-            );
-
-        };
-
-    }, [
-        language,
-        isValidLanguage
-    ]);
+        ]
+    );
 
 
     // =====================================================
-    // PRELOAD PERSIAN FONT
+    // DOCUMENT LANGUAGE
     // =====================================================
 
-    useEffect(() => {
+    useEffect(
+        () => {
 
-        if (
-            !document.fonts ||
-            !document.fonts.load
-        ) {
-            return;
-        }
+            if (
+                !validLanguage
+            ) {
 
+                return;
 
-        document.fonts.load(
-            '400 16px Vazirmatn'
-        );
+            }
 
 
-        document.fonts.load(
-            '600 16px Vazirmatn'
-        );
+            document.documentElement.lang =
+                language;
 
 
-        document.fonts.load(
-            '700 32px Vazirmatn'
-        );
+            /*
+             * Keep global website shell LTR.
+             */
 
-    }, []);
+            document.documentElement.dir =
+                'ltr';
+
+        },
+        [
+            language,
+            validLanguage
+        ]
+    );
 
 
     // =====================================================
     // SEO
     // =====================================================
 
-    useEffect(() => {
-
-        if (
-            !isValidLanguage
-        ) {
-            return undefined;
-        }
-
-
-        const previousTitle =
-            document.title;
-
-
-        const title =
-            isPersian
-
-                ? 'بلاگ طراحی محصول | حسین علوی'
-
-                : 'Product Design Blog | Hossein Alavi';
-
-
-        const description =
-            isPersian
-
-                ? 'مقاله‌های حسین علوی درباره طراحی محصول، تحقیق کاربر، تعریف مسئله، تفکر محصول، سیستم طراحی و تجربه کاربری.'
-
-                : 'Product design articles by Hossein Alavi about user research, problem framing, product thinking, design systems, UX, and complex digital products.';
-
-
-        const canonicalUrl =
-            `https://hosseinalavifarzin.ir/blog/${language}/`;
-
-
-        document.title =
-            title;
-
-
-        const managedElements = [];
-
-
-        // =================================================
-        // META
-        // =================================================
-
-        const manageMeta = (
-            selector,
-            attributes
-        ) => {
-
-            let element =
-                document.head.querySelector(
-                    selector
-                );
-
-
-            const created =
-                !element;
-
+    useEffect(
+        () => {
 
             if (
-                !element
+                !validLanguage
             ) {
 
-                element =
-                    document.createElement(
-                        'meta'
-                    );
-
-
-                document.head.appendChild(
-                    element
-                );
+                return;
 
             }
 
 
-            const previousValues = {};
+            const title =
+                isPersian
+                    ? 'بلاگ طراحی محصول | حسین علوی'
+                    : 'Product Design Blog | Hossein Alavi';
 
 
-            Object.entries(
-                attributes
-            ).forEach(
-                ([
-                    attribute,
-                    value
-                ]) => {
+            const description =
+                isPersian
+                    ? 'یادداشت‌ها و مقاله‌های حسین علوی درباره طراحی محصول، تحقیق کاربر، تعریف مسئله، تفکر محصول و سیستم‌های طراحی.'
+                    : 'Articles and notes by Hossein Alavi about product design, user research, problem framing, product thinking, and design systems.';
 
-                    previousValues[
-                        attribute
-                    ] =
-                        element.getAttribute(
-                            attribute
-                        );
 
+            const canonical =
+                `${BASE_URL}/blog/${language}/`;
 
-                    element.setAttribute(
-                        attribute,
-                        value
-                    );
-
-                }
-            );
-
-
-            managedElements.push(
-                () => {
-
-                    if (
-                        created
-                    ) {
-
-                        element.remove();
-
-                        return;
-
-                    }
-
-
-                    Object.entries(
-                        previousValues
-                    ).forEach(
-                        ([
-                            attribute,
-                            value
-                        ]) => {
-
-                            restoreAttribute(
-                                element,
-                                attribute,
-                                value
-                            );
-
-                        }
-                    );
-
-                }
-            );
-
-        };
-
-
-        // =================================================
-        // LINK
-        // =================================================
-
-        const manageLink = (
-            selector,
-            attributes
-        ) => {
-
-            let element =
-                document.head.querySelector(
-                    selector
-                );
-
-
-            const created =
-                !element;
-
-
-            if (
-                !element
-            ) {
-
-                element =
-                    document.createElement(
-                        'link'
-                    );
-
-
-                document.head.appendChild(
-                    element
-                );
-
-            }
-
-
-            const previousValues = {};
-
-
-            Object.entries(
-                attributes
-            ).forEach(
-                ([
-                    attribute,
-                    value
-                ]) => {
-
-                    previousValues[
-                        attribute
-                    ] =
-                        element.getAttribute(
-                            attribute
-                        );
-
-
-                    element.setAttribute(
-                        attribute,
-                        value
-                    );
-
-                }
-            );
-
-
-            managedElements.push(
-                () => {
-
-                    if (
-                        created
-                    ) {
-
-                        element.remove();
-
-                        return;
-
-                    }
-
-
-                    Object.entries(
-                        previousValues
-                    ).forEach(
-                        ([
-                            attribute,
-                            value
-                        ]) => {
-
-                            restoreAttribute(
-                                element,
-                                attribute,
-                                value
-                            );
-
-                        }
-                    );
-
-                }
-            );
-
-        };
-
-
-        // =================================================
-        // DESCRIPTION
-        // =================================================
-
-        manageMeta(
-            'meta[name="description"]',
-            {
-                name:
-                    'description',
-
-                content:
-                    description
-            }
-        );
-
-
-        // =================================================
-        // OPEN GRAPH
-        // =================================================
-
-        manageMeta(
-            'meta[property="og:title"]',
-            {
-                property:
-                    'og:title',
-
-                content:
-                    title
-            }
-        );
-
-
-        manageMeta(
-            'meta[property="og:description"]',
-            {
-                property:
-                    'og:description',
-
-                content:
-                    description
-            }
-        );
-
-
-        manageMeta(
-            'meta[property="og:url"]',
-            {
-                property:
-                    'og:url',
-
-                content:
-                    canonicalUrl
-            }
-        );
-
-
-        manageMeta(
-            'meta[property="og:locale"]',
-            {
-                property:
-                    'og:locale',
-
-                content:
-                    isPersian
-                        ? 'fa_IR'
-                        : 'en_US'
-            }
-        );
-
-
-        manageMeta(
-            'meta[property="og:locale:alternate"]',
-            {
-                property:
-                    'og:locale:alternate',
-
-                content:
-                    isPersian
-                        ? 'en_US'
-                        : 'fa_IR'
-            }
-        );
-
-
-        // =================================================
-        // TWITTER
-        // =================================================
-
-        manageMeta(
-            'meta[name="twitter:title"]',
-            {
-                name:
-                    'twitter:title',
-
-                content:
-                    title
-            }
-        );
-
-
-        manageMeta(
-            'meta[name="twitter:description"]',
-            {
-                name:
-                    'twitter:description',
-
-                content:
-                    description
-            }
-        );
-
-
-        // =================================================
-        // CANONICAL
-        // =================================================
-
-        manageLink(
-            'link[rel="canonical"]',
-            {
-                rel:
-                    'canonical',
-
-                href:
-                    canonicalUrl
-            }
-        );
-
-
-        // =================================================
-        // HREFLANG — EN
-        // =================================================
-
-        manageLink(
-            'link[rel="alternate"][hreflang="en"]',
-            {
-                rel:
-                    'alternate',
-
-                hreflang:
-                    'en',
-
-                href:
-                    'https://hosseinalavifarzin.ir/blog/en/'
-            }
-        );
-
-
-        // =================================================
-        // HREFLANG — FA
-        // =================================================
-
-        manageLink(
-            'link[rel="alternate"][hreflang="fa"]',
-            {
-                rel:
-                    'alternate',
-
-                hreflang:
-                    'fa',
-
-                href:
-                    'https://hosseinalavifarzin.ir/blog/fa/'
-            }
-        );
-
-
-        // =================================================
-        // HREFLANG — DEFAULT
-        // =================================================
-
-        manageLink(
-            'link[rel="alternate"][hreflang="x-default"]',
-            {
-                rel:
-                    'alternate',
-
-                hreflang:
-                    'x-default',
-
-                href:
-                    'https://hosseinalavifarzin.ir/blog/en/'
-            }
-        );
-
-
-        // =================================================
-        // CLEANUP
-        // =================================================
-
-        return () => {
 
             document.title =
-                previousTitle;
+                title;
 
 
-            managedElements
-                .reverse()
-                .forEach(
-                    (restore) =>
-                        restore()
-                );
+            setCanonical(
+                canonical
+            );
 
-        };
 
-    }, [
-        language,
-        isPersian,
-        isValidLanguage
-    ]);
+            setMeta(
+                'meta[name="description"]',
+                {
+                    name:
+                        'description',
+
+                    content:
+                        description
+                }
+            );
+
+
+            setMeta(
+                'meta[name="robots"]',
+                {
+                    name:
+                        'robots',
+
+                    content:
+                        'index, follow, max-image-preview:large'
+                }
+            );
+
+
+            setMeta(
+                'meta[property="og:type"]',
+                {
+                    property:
+                        'og:type',
+
+                    content:
+                        'website'
+                }
+            );
+
+
+            setMeta(
+                'meta[property="og:title"]',
+                {
+                    property:
+                        'og:title',
+
+                    content:
+                        title
+                }
+            );
+
+
+            setMeta(
+                'meta[property="og:description"]',
+                {
+                    property:
+                        'og:description',
+
+                    content:
+                        description
+                }
+            );
+
+
+            setMeta(
+                'meta[property="og:url"]',
+                {
+                    property:
+                        'og:url',
+
+                    content:
+                        canonical
+                }
+            );
+
+
+            setMeta(
+                'meta[name="twitter:card"]',
+                {
+                    name:
+                        'twitter:card',
+
+                    content:
+                        'summary_large_image'
+                }
+            );
+
+
+            setMeta(
+                'meta[name="twitter:title"]',
+                {
+                    name:
+                        'twitter:title',
+
+                    content:
+                        title
+                }
+            );
+
+
+            setMeta(
+                'meta[name="twitter:description"]',
+                {
+                    name:
+                        'twitter:description',
+
+                    content:
+                        description
+                }
+            );
+
+
+            setLanguageAlternates();
+
+        },
+        [
+            language,
+            validLanguage,
+            isPersian
+        ]
+    );
 
 
     // =====================================================
@@ -754,7 +868,7 @@ function Blog() {
     // =====================================================
 
     if (
-        !isValidLanguage
+        !validLanguage
     ) {
 
         return (
@@ -769,422 +883,442 @@ function Blog() {
     }
 
 
-    // =====================================================
-    // RENDER
-    // =====================================================
-
     return (
 
         <main className="
+            blog-page
             min-h-screen
             bg-theme-primary
         ">
 
-
-            {/* =================================================
-                GLOBAL SITE HEADER
-                ALWAYS ENGLISH / LTR / ORIGINAL FONT
-            ================================================== */}
+            {/* =============================================
+                NAVBAR
+            ============================================== */}
 
             <div
                 lang="en"
                 dir="ltr"
-                className="
-                    blog-site-chrome
-                "
             >
-
                 <MainNavBar />
-
             </div>
 
 
-            {/* =================================================
-                BLOG HERO
-            ================================================== */}
+            {/* =============================================
+                LOCALIZED PAGE
+            ============================================== */}
 
-            <section className="
-                relative
-                pt-28
-                sm:pt-36
-                pb-16
-                sm:pb-20
-                overflow-hidden
-            ">
+            <div
+                lang={language}
+                dir={direction}
+                className={
+                    isPersian
+                        ? 'blog-page-fa'
+                        : 'blog-page-en'
+                }
+            >
 
-                {/* Background */}
-                <div className="
-                    absolute
-                    inset-0
-                    pointer-events-none
-                ">
+                {/* =========================================
+                    HEADER
+                ========================================== */}
 
-                    <div className="
-                        absolute
-                        -top-24
-                        -left-24
-                        w-[420px]
-                        h-[420px]
-                        bg-primary-500/10
-                        rounded-full
-                        blur-3xl
-                    " />
-
+                <header className="blog-index-header">
 
                     <div className="
-                        absolute
-                        top-20
-                        right-0
-                        w-[350px]
-                        h-[350px]
-                        bg-accent-cyan/10
-                        rounded-full
-                        blur-3xl
-                    " />
-
-                </div>
-
-
-                <div className="
-                    container
-                    mx-auto
-                    px-4
-                    relative
-                    z-10
-                ">
-
-                    <div className="
-                        max-w-4xl
+                        container
                         mx-auto
+                        px-4
                     ">
 
+                        <div className="
+                            max-w-6xl
+                            mx-auto
+                        ">
 
-                        {/* =========================================
-                            LANGUAGE CONTROL
-                            OUTSIDE LOCALIZED TRANSITION
-                        ========================================== */}
+                            {/* TOP BAR */}
 
-                        <div
-                            lang="en"
-                            dir="ltr"
-                            className="
-                                blog-language-toolbar
-                                flex
-                                items-center
-                                justify-center
-                                sm:justify-end
-                                mb-8
-                                sm:mb-10
-                            "
-                        >
+                            <div className="blog-index-topbar">
 
-                            <LanguageSwitch
-                                language={
-                                    language
-                                }
-                            />
+                                <span className="blog-index-eyebrow">
 
-                        </div>
+                                    <span
+                                        className="blog-index-eyebrow-dot"
+                                        aria-hidden="true"
+                                    />
 
-
-                        {/* =========================================
-                            LOCALIZED HERO
-                        ========================================== */}
-
-                        <div
-                            key={
-                                `blog-hero-${language}`
-                            }
-                            lang={
-                                language
-                            }
-                            dir={
-                                isPersian
-                                    ? 'rtl'
-                                    : 'ltr'
-                            }
-                            className={`
-                                blog-hero-localized
-                                text-center
-
-                                ${
-                                    isPersian
-                                        ? 'blog-content-fa'
-                                        : ''
-                                }
-                            `}
-                        >
-
-                            <span className="
-                                inline-block
-                                px-3
-                                sm:px-4
-                                py-1.5
-                                sm:py-2
-                                rounded-full
-                                glass-light
-                                text-primary-500
-                                text-xs
-                                sm:text-sm
-                                font-medium
-                                mb-5
-                            ">
-
-                                {
-                                    currentContent.badge
-                                }
-
-                            </span>
-
-
-                            <h1 className="
-                                text-4xl
-                                sm:text-5xl
-                                lg:text-6xl
-                                font-bold
-                                text-theme-primary
-                                leading-tight
-                                mb-6
-                            ">
-
-                                {
-                                    currentContent.title
-                                }
-
-                                {' '}
-
-                                <span className="
-                                    gradient-text
-                                ">
 
                                     {
-                                        currentContent.highlightedTitle
+                                        isPersian
+                                            ? 'یادداشت‌های طراحی محصول'
+                                            : 'Product Design Notes'
                                     }
 
                                 </span>
 
-                            </h1>
+
+                                <LanguageSwitch
+                                    language={
+                                        language
+                                    }
+                                    availableLanguages={{
+                                        en: true,
+                                        fa: true
+                                    }}
+                                />
+
+                            </div>
 
 
-                            <p className="
-                                text-theme-secondary
-                                text-base
-                                sm:text-lg
-                                leading-relaxed
-                                max-w-2xl
-                                mx-auto
-                            ">
+                            {/* INTRO */}
 
-                                {
-                                    currentContent.description
-                                }
+                            <div className="blog-index-intro">
 
-                            </p>
+                                <h1 className="blog-index-title">
+
+                                    {
+                                        isPersian
+                                            ? 'درباره‌ی مسئله، کاربر و تصمیم‌های طراحی'
+                                            : 'Writing about problems, users, and product decisions'
+                                    }
+
+                                </h1>
+
+
+                                <p className="blog-index-description">
+
+                                    {
+                                        isPersian
+                                            ? 'یادداشت‌هایی درباره طراحی محصول، تحقیق کاربر، تعریف مسئله و تصمیم‌هایی که به ساخت تجربه‌های بهتر کمک می‌کنند.'
+                                            : 'Notes on product design, user research, problem framing, and the decisions behind clearer digital products.'
+                                    }
+
+                                </p>
+
+                            </div>
 
                         </div>
 
                     </div>
 
-                </div>
-
-            </section>
+                </header>
 
 
-            {/* =================================================
-                BLOG ARTICLES / CATEGORIES
-            ================================================== */}
+                {/* =========================================
+                    CATEGORIES
+                ========================================== */}
 
-            <section className="
-                py-14
-                sm:py-20
-                bg-theme-secondary
-            ">
+                <section className="blog-topics-section">
 
-                <div className="
-                    container
-                    mx-auto
-                    px-4
-                ">
-
-                    <div
-                        key={
-                            `blog-content-${language}`
-                        }
-                        lang={
-                            language
-                        }
-                        dir={
-                            isPersian
-                                ? 'rtl'
-                                : 'ltr'
-                        }
-                        className={`
-                            blog-list-localized
-
-                            ${
-                                isPersian
-                                    ? 'blog-content-fa'
-                                    : ''
-                            }
-                        `}
-                    >
-
-
-                        {/* =========================================
-                            CATEGORIES
-                        ========================================== */}
+                    <div className="
+                        container
+                        mx-auto
+                        px-4
+                    ">
 
                         <div className="
-                            flex
-                            flex-wrap
-                            items-center
-                            justify-center
-                            gap-3
-                            mb-12
+                            max-w-6xl
+                            mx-auto
                         ">
 
-                            {categories.map(
-                                (category) => (
+                            <div className="blog-topics-heading">
+
+                                <div>
+
+                                    <span className="blog-section-kicker">
+
+                                        {
+                                            isPersian
+                                                ? 'موضوعات'
+                                                : 'Topics'
+                                        }
+
+                                    </span>
+
+
+                                    <h2>
+
+                                        {
+                                            isPersian
+                                                ? 'دسته‌بندی نوشته‌ها'
+                                                : 'Browse by category'
+                                        }
+
+                                    </h2>
+
+                                </div>
+
+
+                                <p>
+
+                                    {
+                                        isPersian
+                                            ? 'نوشته‌ها را بر اساس موضوعی که دنبال می‌کنی پیدا کن.'
+                                            : 'Explore articles based on the product design topic you need.'
+                                    }
+
+                                </p>
+
+                            </div>
+
+
+                            <div className="blog-topics-grid">
+
+                                {BLOG_CATEGORIES.map(
+                                    (category) => {
+
+                                        const active =
+                                            activeCategory ===
+                                            category.id;
+
+
+                                        const count =
+                                            categoryCounts[
+                                                category.id
+                                            ] || 0;
+
+
+                                        return (
+
+                                            <button
+                                                key={
+                                                    category.id
+                                                }
+                                                type="button"
+                                                onClick={
+                                                    () =>
+                                                        setActiveCategory(
+                                                            category.id
+                                                        )
+                                                }
+                                                className={`
+                                                    blog-topic-card
+
+                                                    ${
+                                                        active
+                                                            ? 'blog-topic-card-active'
+                                                            : ''
+                                                    }
+                                                `}
+                                            >
+
+                                                <span className="blog-topic-main">
+
+                                                    <span
+                                                        className="blog-topic-dot"
+                                                        aria-hidden="true"
+                                                    />
+
+
+                                                    <span className="blog-topic-name">
+
+                                                        {
+                                                            category[
+                                                                language
+                                                            ] ||
+                                                            category.en
+                                                        }
+
+                                                    </span>
+
+                                                </span>
+
+
+                                                <span className="blog-topic-count">
+
+                                                    {
+                                                        new Intl.NumberFormat(
+                                                            isPersian
+                                                                ? 'fa-IR'
+                                                                : 'en-US'
+                                                        ).format(
+                                                            count
+                                                        )
+                                                    }
+
+                                                </span>
+
+                                            </button>
+
+                                        );
+
+                                    }
+                                )}
+
+                            </div>
+
+                        </div>
+
+                    </div>
+
+                </section>
+
+
+                {/* =========================================
+                    ARTICLES
+                ========================================== */}
+
+                <section className="blog-index-content">
+
+                    <div className="
+                        container
+                        mx-auto
+                        px-4
+                    ">
+
+                        <div className="
+                            max-w-6xl
+                            mx-auto
+                        ">
+
+                            <div className="blog-list-header">
+
+                                <div>
+
+                                    <span className="blog-section-kicker">
+
+                                        {
+                                            isPersian
+                                                ? 'مطالب'
+                                                : 'Articles'
+                                        }
+
+                                    </span>
+
+
+                                    <h2 className="blog-list-title">
+
+                                        {activeCategoryLabel}
+
+                                    </h2>
+
+                                </div>
+
+
+                                <span className="blog-list-count">
+
+                                    {
+                                        new Intl.NumberFormat(
+                                            isPersian
+                                                ? 'fa-IR'
+                                                : 'en-US'
+                                        ).format(
+                                            filteredPosts.length
+                                        )
+                                    }
+
+                                    {' '}
+
+                                    {
+                                        isPersian
+                                            ? 'مطلب'
+                                            : filteredPosts.length === 1
+                                                ? 'article'
+                                                : 'articles'
+                                    }
+
+                                </span>
+
+                            </div>
+
+
+                            {/* BLOG GRID */}
+
+                            {filteredPosts.length > 0 ? (
+
+                                <div className="blog-grid">
+
+                                    {filteredPosts.map(
+                                        (post) => (
+
+                                            <BlogCard
+                                                key={
+                                                    post.slug
+                                                }
+                                                post={
+                                                    post
+                                                }
+                                                language={
+                                                    language
+                                                }
+                                            />
+
+                                        )
+                                    )}
+
+                                </div>
+
+                            ) : (
+
+                                <div className="blog-empty-state">
+
+                                    <span
+                                        className="blog-empty-dot"
+                                        aria-hidden="true"
+                                    />
+
+
+                                    <h3>
+
+                                        {
+                                            isPersian
+                                                ? 'هنوز مطلبی در این دسته منتشر نشده'
+                                                : 'No articles in this category yet'
+                                        }
+
+                                    </h3>
+
+
+                                    <p>
+
+                                        {
+                                            isPersian
+                                                ? 'به‌زودی نوشته‌های بیشتری به این بخش اضافه می‌کنم.'
+                                                : 'More writing will be added here soon.'
+                                        }
+
+                                    </p>
+
 
                                     <button
-                                        key={
-                                            category.id
-                                        }
                                         type="button"
-                                        onClick={() =>
-                                            setActiveCategory(
-                                                category.id
-                                            )
+                                        onClick={
+                                            () =>
+                                                setActiveCategory(
+                                                    'all'
+                                                )
                                         }
-                                        className={`
-                                            px-4
-                                            py-2
-                                            rounded-xl
-                                            text-sm
-                                            font-medium
-                                            transition-all
-                                            duration-300
-
-                                            ${
-                                                activeCategory ===
-                                                category.id
-
-                                                    ? `
-                                                        bg-primary-500
-                                                        text-white
-                                                        shadow-glow-green
-                                                    `
-
-                                                    : `
-                                                        glass
-                                                        text-theme-secondary
-                                                        hover:text-theme-primary
-                                                    `
-                                            }
-                                        `}
                                     >
 
                                         {
-                                            category[
-                                                language
-                                            ]
+                                            isPersian
+                                                ? 'نمایش همه مطالب'
+                                                : 'View all articles'
                                         }
 
                                     </button>
 
-                                )
+                                </div>
+
                             )}
-
-                        </div>
-
-
-                        {/* =========================================
-                            TEMP ARTICLE AREA
-                        ========================================== */}
-
-                        <div className="
-                            max-w-3xl
-                            mx-auto
-                            glass
-                            rounded-xl
-                            sm:rounded-2xl
-                            p-8
-                            sm:p-10
-                            text-center
-                        ">
-
-                            <p className="
-                                text-primary-500
-                                text-xs
-                                font-semibold
-                                mb-4
-                            ">
-
-                                {
-                                    categories.find(
-                                        (
-                                            category
-                                        ) =>
-                                            category.id ===
-                                            activeCategory
-                                    )?.[language]
-                                }
-
-                            </p>
-
-
-                            <h2 className="
-                                text-2xl
-                                sm:text-3xl
-                                font-bold
-                                text-theme-primary
-                                mb-4
-                            ">
-
-                                {
-                                    currentContent.sectionTitle
-                                }
-
-                            </h2>
-
-
-                            <p className="
-                                text-theme-secondary
-                                leading-relaxed
-                            ">
-
-                                {
-                                    currentContent.empty
-                                }
-
-                            </p>
 
                         </div>
 
                     </div>
 
-                </div>
+                </section>
 
-            </section>
+            </div>
 
 
-            {/* =================================================
-                GLOBAL FOOTER
-                ALWAYS ORIGINAL SITE STYLE
-            ================================================== */}
+            {/* =============================================
+                FOOTER
+            ============================================== */}
 
             <div
                 lang="en"
                 dir="ltr"
-                className="
-                    blog-site-chrome
-                "
             >
-
                 <Footer />
-
             </div>
-
 
         </main>
 

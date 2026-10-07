@@ -13,7 +13,11 @@ import {
 
 
 function LanguageSwitch({
-    language
+    language,
+    availableLanguages = {
+        en: true,
+        fa: true
+    }
 }) {
 
     const location =
@@ -22,9 +26,34 @@ function LanguageSwitch({
     const navigate =
         useNavigate();
 
+    const [
+        isTransitioning,
+        setIsTransitioning
+    ] = useState(false);
 
-    const [isTransitioning, setIsTransitioning] =
-        useState(false);
+
+    const hasEnglish =
+        availableLanguages?.en === true;
+
+    const hasPersian =
+        availableLanguages?.fa === true;
+
+
+    // =====================================================
+    // SINGLE-LANGUAGE CONTENT
+    //
+    // If the article doesn't have both versions,
+    // the switch should not exist at all.
+    // =====================================================
+
+    if (
+        !hasEnglish ||
+        !hasPersian
+    ) {
+
+        return null;
+
+    }
 
 
     const changeLanguage = (
@@ -43,54 +72,45 @@ function LanguageSwitch({
             /^\/blog\/(en|fa)(?=\/|$)/;
 
 
-        let nextPath;
-
-
-        if (
+        const nextPath =
             languageRouteRegex.test(
                 location.pathname
             )
-        ) {
 
-            nextPath =
-                location.pathname.replace(
+                ? location.pathname.replace(
                     languageRouteRegex,
                     `/blog/${nextLanguage}`
-                );
+                )
 
-        } else {
-
-            nextPath =
-                `/blog/${nextLanguage}`;
-
-        }
+                : `/blog/${nextLanguage}`;
 
 
         const target =
             `${nextPath}${location.search}${location.hash}`;
 
 
-        const prefersReducedMotion =
+        const reducedMotion =
             window.matchMedia(
                 '(prefers-reduced-motion: reduce)'
             ).matches;
 
 
-        const performNavigation =
-            () => {
+        const performNavigation = () => {
 
-                flushSync(() => {
+            flushSync(() => {
 
-                    navigate(target);
+                navigate(
+                    target
+                );
 
-                });
+            });
 
-            };
+        };
 
 
         if (
             !document.startViewTransition ||
-            prefersReducedMotion
+            reducedMotion
         ) {
 
             performNavigation();
@@ -111,12 +131,13 @@ function LanguageSwitch({
                 );
 
 
-            transition.finished
-                .finally(() => {
+            transition.finished.finally(
+                () => {
 
                     setIsTransitioning(false);
 
-                });
+                }
+            );
 
         } catch (error) {
 
@@ -133,63 +154,53 @@ function LanguageSwitch({
 
         <div
             dir="ltr"
-            lang="en"
-            role="group"
-            aria-label="Blog language"
-            aria-busy={
-                isTransitioning
-            }
             className="
                 relative
-                grid
+                inline-grid
                 grid-cols-2
-                w-36
+                items-center
+                gap-1
                 p-1
                 rounded-xl
                 glass
+                border
+                border-black/5
+                dark:border-white/10
                 overflow-hidden
-                flex-shrink-0
             "
+            aria-label="Blog language"
         >
 
-            {/* Sliding Background */}
             <span
                 aria-hidden="true"
-                className={`
-                    pointer-events-none
+                className="
                     absolute
                     top-1
                     bottom-1
                     left-1
-                    w-[calc(50%-4px)]
                     rounded-lg
                     bg-gradient-to-r
                     from-primary-500
-                    to-primary-600
-                    shadow-glow-green
-                    transform
+                    to-accent-cyan
+                    shadow-sm
                     transition-transform
                     duration-500
-
-                    ${
-                        language === 'fa'
-                            ? 'translate-x-full'
-                            : 'translate-x-0'
-                    }
-                `}
+                    ease-out
+                "
                 style={{
-                    transitionTimingFunction:
-                        'cubic-bezier(0.16, 1, 0.3, 1)'
+                    width:
+                        'calc(50% - 4px)',
+
+                    transform:
+                        language === 'fa'
+                            ? 'translateX(calc(100% + 4px))'
+                            : 'translateX(0)'
                 }}
             />
 
 
-            {/* English */}
             <button
                 type="button"
-                disabled={
-                    isTransitioning
-                }
                 onClick={() =>
                     changeLanguage('en')
                 }
@@ -199,20 +210,18 @@ function LanguageSwitch({
                 className={`
                     relative
                     z-10
-                    min-h-9
-                    px-4
+                    min-w-[64px]
+                    px-3
+                    py-2
                     rounded-lg
                     text-sm
                     font-semibold
                     transition-colors
                     duration-300
-                    disabled:cursor-default
 
                     ${
                         language === 'en'
-
                             ? 'text-white'
-
                             : `
                                 text-theme-secondary
                                 hover:text-theme-primary
@@ -220,18 +229,12 @@ function LanguageSwitch({
                     }
                 `}
             >
-
                 EN
-
             </button>
 
 
-            {/* Persian */}
             <button
                 type="button"
-                disabled={
-                    isTransitioning
-                }
                 onClick={() =>
                     changeLanguage('fa')
                 }
@@ -241,20 +244,18 @@ function LanguageSwitch({
                 className={`
                     relative
                     z-10
-                    min-h-9
-                    px-4
+                    min-w-[64px]
+                    px-3
+                    py-2
                     rounded-lg
                     text-sm
                     font-semibold
                     transition-colors
                     duration-300
-                    disabled:cursor-default
 
                     ${
                         language === 'fa'
-
                             ? 'text-white'
-
                             : `
                                 text-theme-secondary
                                 hover:text-theme-primary
@@ -262,19 +263,7 @@ function LanguageSwitch({
                     }
                 `}
             >
-
-                <span
-                    lang="fa"
-                    dir="rtl"
-                    className="
-                        language-switch-fa-label
-                    "
-                >
-
-                    فا
-
-                </span>
-
+                فا
             </button>
 
         </div>
