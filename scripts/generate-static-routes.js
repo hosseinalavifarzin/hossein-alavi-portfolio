@@ -1,5 +1,8 @@
-const fs = require('fs');
-const path = require('path');
+const fs =
+    require('fs');
+
+const path =
+    require('path');
 
 
 // =========================================================
@@ -48,7 +51,9 @@ function escapeHtml(
     value = ''
 ) {
 
-    return String(value)
+    return String(
+        value
+    )
         .replace(
             /&/g,
             '&amp;'
@@ -117,11 +122,10 @@ function normalizeRoute(
 
 
     return `/${
-        route
-            .replace(
-                /^\/+|\/+$/g,
-                ''
-            )
+        route.replace(
+            /^\/+|\/+$/g,
+            ''
+        )
     }/`;
 
 }
@@ -148,9 +152,12 @@ function routeToDirectory(
 
     return path.join(
         BUILD_DIR,
+
         ...normalized
             .split('/')
-            .filter(Boolean)
+            .filter(
+                Boolean
+            )
     );
 
 }
@@ -186,14 +193,16 @@ function writeRoute(
 
 
     console.log(
-        `Generated: ${normalizeRoute(route)}`
+        `Generated: ${normalizeRoute(
+            route
+        )}`
     );
 
 }
 
 
 // =========================================================
-// REMOVE EXISTING SEO TAGS FROM CRA TEMPLATE
+// CLEAN EXISTING SEO
 // =========================================================
 
 function cleanHeadSeo(
@@ -254,7 +263,7 @@ function cleanHeadSeo(
 
 
 // =========================================================
-// INJECT INTO HEAD
+// INJECT HEAD
 // =========================================================
 
 function injectIntoHead(
@@ -285,7 +294,8 @@ function createPageHtml({
     title,
     description,
     canonical,
-    robots = 'index, follow, max-image-preview:large',
+    robots =
+        'index, follow, max-image-preview:large',
     language = 'en',
     ogType = 'website',
     image = '',
@@ -325,11 +335,13 @@ function createPageHtml({
                     hreflang,
                     href
                 }) =>
+
                     `<link rel="alternate" hreflang="${escapeHtml(
                         hreflang
                     )}" href="${escapeHtml(
                         href
                     )}" />`
+
             )
             .join('\n');
 
@@ -338,12 +350,19 @@ function createPageHtml({
         imageUrl
 
             ? `
-<meta property="og:image" content="${escapeHtml(
-                imageUrl
-            )}" />
-<meta name="twitter:image" content="${escapeHtml(
-                imageUrl
-            )}" />`
+<meta
+    property="og:image"
+    content="${escapeHtml(
+        imageUrl
+    )}"
+/>
+
+<meta
+    name="twitter:image"
+    content="${escapeHtml(
+        imageUrl
+    )}"
+/>`
 
             : '';
 
@@ -430,7 +449,7 @@ ${imageTags}
 
 
 // =========================================================
-// ARTICLE HTML
+// ARTICLE SEO
 // =========================================================
 
 function createArticleHtml({
@@ -440,11 +459,17 @@ function createArticleHtml({
 }) {
 
     const content =
-        post?.[language];
+        post?.[
+            language
+        ];
 
 
-    if (!content) {
+    if (
+        !content
+    ) {
+
         return null;
+
     }
 
 
@@ -463,9 +488,11 @@ function createArticleHtml({
 
     const imageUrl =
         post.cover
+
             ? absoluteUrl(
                 post.cover
             )
+
             : '';
 
 
@@ -483,13 +510,21 @@ function createArticleHtml({
         );
 
 
+    /*
+     * Article x-default rule remains:
+     *
+     * EN when English exists,
+     * otherwise available language.
+     */
+
     const defaultLanguage =
         hasEnglish
             ? 'en'
             : 'fa';
 
 
-    const alternates = [];
+    const alternates =
+        [];
 
 
     if (
@@ -602,9 +637,7 @@ function createArticleHtml({
 
 
     /*
-     * Never invent dates.
-     * Only include datePublished
-     * when the CMS actually provides one.
+     * Do not invent publication dates.
      */
 
     if (
@@ -619,16 +652,25 @@ function createArticleHtml({
 
     const pageHtml =
         createPageHtml({
+
             template,
+
             title,
+
             description,
+
             canonical,
+
             language,
+
             ogType:
                 'article',
+
             image:
                 post.cover || '',
+
             alternates
+
         });
 
 
@@ -636,6 +678,7 @@ function createArticleHtml({
 `
 ${
     post.publishedAt
+
         ? `
 <meta
     property="article:published_time"
@@ -643,6 +686,7 @@ ${
         post.publishedAt
     )}"
 />`
+
         : ''
 }
 
@@ -667,7 +711,7 @@ ${
 
 
 // =========================================================
-// LOAD BUILD
+// BUILD TEMPLATE
 // =========================================================
 
 if (
@@ -686,7 +730,9 @@ if (
     );
 
 
-    process.exit(1);
+    process.exit(
+        1
+    );
 
 }
 
@@ -699,10 +745,11 @@ const template =
 
 
 // =========================================================
-// LOAD BLOG POSTS
+// BLOG DATA
 // =========================================================
 
-let blogPosts = [];
+let blogPosts =
+    [];
 
 
 if (
@@ -733,7 +780,9 @@ if (
 
         }
 
-    } catch (error) {
+    } catch (
+        error
+    ) {
 
         console.error(
             '❌ Could not read blogPosts.json'
@@ -745,7 +794,9 @@ if (
         );
 
 
-        process.exit(1);
+        process.exit(
+            1
+        );
 
     }
 
@@ -753,7 +804,7 @@ if (
 
 
 // =========================================================
-// NORMAL STATIC ROUTES
+// STATIC ROUTES
 // =========================================================
 
 const plainRoutes = [
@@ -784,8 +835,11 @@ plainRoutes.forEach(
 
 // =========================================================
 // BLOG GATEWAY
-// /blog/ redirects in React to /blog/en/
-// Keep gateway noindex.
+//
+// /blog/
+// React redirects to /blog/fa/
+//
+// Gateway itself is noindex.
 // =========================================================
 
 const blogGatewayHtml =
@@ -794,29 +848,21 @@ const blogGatewayHtml =
         template,
 
         title:
-            'Product Design Blog | Hossein Alavi',
+            'بلاگ طراحی محصول | حسین علوی',
 
         description:
-            'Product design articles by Hossein Alavi.',
+            'یادداشت‌ها و مقاله‌های حسین علوی درباره طراحی محصول، تحقیق کاربر، تعریف مسئله و تفکر محصول.',
 
         canonical:
-            `${BASE_URL}/blog/en/`,
+            `${BASE_URL}/blog/fa/`,
 
         robots:
             'noindex, follow',
 
         language:
-            'en',
+            'fa',
 
         alternates: [
-
-            {
-                hreflang:
-                    'en',
-
-                href:
-                    `${BASE_URL}/blog/en/`
-            },
 
             {
                 hreflang:
@@ -828,10 +874,18 @@ const blogGatewayHtml =
 
             {
                 hreflang:
-                    'x-default',
+                    'en',
 
                 href:
                     `${BASE_URL}/blog/en/`
+            },
+
+            {
+                hreflang:
+                    'x-default',
+
+                href:
+                    `${BASE_URL}/blog/fa/`
             }
 
         ]
@@ -842,64 +896,6 @@ const blogGatewayHtml =
 writeRoute(
     '/blog/',
     blogGatewayHtml
-);
-
-
-// =========================================================
-// ENGLISH BLOG INDEX
-// =========================================================
-
-const englishBlogHtml =
-    createPageHtml({
-
-        template,
-
-        title:
-            'Product Design Blog | Hossein Alavi',
-
-        description:
-            'Articles and notes by Hossein Alavi about product design, user research, problem framing, product thinking, and design systems.',
-
-        canonical:
-            `${BASE_URL}/blog/en/`,
-
-        language:
-            'en',
-
-        alternates: [
-
-            {
-                hreflang:
-                    'en',
-
-                href:
-                    `${BASE_URL}/blog/en/`
-            },
-
-            {
-                hreflang:
-                    'fa',
-
-                href:
-                    `${BASE_URL}/blog/fa/`
-            },
-
-            {
-                hreflang:
-                    'x-default',
-
-                href:
-                    `${BASE_URL}/blog/en/`
-            }
-
-        ]
-
-    });
-
-
-writeRoute(
-    '/blog/en/',
-    englishBlogHtml
 );
 
 
@@ -928,14 +924,6 @@ const persianBlogHtml =
 
             {
                 hreflang:
-                    'en',
-
-                href:
-                    `${BASE_URL}/blog/en/`
-            },
-
-            {
-                hreflang:
                     'fa',
 
                 href:
@@ -944,10 +932,18 @@ const persianBlogHtml =
 
             {
                 hreflang:
-                    'x-default',
+                    'en',
 
                 href:
                     `${BASE_URL}/blog/en/`
+            },
+
+            {
+                hreflang:
+                    'x-default',
+
+                href:
+                    `${BASE_URL}/blog/fa/`
             }
 
         ]
@@ -962,10 +958,69 @@ writeRoute(
 
 
 // =========================================================
+// ENGLISH BLOG INDEX
+// =========================================================
+
+const englishBlogHtml =
+    createPageHtml({
+
+        template,
+
+        title:
+            'Product Design Blog | Hossein Alavi',
+
+        description:
+            'Articles and notes by Hossein Alavi about product design, user research, problem framing, product thinking, and design systems.',
+
+        canonical:
+            `${BASE_URL}/blog/en/`,
+
+        language:
+            'en',
+
+        alternates: [
+
+            {
+                hreflang:
+                    'fa',
+
+                href:
+                    `${BASE_URL}/blog/fa/`
+            },
+
+            {
+                hreflang:
+                    'en',
+
+                href:
+                    `${BASE_URL}/blog/en/`
+            },
+
+            {
+                hreflang:
+                    'x-default',
+
+                href:
+                    `${BASE_URL}/blog/fa/`
+            }
+
+        ]
+
+    });
+
+
+writeRoute(
+    '/blog/en/',
+    englishBlogHtml
+);
+
+
+// =========================================================
 // ARTICLE STATIC ROUTES
 // =========================================================
 
-const articleUrls = [];
+const articleUrls =
+    [];
 
 
 blogPosts.forEach(
@@ -981,9 +1036,9 @@ blogPosts.forEach(
         }
 
 
-        // ---------------------------------------------
-        // EN
-        // ---------------------------------------------
+        // =================================================
+        // ENGLISH ARTICLE
+        // =================================================
 
         if (
             post.languages?.en &&
@@ -1023,9 +1078,9 @@ blogPosts.forEach(
         }
 
 
-        // ---------------------------------------------
-        // FA
-        // ---------------------------------------------
+        // =================================================
+        // PERSIAN ARTICLE
+        // =================================================
 
         if (
             post.languages?.fa &&
@@ -1075,16 +1130,23 @@ blogPosts.forEach(
 const sitemapUrls = [
 
     `${BASE_URL}/`,
+
     `${BASE_URL}/portfolio/`,
 
-    `${BASE_URL}/blog/en/`,
     `${BASE_URL}/blog/fa/`,
 
+    `${BASE_URL}/blog/en/`,
+
     `${BASE_URL}/projects/tipax/`,
+
     `${BASE_URL}/projects/citynet/`,
+
     `${BASE_URL}/projects/blue/`,
+
     `${BASE_URL}/projects/3click/`,
+
     `${BASE_URL}/projects/darzi/`,
+
     `${BASE_URL}/projects/yahoo/`,
 
     ...articleUrls
@@ -1093,6 +1155,7 @@ const sitemapUrls = [
 
 
 // Remove duplicates
+
 const uniqueSitemapUrls =
     [
         ...new Set(
@@ -1100,6 +1163,10 @@ const uniqueSitemapUrls =
         )
     ];
 
+
+// =========================================================
+// SITEMAP XML
+// =========================================================
 
 const sitemap =
 `<?xml version="1.0" encoding="UTF-8"?>
@@ -1110,7 +1177,9 @@ ${uniqueSitemapUrls
     .map(
         (url) =>
 `    <url>
-        <loc>${escapeHtml(url)}</loc>
+        <loc>${escapeHtml(
+            url
+        )}</loc>
     </url>`
     )
     .join('\n')}
@@ -1151,19 +1220,29 @@ fs.writeFileSync(
 
 
 // =========================================================
-// FINISH
+// FINISHED
 // =========================================================
 
-console.log('\n✅ Static routes generated.');
+console.log(
+    '\n✅ Static routes generated.'
+);
+
+
 console.log(
     `✅ Blog articles: ${articleUrls.length}`
 );
+
+
 console.log(
     `✅ Sitemap URLs: ${uniqueSitemapUrls.length}`
 );
+
+
 console.log(
     '✅ sitemap.xml generated.'
 );
+
+
 console.log(
     '✅ robots.txt generated.\n'
 );

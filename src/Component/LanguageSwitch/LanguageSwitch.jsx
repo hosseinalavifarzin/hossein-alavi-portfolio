@@ -1,151 +1,151 @@
 import {
-    useState
-} from 'react';
-
-import {
-    flushSync
-} from 'react-dom';
-
-import {
     useLocation,
     useNavigate
 } from 'react-router-dom';
 
+import './LanguageSwitch.css';
+
 
 function LanguageSwitch({
-    language,
+    language = 'fa',
     availableLanguages = {
-        en: true,
-        fa: true
+        fa: true,
+        en: true
     }
 }) {
 
     const location =
         useLocation();
 
+
     const navigate =
         useNavigate();
 
-    const [
-        isTransitioning,
-        setIsTransitioning
-    ] = useState(false);
-
-
-    const hasEnglish =
-        availableLanguages?.en === true;
-
-    const hasPersian =
-        availableLanguages?.fa === true;
-
 
     // =====================================================
-    // SINGLE-LANGUAGE CONTENT
-    //
-    // If the article doesn't have both versions,
-    // the switch should not exist at all.
+    // CHECK LANGUAGE AVAILABILITY
+    // Supports object or array formats
     // =====================================================
 
-    if (
-        !hasEnglish ||
-        !hasPersian
-    ) {
-
-        return null;
-
-    }
-
-
-    const changeLanguage = (
-        nextLanguage
+    const languageAvailable = (
+        targetLanguage
     ) => {
 
         if (
-            nextLanguage === language ||
-            isTransitioning
-        ) {
-            return;
-        }
-
-
-        const languageRouteRegex =
-            /^\/blog\/(en|fa)(?=\/|$)/;
-
-
-        const nextPath =
-            languageRouteRegex.test(
-                location.pathname
+            Array.isArray(
+                availableLanguages
             )
+        ) {
 
-                ? location.pathname.replace(
-                    languageRouteRegex,
-                    `/blog/${nextLanguage}`
-                )
+            return availableLanguages.includes(
+                targetLanguage
+            );
 
-                : `/blog/${nextLanguage}`;
-
-
-        const target =
-            `${nextPath}${location.search}${location.hash}`;
-
-
-        const reducedMotion =
-            window.matchMedia(
-                '(prefers-reduced-motion: reduce)'
-            ).matches;
-
-
-        const performNavigation = () => {
-
-            flushSync(() => {
-
-                navigate(
-                    target
-                );
-
-            });
-
-        };
+        }
 
 
         if (
-            !document.startViewTransition ||
-            reducedMotion
+            availableLanguages &&
+            typeof availableLanguages === 'object'
         ) {
 
-            performNavigation();
+            return Boolean(
+                availableLanguages[
+                    targetLanguage
+                ]
+            );
+
+        }
+
+
+        return true;
+
+    };
+
+
+    // =====================================================
+    // SWITCH
+    // Keeps current article slug when switching language
+    // =====================================================
+
+    const changeLanguage = (
+        targetLanguage
+    ) => {
+
+        if (
+            targetLanguage === language
+        ) {
+            return;
+        }
+
+
+        if (
+            !languageAvailable(
+                targetLanguage
+            )
+        ) {
+            return;
+        }
+
+
+        const parts =
+            location.pathname
+                .split('/')
+                .filter(Boolean);
+
+
+        const blogIndex =
+            parts.indexOf(
+                'blog'
+            );
+
+
+        if (
+            blogIndex !== -1
+        ) {
+
+            const languageIndex =
+                blogIndex + 1;
+
+
+            if (
+                parts[
+                    languageIndex
+                ] === 'fa' ||
+                parts[
+                    languageIndex
+                ] === 'en'
+            ) {
+
+                parts[
+                    languageIndex
+                ] =
+                    targetLanguage;
+
+            } else {
+
+                parts.splice(
+                    languageIndex,
+                    0,
+                    targetLanguage
+                );
+
+            }
+
+
+            navigate(
+                `/${parts.join('/')}`
+            );
+
 
             return;
 
         }
 
 
-        setIsTransitioning(true);
-
-
-        try {
-
-            const transition =
-                document.startViewTransition(
-                    performNavigation
-                );
-
-
-            transition.finished.finally(
-                () => {
-
-                    setIsTransitioning(false);
-
-                }
-            );
-
-        } catch (error) {
-
-            setIsTransitioning(false);
-
-            performNavigation();
-
-        }
+        navigate(
+            `/blog/${targetLanguage}`
+        );
 
     };
 
@@ -153,117 +153,75 @@ function LanguageSwitch({
     return (
 
         <div
+            className="language-switch-mini"
+            role="group"
+            aria-label="Language"
             dir="ltr"
-            className="
-                relative
-                inline-grid
-                grid-cols-2
-                items-center
-                gap-1
-                p-1
-                rounded-xl
-                glass
-                border
-                border-black/5
-                dark:border-white/10
-                overflow-hidden
-            "
-            aria-label="Blog language"
         >
 
-            <span
-                aria-hidden="true"
-                className="
-                    absolute
-                    top-1
-                    bottom-1
-                    left-1
-                    rounded-lg
-                    bg-gradient-to-r
-                    from-primary-500
-                    to-accent-cyan
-                    shadow-sm
-                    transition-transform
-                    duration-500
-                    ease-out
-                "
-                style={{
-                    width:
-                        'calc(50% - 4px)',
-
-                    transform:
-                        language === 'fa'
-                            ? 'translateX(calc(100% + 4px))'
-                            : 'translateX(0)'
-                }}
-            />
-
-
             <button
                 type="button"
-                onClick={() =>
-                    changeLanguage('en')
+                onClick={
+                    () =>
+                        changeLanguage(
+                            'fa'
+                        )
                 }
-                aria-pressed={
-                    language === 'en'
-                }
-                className={`
-                    relative
-                    z-10
-                    min-w-[64px]
-                    px-3
-                    py-2
-                    rounded-lg
-                    text-sm
-                    font-semibold
-                    transition-colors
-                    duration-300
-
-                    ${
-                        language === 'en'
-                            ? 'text-white'
-                            : `
-                                text-theme-secondary
-                                hover:text-theme-primary
-                            `
-                    }
-                `}
-            >
-                EN
-            </button>
-
-
-            <button
-                type="button"
-                onClick={() =>
-                    changeLanguage('fa')
+                disabled={
+                    !languageAvailable(
+                        'fa'
+                    )
                 }
                 aria-pressed={
                     language === 'fa'
                 }
                 className={`
-                    relative
-                    z-10
-                    min-w-[64px]
-                    px-3
-                    py-2
-                    rounded-lg
-                    text-sm
-                    font-semibold
-                    transition-colors
-                    duration-300
+                    language-switch-mini-button
 
                     ${
                         language === 'fa'
-                            ? 'text-white'
-                            : `
-                                text-theme-secondary
-                                hover:text-theme-primary
-                            `
+                            ? 'language-switch-mini-button-active'
+                            : ''
                     }
                 `}
             >
-                فا
+                FA
+            </button>
+
+
+            <span
+                className="language-switch-mini-divider"
+                aria-hidden="true"
+            />
+
+
+            <button
+                type="button"
+                onClick={
+                    () =>
+                        changeLanguage(
+                            'en'
+                        )
+                }
+                disabled={
+                    !languageAvailable(
+                        'en'
+                    )
+                }
+                aria-pressed={
+                    language === 'en'
+                }
+                className={`
+                    language-switch-mini-button
+
+                    ${
+                        language === 'en'
+                            ? 'language-switch-mini-button-active'
+                            : ''
+                    }
+                `}
+            >
+                EN
             </button>
 
         </div>

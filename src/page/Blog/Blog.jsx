@@ -262,9 +262,13 @@ function setLanguageAlternates() {
     );
 
 
+    /*
+     * Default blog language = Persian
+     */
+
     addAlternate(
         'x-default',
-        `${BASE_URL}/blog/en/`
+        `${BASE_URL}/blog/fa/`
     );
 
 }
@@ -309,7 +313,7 @@ function BlogCard({
             >
 
                 {/* =========================================
-                    IMAGE WITH INNER PADDING
+                    IMAGE WITH PADDING
                 ========================================== */}
 
                 <div className="blog-card-media">
@@ -486,7 +490,7 @@ function BlogCard({
 
 
 // =========================================================
-// BLOG PAGE
+// BLOG
 // =========================================================
 
 function Blog() {
@@ -518,7 +522,7 @@ function Blog() {
 
 
     // =====================================================
-    // AVAILABLE POSTS
+    // POSTS
     // =====================================================
 
     const availablePosts =
@@ -651,7 +655,7 @@ function Blog() {
 
 
     // =====================================================
-    // RESET FILTER AFTER LANGUAGE CHANGE
+    // RESET CATEGORY AFTER LANGUAGE CHANGE
     // =====================================================
 
     useEffect(
@@ -689,7 +693,8 @@ function Blog() {
 
 
             /*
-             * Keep global website shell LTR.
+             * Global shell stays LTR.
+             * Persian localized content uses RTL.
              */
 
             document.documentElement.dir =
@@ -864,7 +869,7 @@ function Blog() {
 
 
     // =====================================================
-    // INVALID LANGUAGE
+    // INVALID LANGUAGE → FARSI
     // =====================================================
 
     if (
@@ -874,7 +879,7 @@ function Blog() {
         return (
 
             <Navigate
-                to="/blog/en"
+                to="/blog/fa"
                 replace
             />
 
@@ -899,17 +904,20 @@ function Blog() {
                 lang="en"
                 dir="ltr"
             >
+
                 <MainNavBar />
+
             </div>
 
 
             {/* =============================================
-                LOCALIZED PAGE
+                LOCALIZED CONTENT
             ============================================== */}
 
             <div
                 lang={language}
                 dir={direction}
+
                 className={
                     isPersian
                         ? 'blog-page-fa'
@@ -934,8 +942,6 @@ function Blog() {
                             mx-auto
                         ">
 
-                            {/* TOP BAR */}
-
                             <div className="blog-index-topbar">
 
                                 <span className="blog-index-eyebrow">
@@ -959,6 +965,7 @@ function Blog() {
                                     language={
                                         language
                                     }
+
                                     availableLanguages={{
                                         en: true,
                                         fa: true
@@ -967,8 +974,6 @@ function Blog() {
 
                             </div>
 
-
-                            {/* INTRO */}
 
                             <div className="blog-index-intro">
 
@@ -1082,13 +1087,16 @@ function Blog() {
                                                 key={
                                                     category.id
                                                 }
+
                                                 type="button"
+
                                                 onClick={
                                                     () =>
                                                         setActiveCategory(
                                                             category.id
                                                         )
                                                 }
+
                                                 className={`
                                                     blog-topic-card
 
@@ -1220,8 +1228,6 @@ function Blog() {
                             </div>
 
 
-                            {/* BLOG GRID */}
-
                             {filteredPosts.length > 0 ? (
 
                                 <div className="blog-grid">
@@ -1233,9 +1239,11 @@ function Blog() {
                                                 key={
                                                     post.slug
                                                 }
+
                                                 post={
                                                     post
                                                 }
+
                                                 language={
                                                     language
                                                 }
@@ -1280,6 +1288,7 @@ function Blog() {
 
                                     <button
                                         type="button"
+
                                         onClick={
                                             () =>
                                                 setActiveCategory(
@@ -1317,7 +1326,9 @@ function Blog() {
                 lang="en"
                 dir="ltr"
             >
+
                 <Footer />
+
             </div>
 
         </main>
