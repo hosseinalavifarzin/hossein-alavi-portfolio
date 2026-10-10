@@ -1,43 +1,32 @@
 /* =========================================================
    MINI LANGUAGE SWITCH
-
-   Intentionally subtle.
-   Language is a secondary action, not a primary CTA.
 ========================================================= */
 
 .language-switch-mini {
     display: inline-flex;
-
     align-items: center;
+    justify-content: center;
 
-    gap: 0.15rem;
+    gap: 0.1rem;
 
-    height: 1.75rem;
+    height: 1.65rem;
 
-    padding:
-        0 0.2rem;
+    padding: 0 0.16rem;
 
-    border:
-        1px solid
-        rgb(0 0 0 / 0.07);
+    border: 1px solid rgb(0 0 0 / 0.065);
 
-    border-radius:
-        0.55rem;
+    border-radius: 0.5rem;
 
-    background:
-        rgb(255 255 255 / 0.2);
+    background: transparent;
 
     direction: ltr;
+
+    flex-shrink: 0;
 }
 
 
-.dark
-.language-switch-mini {
-    border-color:
-        rgb(255 255 255 / 0.08);
-
-    background:
-        rgb(255 255 255 / 0.02);
+.dark .language-switch-mini {
+    border-color: rgb(255 255 255 / 0.08);
 }
 
 
@@ -47,56 +36,43 @@
 
 .language-switch-mini-button {
     display: inline-flex;
-
     align-items: center;
-
     justify-content: center;
 
-    min-width: 1.75rem;
+    min-width: 1.65rem;
+    height: 1.2rem;
 
-    height: 1.35rem;
+    padding: 0 0.22rem;
 
-    padding:
-        0 0.3rem;
+    border: 0;
 
-    border:
-        0;
+    border-radius: 0.34rem;
 
-    border-radius:
-        0.38rem;
+    background: transparent;
 
-    background:
-        transparent;
+    color: #a1a1aa;
 
-    color:
-        #a1a1aa;
+    font-family: inherit;
 
-    font-family:
-        inherit;
+    font-size: 0.55rem;
 
-    font-size:
-        0.58rem;
-
-    font-weight:
-        700;
+    font-weight: 700;
 
     line-height: 1;
 
-    letter-spacing:
-        0.02em;
+    letter-spacing: 0.025em;
 
     cursor: pointer;
 
     transition:
         color 160ms ease,
-        background 160ms ease;
+        background 160ms ease,
+        opacity 160ms ease;
 }
 
 
-.dark
-.language-switch-mini-button {
-    color:
-        #71717a;
+.dark .language-switch-mini-button {
+    color: #71717a;
 }
 
 
@@ -105,21 +81,17 @@
 ========================================================= */
 
 .language-switch-mini-button:hover:not(:disabled) {
-    color:
-        #52525b;
+    color: #52525b;
 
-    background:
-        rgb(0 0 0 / 0.035);
+    background: rgb(0 0 0 / 0.035);
 }
 
 
 .dark
 .language-switch-mini-button:hover:not(:disabled) {
-    color:
-        #d4d4d8;
+    color: #d4d4d8;
 
-    background:
-        rgb(255 255 255 / 0.045);
+    background: rgb(255 255 255 / 0.04);
 }
 
 
@@ -128,21 +100,17 @@
 ========================================================= */
 
 .language-switch-mini-button-active {
-    background:
-        rgb(34 197 94 / 0.07);
+    color: rgb(34 197 94);
 
-    color:
-        rgb(34 197 94);
+    background: rgb(34 197 94 / 0.065);
 }
 
 
 .dark
 .language-switch-mini-button-active {
-    background:
-        rgb(34 197 94 / 0.08);
+    color: rgb(34 197 94);
 
-    color:
-        rgb(34 197 94);
+    background: rgb(34 197 94 / 0.075);
 }
 
 
@@ -151,34 +119,43 @@
 ========================================================= */
 
 .language-switch-mini-divider {
-    width:
-        1px;
+    width: 1px;
 
-    height:
-        0.7rem;
+    height: 0.62rem;
 
-    background:
-        rgb(0 0 0 / 0.08);
+    flex-shrink: 0;
+
+    background: rgb(0 0 0 / 0.075);
 }
 
 
 .dark
 .language-switch-mini-divider {
-    background:
-        rgb(255 255 255 / 0.09);
+    background: rgb(255 255 255 / 0.09);
 }
 
 
 /* =========================================================
-   DISABLED LANGUAGE
+   DISABLED
 ========================================================= */
 
 .language-switch-mini-button:disabled {
-    opacity:
-        0.28;
+    opacity: 0.25;
 
-    cursor:
-        default;
+    cursor: default;
+}
+
+
+/* =========================================================
+   FOCUS
+========================================================= */
+
+.language-switch-mini-button:focus-visible {
+    outline:
+        1px solid
+        rgb(34 197 94 / 0.5);
+
+    outline-offset: 1px;
 }
 
 
@@ -186,31 +163,23 @@
    MOBILE
 ========================================================= */
 
-@media (
-    max-width: 640px
-) {
+@media (max-width: 640px) {
 
     .language-switch-mini {
-        height:
-            1.65rem;
+        height: 1.55rem;
 
-        border-radius:
-            0.5rem;
+        border-radius: 0.45rem;
     }
 
 
     .language-switch-mini-button {
-        min-width:
-            1.6rem;
+        min-width: 1.5rem;
 
-        height:
-            1.25rem;
+        height: 1.15rem;
 
-        padding:
-            0 0.25rem;
+        padding: 0 0.18rem;
 
-        font-size:
-            0.55rem;
+        font-size: 0.52rem;
     }
 
 }

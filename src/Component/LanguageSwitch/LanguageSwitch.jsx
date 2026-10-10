@@ -8,6 +8,7 @@ import './LanguageSwitch.css';
 
 function LanguageSwitch({
     language = 'fa',
+
     availableLanguages = {
         fa: true,
         en: true
@@ -23,8 +24,7 @@ function LanguageSwitch({
 
 
     // =====================================================
-    // CHECK LANGUAGE AVAILABILITY
-    // Supports object or array formats
+    // LANGUAGE AVAILABILITY
     // =====================================================
 
     const languageAvailable = (
@@ -64,8 +64,7 @@ function LanguageSwitch({
 
 
     // =====================================================
-    // SWITCH
-    // Keeps current article slug when switching language
+    // SWITCH LANGUAGE
     // =====================================================
 
     const changeLanguage = (
@@ -73,9 +72,12 @@ function LanguageSwitch({
     ) => {
 
         if (
-            targetLanguage === language
+            targetLanguage ===
+            language
         ) {
+
             return;
+
         }
 
 
@@ -84,7 +86,9 @@ function LanguageSwitch({
                 targetLanguage
             )
         ) {
+
             return;
+
         }
 
 
@@ -108,13 +112,15 @@ function LanguageSwitch({
                 blogIndex + 1;
 
 
+            const currentLanguage =
+                parts[
+                    languageIndex
+                ];
+
+
             if (
-                parts[
-                    languageIndex
-                ] === 'fa' ||
-                parts[
-                    languageIndex
-                ] === 'en'
+                currentLanguage === 'fa' ||
+                currentLanguage === 'en'
             ) {
 
                 parts[
@@ -161,20 +167,25 @@ function LanguageSwitch({
 
             <button
                 type="button"
-                onClick={
-                    () =>
-                        changeLanguage(
-                            'fa'
-                        )
+
+                onClick={() =>
+                    changeLanguage(
+                        'fa'
+                    )
                 }
+
                 disabled={
                     !languageAvailable(
                         'fa'
                     )
                 }
+
                 aria-pressed={
                     language === 'fa'
                 }
+
+                aria-label="فارسی"
+
                 className={`
                     language-switch-mini-button
 
@@ -185,7 +196,9 @@ function LanguageSwitch({
                     }
                 `}
             >
+
                 FA
+
             </button>
 
 
@@ -197,20 +210,25 @@ function LanguageSwitch({
 
             <button
                 type="button"
-                onClick={
-                    () =>
-                        changeLanguage(
-                            'en'
-                        )
+
+                onClick={() =>
+                    changeLanguage(
+                        'en'
+                    )
                 }
+
                 disabled={
                     !languageAvailable(
                         'en'
                     )
                 }
+
                 aria-pressed={
                     language === 'en'
                 }
+
+                aria-label="English"
+
                 className={`
                     language-switch-mini-button
 
@@ -221,7 +239,9 @@ function LanguageSwitch({
                     }
                 `}
             >
+
                 EN
+
             </button>
 
         </div>

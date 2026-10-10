@@ -20,9 +20,7 @@ import { LanguageProvider } from './context/LanguageContext';
 function App() {
 
     return (
-
         <ThemeProvider>
-
             <LanguageProvider>
 
                 <BrowserRouter>
@@ -39,7 +37,7 @@ function App() {
                             element={<Home />}
                         />
 
-                        {/* Default Blog Language = Persian */}
+                        {/* Default blog language = Persian */}
                         <Route
                             path="/blog"
                             element={
@@ -70,9 +68,7 @@ function App() {
                 </BrowserRouter>
 
             </LanguageProvider>
-
         </ThemeProvider>
-
     );
 
 }

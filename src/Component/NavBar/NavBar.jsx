@@ -1,250 +1,260 @@
-import { useEffect, useState } from 'react';
-
-import { useNavigate } from 'react-router-dom';
+import {
+    useEffect,
+    useState
+} from 'react';
 
 import {
-  Disclosure,
-  DisclosureButton,
-  DisclosurePanel
+    useLocation,
+    useNavigate
+} from 'react-router-dom';
+
+import {
+    Disclosure,
+    DisclosureButton,
+    DisclosurePanel
 } from '@headlessui/react';
 
 import {
-  Bars3Icon,
-  XMarkIcon
+    Bars3Icon,
+    XMarkIcon
 } from '@heroicons/react/24/outline';
 
 import {
-  HiDownload,
-  HiSun,
-  HiMoon
+    HiDownload,
+    HiSun,
+    HiMoon
 } from 'react-icons/hi';
 
 import {
-  IoGameController
+    IoGameController
 } from 'react-icons/io5';
 
 import {
-  useTheme
+    useTheme
 } from '../../context/ThemeContext';
 
 import DinoGame from '../Game/DinoGame';
 
 
-// CV
 const cvFile =
-  `${process.env.PUBLIC_URL}/Hossein-Alavi-CV.pdf`;
+    `${process.env.PUBLIC_URL}/Hossein-Alavi-CV.pdf`;
 
 
-// =========================================================
-// SMOOTH SCROLL
-// =========================================================
-const scrollToSection = (sectionId) => {
+const navigation = [
 
-  const section =
-    document.getElementById(sectionId);
+    {
+        name: 'Home',
+        type: 'section',
+        id: 'home'
+    },
 
-  if (!section) return;
+    {
+        name: 'Portfolio',
+        type: 'route',
+        to: '/portfolio'
+    },
 
-  const navbarOffset = 85;
+    {
+        name: 'Blog',
+        type: 'route',
 
-  const sectionPosition =
-    section.getBoundingClientRect().top +
-    window.pageYOffset -
-    navbarOffset;
+        // Persian is the default blog language
+        to: '/blog/fa',
 
-  window.scrollTo({
-    top: sectionPosition,
-    behavior: 'smooth'
-  });
+        // Keep Blog active on both FA and EN routes
+        activePrefix: '/blog'
+    },
+
+    {
+        name: 'About',
+        type: 'section',
+        id: 'about'
+    },
+
+    {
+        name: 'Contact',
+        type: 'section',
+        id: 'contact'
+    }
+
+];
+
+
+const scrollToSection = (
+    sectionId
+) => {
+
+    const section =
+        document.getElementById(
+            sectionId
+        );
+
+
+    if (!section) {
+        return;
+    }
+
+
+    const navbarOffset =
+        85;
+
+
+    const sectionPosition =
+        section
+            .getBoundingClientRect()
+            .top +
+        window.pageYOffset -
+        navbarOffset;
+
+
+    window.scrollTo({
+        top: sectionPosition,
+        behavior: 'smooth'
+    });
 
 };
 
 
 // =========================================================
-// NAVIGATION
-// =========================================================
-const navigation = [
-
-  {
-    name: 'Home',
-    type: 'route',
-    to: '/'
-  },
-
-  {
-    name: 'About',
-    type: 'section',
-    id: 'about'
-  },
-
-  {
-    name: 'Skills',
-    type: 'section',
-    id: 'skills'
-  },
-
-  {
-    name: 'Experience',
-    type: 'section',
-    id: 'experience'
-  },
-
-  {
-    name: 'Projects',
-    type: 'section',
-    id: 'projects'
-  },
-
-  {
-    name: 'Blog',
-    type: 'route',
-    to: '/blog'
-  },
-
-  {
-    name: 'Contact',
-    type: 'section',
-    id: 'contact'
-  }
-
-];
-
-
-// =========================================================
 // THEME TOGGLE
 // =========================================================
+
 const ThemeToggle = ({
-  isDark,
-  toggleTheme
+    isDark,
+    toggleTheme
 }) => {
 
-  return (
+    return (
 
-    <div className="
-      flex
-      items-center
-      gap-1
-      p-1
-      rounded-xl
-      glass
-    ">
+        <div className="
+            flex
+            items-center
+            gap-1
+            p-1
+            rounded-xl
+            glass
+        ">
 
-      {/* Light */}
-      <button
-        onClick={() =>
-          !isDark || toggleTheme()
-        }
-        className={`
-          flex
-          items-center
-          gap-2
-          px-3
-          py-2
-          rounded-lg
-          text-sm
-          font-medium
-          transition-all
-          duration-300
+            {/* LIGHT */}
 
-          ${
-            !isDark
+            <button
+                onClick={() =>
+                    !isDark ||
+                    toggleTheme()
+                }
+                className={`
+                    flex
+                    items-center
+                    gap-2
+                    px-3
+                    py-2
+                    rounded-lg
+                    text-sm
+                    font-medium
+                    transition-all
+                    duration-300
 
-              ? `
-                bg-gradient-to-r
-                from-yellow-400
-                to-orange-400
-                text-white
-                shadow-md
-              `
+                    ${
+                        !isDark
 
-              : `
-                text-theme-secondary
-                hover:text-theme-primary
-                hover:bg-black/5
-                dark:hover:bg-white/5
-              `
-          }
-        `}
-      >
+                            ? `
+                                bg-gradient-to-r
+                                from-yellow-400
+                                to-orange-400
+                                text-white
+                                shadow-md
+                            `
 
-        <HiSun
-          className={`
-            text-lg
+                            : `
+                                text-theme-secondary
+                                hover:text-theme-primary
+                                hover:bg-black/5
+                                dark:hover:bg-white/5
+                            `
+                    }
+                `}
+            >
 
-            ${
-              !isDark
-                ? 'text-white'
-                : 'text-yellow-500'
-            }
-          `}
-        />
+                <HiSun
+                    className={`
+                        text-lg
 
-        <span>
-          Light
-        </span>
+                        ${
+                            !isDark
+                                ? 'text-white'
+                                : 'text-yellow-500'
+                        }
+                    `}
+                />
 
-      </button>
+                <span>
+                    Light
+                </span>
+
+            </button>
 
 
-      {/* Dark */}
-      <button
-        onClick={() =>
-          isDark || toggleTheme()
-        }
-        className={`
-          flex
-          items-center
-          gap-2
-          px-3
-          py-2
-          rounded-lg
-          text-sm
-          font-medium
-          transition-all
-          duration-300
+            {/* DARK */}
 
-          ${
-            isDark
+            <button
+                onClick={() =>
+                    isDark ||
+                    toggleTheme()
+                }
+                className={`
+                    flex
+                    items-center
+                    gap-2
+                    px-3
+                    py-2
+                    rounded-lg
+                    text-sm
+                    font-medium
+                    transition-all
+                    duration-300
 
-              ? `
-                bg-gradient-to-r
-                from-indigo-500
-                to-purple-600
-                text-white
-                shadow-md
-              `
+                    ${
+                        isDark
 
-              : `
-                text-theme-secondary
-                hover:text-theme-primary
-                hover:bg-black/5
-                dark:hover:bg-white/5
-              `
-          }
-        `}
-      >
+                            ? `
+                                bg-gradient-to-r
+                                from-indigo-500
+                                to-purple-600
+                                text-white
+                                shadow-md
+                            `
 
-        <HiMoon
-          className={`
-            text-lg
+                            : `
+                                text-theme-secondary
+                                hover:text-theme-primary
+                                hover:bg-black/5
+                                dark:hover:bg-white/5
+                            `
+                    }
+                `}
+            >
 
-            ${
-              isDark
-                ? 'text-white'
-                : 'text-indigo-500'
-            }
-          `}
-        />
+                <HiMoon
+                    className={`
+                        text-lg
 
-        <span>
-          Dark
-        </span>
+                        ${
+                            isDark
+                                ? 'text-white'
+                                : 'text-indigo-500'
+                        }
+                    `}
+                />
 
-      </button>
+                <span>
+                    Dark
+                </span>
 
-    </div>
+            </button>
 
-  );
+        </div>
+
+    );
 
 };
 
@@ -252,694 +262,904 @@ const ThemeToggle = ({
 // =========================================================
 // NAVBAR
 // =========================================================
-export default function NavBar() {
 
-  const [scrolled, setScrolled] =
-    useState(false);
+export default function MainNavBar() {
 
-  const [activeSection, setActiveSection] =
-    useState('home');
-
-  const [showGame, setShowGame] =
-    useState(false);
-
-  const {
-    isDark,
-    toggleTheme
-  } = useTheme();
-
-  const navigate = useNavigate();
+    const [
+        scrolled,
+        setScrolled
+    ] = useState(false);
 
 
-  // =======================================================
-  // NAVIGATION HANDLER
-  // =======================================================
-  const handleNavigation = (item) => {
-
-    if (item.type === 'route') {
-
-      navigate(item.to);
-
-      return;
-
-    }
-
-    scrollToSection(item.id);
-
-  };
+    const [
+        activeSection,
+        setActiveSection
+    ] = useState('home');
 
 
-  // =======================================================
-  // ACTIVE SECTION
-  // =======================================================
-  useEffect(() => {
-
-    const handleScroll = () => {
-
-      setScrolled(
-        window.scrollY > 50
-      );
+    const [
+        showGame,
+        setShowGame
+    ] = useState(false);
 
 
-      const sections = [
-        'home',
-        'about',
-        'skills',
-        'experience',
-        'projects',
-        'contact'
-      ];
+    const {
+        isDark,
+        toggleTheme
+    } = useTheme();
 
 
-      for (
-        const section of [...sections].reverse()
-      ) {
+    const location =
+        useLocation();
 
-        const element =
-          document.getElementById(section);
 
+    const navigate =
+        useNavigate();
+
+
+    // =====================================================
+    // HASH SCROLL
+    // =====================================================
+
+    useEffect(() => {
 
         if (
-          element &&
-          window.scrollY >=
-            element.offsetTop - 120
+            location.pathname === '/' &&
+            location.hash
         ) {
 
-          setActiveSection(section);
+            const sectionId =
+                location.hash.replace(
+                    '#',
+                    ''
+                );
 
-          break;
+
+            const timer =
+                setTimeout(
+                    () => {
+
+                        scrollToSection(
+                            sectionId
+                        );
+
+                    },
+                    50
+                );
+
+
+            return () =>
+                clearTimeout(
+                    timer
+                );
 
         }
 
-      }
 
-    };
+        return undefined;
 
-
-    window.addEventListener(
-      'scroll',
-      handleScroll
-    );
+    }, [
+        location.pathname,
+        location.hash
+    ]);
 
 
-    handleScroll();
+    // =====================================================
+    // ACTIVE SECTION + SCROLLED NAV
+    // =====================================================
+
+    useEffect(() => {
+
+        const handleScroll = () => {
+
+            setScrolled(
+                window.scrollY > 50
+            );
 
 
-    return () => {
+            if (
+                location.pathname !== '/'
+            ) {
 
-      window.removeEventListener(
-        'scroll',
-        handleScroll
-      );
+                return;
 
-    };
-
-  }, []);
+            }
 
 
-  return (
-
-    <>
-
-      <Disclosure
-        as="nav"
-        className={`
-          fixed
-          top-0
-          left-0
-          right-0
-          z-50
-          transition-all
-          duration-500
-
-          ${
-            scrolled
-              ? 'glass shadow-lg'
-              : 'bg-transparent'
-          }
-        `}
-      >
-
-        {({ open }) => (
-
-          <>
-
-            <div className="
-              container
-              mx-auto
-              px-4
-            ">
-
-              <div className="
-                flex
-                items-center
-                justify-between
-                h-16
-                sm:h-20
-              ">
+            const sections = [
+                'home',
+                'about',
+                'contact'
+            ];
 
 
-                {/* =================================================
-                    LOGO
-                ================================================== */}
-                <a
-                  href="#home"
-                  onClick={(e) => {
+            for (
+                const section of
+                [...sections].reverse()
+            ) {
 
-                    e.preventDefault();
-
-                    scrollToSection('home');
-
-                  }}
-                  className="
-                    flex
-                    items-center
-                    gap-2
-                    group
-                  "
-                >
-
-                  <div className="
-                    w-9
-                    h-9
-                    sm:w-10
-                    sm:h-10
-                    rounded-xl
-                    bg-gradient-to-br
-                    from-primary-500
-                    to-accent-cyan
-                    flex
-                    items-center
-                    justify-center
-                    text-white
-                    font-bold
-                    text-lg
-                    sm:text-xl
-                    transition-transform
-                    duration-300
-                    group-hover:scale-110
-                  ">
-
-                    H
-
-                  </div>
-
-
-                  <span className="
-                    text-lg
-                    sm:text-xl
-                    font-heading
-                    font-bold
-                    text-theme-primary
-                    hidden
-                    sm:block
-                  ">
-
-                    Hossein
-
-                    <span className="text-primary-500">
-                      .
-                    </span>
-
-                  </span>
-
-                </a>
-
-
-                {/* =================================================
-                    DESKTOP NAVIGATION
-                ================================================== */}
-                <div className="
-                  hidden
-                  lg:flex
-                  items-center
-                  gap-1
-                "
-                >
-
-                  {navigation.map((item) => {
-
-                    const isActive =
-                      item.type === 'section' &&
-                      activeSection === item.id;
-
-
-                    const href =
-                      item.type === 'route'
-                        ? item.to
-                        : `#${item.id}`;
-
-
-                    return (
-
-                      <a
-                        key={item.name}
-                        href={href}
-
-                        onClick={(e) => {
-
-                          e.preventDefault();
-
-                          handleNavigation(item);
-
-                        }}
-
-                        className={`
-                          relative
-                          px-4
-                          py-2
-                          text-sm
-                          font-medium
-                          transition-all
-                          duration-300
-                          rounded-lg
-                          group
-
-                          ${
-                            isActive
-
-                              ? 'text-primary-500'
-
-                              : `
-                                text-theme-secondary
-                                hover:text-theme-primary
-                              `
-                          }
-                        `}
-                      >
-
-                        {item.name}
-
-
-                        <span
-                          className={`
-                            absolute
-                            bottom-0
-                            left-1/2
-                            -translate-x-1/2
-                            h-0.5
-                            bg-primary-500
-                            transition-all
-                            duration-300
-                            rounded-full
-
-                            ${
-                              isActive
-                                ? 'w-6'
-                                : 'w-0 group-hover:w-4'
-                            }
-                          `}
-                        />
-
-                      </a>
-
+                const element =
+                    document.getElementById(
+                        section
                     );
 
-                  })}
+
+                if (
+                    element &&
+                    window.scrollY >=
+                        element.offsetTop -
+                        120
+                ) {
+
+                    setActiveSection(
+                        section
+                    );
 
 
-                  {/* =================================================
-                      GAME
-                  ================================================== */}
-                  <button
-                    onClick={() =>
-                      setShowGame(true)
+                    break;
+
+                }
+
+            }
+
+        };
+
+
+        window.addEventListener(
+            'scroll',
+            handleScroll
+        );
+
+
+        handleScroll();
+
+
+        return () => {
+
+            window.removeEventListener(
+                'scroll',
+                handleScroll
+            );
+
+        };
+
+    }, [
+        location.pathname
+    ]);
+
+
+    // =====================================================
+    // NAVIGATION
+    // =====================================================
+
+    const handleNavigation = (
+        item
+    ) => {
+
+        if (
+            item.type === 'route'
+        ) {
+
+            navigate(
+                item.to
+            );
+
+
+            return;
+
+        }
+
+
+        if (
+            location.pathname === '/'
+        ) {
+
+            scrollToSection(
+                item.id
+            );
+
+
+            return;
+
+        }
+
+
+        navigate(
+            `/#${item.id}`
+        );
+
+    };
+
+
+    const getHref = (
+        item
+    ) => {
+
+        if (
+            item.type === 'route'
+        ) {
+
+            return item.to;
+
+        }
+
+
+        return `/#${item.id}`;
+
+    };
+
+
+    // =====================================================
+    // ACTIVE NAV ITEM
+    // =====================================================
+
+    const isItemActive = (
+        item
+    ) => {
+
+        if (
+            item.type === 'route'
+        ) {
+
+            const prefix =
+                item.activePrefix ||
+                item.to;
+
+
+            return (
+                location.pathname ===
+                    item.to ||
+                location.pathname.startsWith(
+                    `${prefix}/`
+                ) ||
+                location.pathname ===
+                    prefix
+            );
+
+        }
+
+
+        return (
+            location.pathname === '/' &&
+            activeSection === item.id
+        );
+
+    };
+
+
+    return (
+
+        <>
+
+            <Disclosure
+                as="nav"
+                className={`
+                    fixed
+                    top-0
+                    left-0
+                    right-0
+                    z-50
+                    transition-all
+                    duration-500
+
+                    ${
+                        scrolled
+                            ? 'glass shadow-lg'
+                            : 'bg-transparent'
                     }
-                    className="
-                      relative
-                      px-4
-                      py-2
-                      text-sm
-                      font-medium
-                      transition-all
-                      duration-300
-                      rounded-lg
-                      group
-                      text-theme-secondary
-                      hover:text-theme-primary
-                      flex
-                      items-center
-                      gap-1
-                    "
-                  >
-
-                    <IoGameController className="text-lg" />
-
-                    <span>
-                      Game
-                    </span>
-
-
-                    <span className="
-                      absolute
-                      -top-1
-                      -right-1
-                      w-2
-                      h-2
-                      bg-primary-500
-                      rounded-full
-                      animate-pulse
-                    " />
-
-                  </button>
-
-                </div>
-
-
-                {/* =================================================
-                    DESKTOP ACTIONS
-                ================================================== */}
-                <div className="
-                  hidden
-                  lg:flex
-                  items-center
-                  gap-3
-                "
-                >
-
-                  <ThemeToggle
-                    isDark={isDark}
-                    toggleTheme={toggleTheme}
-                  />
-
-
-                  {/* CV */}
-                  <a
-                    href={cvFile}
-                    download="Hossein-Alavi-CV.pdf"
-                    className="
-                      flex
-                      items-center
-                      gap-2
-                      px-5
-                      py-2.5
-                      bg-gradient-to-r
-                      from-primary-500
-                      to-primary-600
-                      text-white
-                      font-semibold
-                      rounded-xl
-                      hover:shadow-glow-green
-                      transition-all
-                      duration-300
-                      hover:-translate-y-0.5
-                    "
-                  >
-
-                    <HiDownload className="text-lg" />
-
-                    <span>
-                      Download CV
-                    </span>
-
-                  </a>
-
-                </div>
-
-
-                {/* =================================================
-                    MOBILE ACTIONS
-                ================================================== */}
-                <div className="
-                  flex
-                  lg:hidden
-                  items-center
-                  gap-2
-                "
-                >
-
-                  {/* Mobile Theme */}
-                  <button
-                    onClick={toggleTheme}
-                    className="
-                      w-9
-                      h-9
-                      rounded-lg
-                      glass
-                      flex
-                      items-center
-                      justify-center
-                      transition-all
-                      duration-300
-                    "
-                    aria-label="Toggle theme"
-                  >
-
-                    {isDark ? (
-
-                      <HiSun className="
-                        text-lg
-                        text-yellow-400
-                      " />
-
-                    ) : (
-
-                      <HiMoon className="
-                        text-lg
-                        text-indigo-500
-                      " />
-
-                    )}
-
-                  </button>
-
-
-                  {/* Mobile Menu Button */}
-                  <DisclosureButton
-                    className="
-                      inline-flex
-                      items-center
-                      justify-center
-                      p-2
-                      rounded-lg
-                      text-theme-secondary
-                      hover:text-theme-primary
-                      hover:bg-black/5
-                      dark:hover:bg-white/10
-                      transition-colors
-                    "
-                  >
-
-                    <span className="sr-only">
-                      Open main menu
-                    </span>
-
-
-                    {open ? (
-
-                      <XMarkIcon className="
-                        block
-                        h-5
-                        w-5
-                      " />
-
-                    ) : (
-
-                      <Bars3Icon className="
-                        block
-                        h-5
-                        w-5
-                      " />
-
-                    )}
-
-                  </DisclosureButton>
-
-                </div>
-
-              </div>
-
-            </div>
-
-
-            {/* =====================================================
-                MOBILE MENU
-            ====================================================== */}
-            <DisclosurePanel
-              className="
-                lg:hidden
-                glass
-                border-t
-                border-black/10
-                dark:border-white/10
-              "
+                `}
             >
 
-              <div className="
-                px-4
-                py-3
-                space-y-1
-              ">
+                {({ open }) => (
 
-                {navigation.map((item) => {
+                    <>
 
-                  const isActive =
-                    item.type === 'section' &&
-                    activeSection === item.id;
+                        {/* =================================
+                            MAIN NAVBAR
+                        ================================== */}
 
+                        <div className="
+                            container
+                            mx-auto
+                            px-4
+                        ">
 
-                  return (
+                            <div className="
+                                flex
+                                items-center
+                                justify-between
+                                h-16
+                                sm:h-20
+                            ">
 
-                    <DisclosureButton
-                      key={item.name}
+                                {/* =========================
+                                    LOGO
+                                ========================== */}
 
-                      as="button"
+                                <a
+                                    href="/"
+                                    onClick={(
+                                        event
+                                    ) => {
 
-                      onClick={() => {
-
-                        handleNavigation(item);
-
-                      }}
-
-                      className={`
-                        w-full
-                        block
-                        text-left
-                        px-4
-                        py-2.5
-                        text-sm
-                        font-medium
-                        rounded-lg
-                        transition-all
-                        duration-300
-
-                        ${
-                          isActive
-
-                            ? `
-                              bg-primary-500/20
-                              text-primary-500
-                            `
-
-                            : `
-                              text-theme-secondary
-                              hover:bg-black/5
-                              dark:hover:bg-white/5
-                              hover:text-theme-primary
-                            `
-                        }
-                      `}
-                    >
-
-                      {item.name}
-
-                    </DisclosureButton>
-
-                  );
-
-                })}
+                                        event
+                                            .preventDefault();
 
 
-                {/* =================================================
-                    MOBILE GAME
-                ================================================== */}
-                <DisclosureButton
-                  as="button"
-                  onClick={() =>
-                    setShowGame(true)
-                  }
-                  className="
-                    w-full
-                    flex
-                    items-center
-                    gap-2
-                    px-4
-                    py-2.5
-                    text-sm
-                    font-medium
-                    rounded-lg
-                    transition-all
-                    duration-300
-                    text-theme-secondary
-                    hover:bg-black/5
-                    dark:hover:bg-white/5
-                    hover:text-theme-primary
-                  "
-                >
+                                        handleNavigation({
+                                            type:
+                                                'section',
 
-                  <IoGameController className="text-lg" />
+                                            id:
+                                                'home'
+                                        });
 
-                  <span>
-                    Play Game
-                  </span>
+                                    }}
+                                    className="
+                                        flex
+                                        items-center
+                                        gap-2
+                                        group
+                                    "
+                                >
 
+                                    <div className="
+                                        w-9
+                                        h-9
+                                        sm:w-10
+                                        sm:h-10
+                                        rounded-xl
+                                        bg-gradient-to-br
+                                        from-primary-500
+                                        to-accent-cyan
+                                        flex
+                                        items-center
+                                        justify-center
+                                        text-white
+                                        font-bold
+                                        text-lg
+                                        sm:text-xl
+                                        transition-transform
+                                        duration-300
+                                        group-hover:scale-110
+                                    ">
 
-                  <span className="
-                    ml-auto
-                    px-2
-                    py-0.5
-                    bg-primary-500/20
-                    text-primary-500
-                    text-xs
-                    rounded-full
-                  "
-                  >
+                                        H
 
-                    New
-
-                  </span>
-
-                </DisclosureButton>
+                                    </div>
 
 
-                {/* =================================================
-                    MOBILE CV
-                ================================================== */}
-                <a
-                  href={cvFile}
-                  download="Hossein-Alavi-CV.pdf"
-                  className="
-                    flex
-                    items-center
-                    justify-center
-                    gap-2
-                    mt-3
-                    px-4
-                    py-2.5
-                    bg-gradient-to-r
-                    from-primary-500
-                    to-primary-600
-                    text-white
-                    text-sm
-                    font-semibold
-                    rounded-lg
-                  "
-                >
+                                    <span className="
+                                        text-lg
+                                        sm:text-xl
+                                        font-heading
+                                        font-bold
+                                        text-theme-primary
+                                        hidden
+                                        sm:block
+                                    ">
 
-                  <HiDownload className="text-base" />
+                                        Hossein
 
-                  <span>
-                    Download CV
-                  </span>
+                                        <span className="text-primary-500">
+                                            .
+                                        </span>
 
-                </a>
+                                    </span>
 
-              </div>
-
-            </DisclosurePanel>
-
-          </>
-
-        )}
-
-      </Disclosure>
+                                </a>
 
 
-      {/* =========================================================
-          GAME MODAL
-      ========================================================== */}
-      {showGame && (
+                                {/* =========================
+                                    DESKTOP NAVIGATION
+                                ========================== */}
 
-        <DinoGame
-          onClose={() =>
-            setShowGame(false)
-          }
-        />
+                                <div className="
+                                    hidden
+                                    lg:flex
+                                    items-center
+                                    gap-1
+                                ">
 
-      )}
+                                    {navigation.map(
+                                        (item) => {
 
-    </>
+                                            const isActive =
+                                                isItemActive(
+                                                    item
+                                                );
 
-  );
+
+                                            return (
+
+                                                <a
+                                                    key={
+                                                        item.name
+                                                    }
+
+                                                    href={
+                                                        getHref(
+                                                            item
+                                                        )
+                                                    }
+
+                                                    onClick={(
+                                                        event
+                                                    ) => {
+
+                                                        event
+                                                            .preventDefault();
+
+
+                                                        handleNavigation(
+                                                            item
+                                                        );
+
+                                                    }}
+
+                                                    className={`
+                                                        relative
+                                                        px-4
+                                                        py-2
+                                                        text-sm
+                                                        font-medium
+                                                        transition-all
+                                                        duration-300
+                                                        rounded-lg
+                                                        group
+
+                                                        ${
+                                                            isActive
+
+                                                                ? 'text-primary-500'
+
+                                                                : `
+                                                                    text-theme-secondary
+                                                                    hover:text-theme-primary
+                                                                `
+                                                        }
+                                                    `}
+                                                >
+
+                                                    {
+                                                        item.name
+                                                    }
+
+
+                                                    <span
+                                                        className={`
+                                                            absolute
+                                                            bottom-0
+                                                            left-1/2
+                                                            -translate-x-1/2
+                                                            h-0.5
+                                                            bg-primary-500
+                                                            transition-all
+                                                            duration-300
+                                                            rounded-full
+
+                                                            ${
+                                                                isActive
+                                                                    ? 'w-6'
+                                                                    : 'w-0 group-hover:w-4'
+                                                            }
+                                                        `}
+                                                    />
+
+                                                </a>
+
+                                            );
+
+                                        }
+                                    )}
+
+
+                                    {/* GAME */}
+
+                                    <button
+                                        onClick={() =>
+                                            setShowGame(
+                                                true
+                                            )
+                                        }
+                                        className="
+                                            relative
+                                            px-4
+                                            py-2
+                                            text-sm
+                                            font-medium
+                                            transition-all
+                                            duration-300
+                                            rounded-lg
+                                            group
+                                            text-theme-secondary
+                                            hover:text-theme-primary
+                                            flex
+                                            items-center
+                                            gap-1
+                                        "
+                                    >
+
+                                        <IoGameController className="text-lg" />
+
+                                        <span>
+                                            Game
+                                        </span>
+
+                                        <span className="
+                                            absolute
+                                            -top-1
+                                            -right-1
+                                            w-2
+                                            h-2
+                                            bg-primary-500
+                                            rounded-full
+                                            animate-pulse
+                                        " />
+
+                                    </button>
+
+                                </div>
+
+
+                                {/* =========================
+                                    DESKTOP ACTIONS
+                                ========================== */}
+
+                                <div className="
+                                    hidden
+                                    lg:flex
+                                    items-center
+                                    gap-3
+                                ">
+
+                                    <ThemeToggle
+                                        isDark={
+                                            isDark
+                                        }
+                                        toggleTheme={
+                                            toggleTheme
+                                        }
+                                    />
+
+
+                                    <a
+                                        href={
+                                            cvFile
+                                        }
+
+                                        download="Hossein-Alavi-CV.pdf"
+
+                                        className="
+                                            flex
+                                            items-center
+                                            gap-2
+                                            px-5
+                                            py-2.5
+                                            bg-gradient-to-r
+                                            from-primary-500
+                                            to-primary-600
+                                            text-white
+                                            font-semibold
+                                            rounded-xl
+                                            hover:shadow-glow-green
+                                            transition-all
+                                            duration-300
+                                            hover:-translate-y-0.5
+                                        "
+                                    >
+
+                                        <HiDownload className="text-lg" />
+
+                                        <span>
+                                            Download CV
+                                        </span>
+
+                                    </a>
+
+                                </div>
+
+
+                                {/* =========================
+                                    MOBILE ACTIONS
+                                ========================== */}
+
+                                <div className="
+                                    flex
+                                    lg:hidden
+                                    items-center
+                                    gap-2
+                                ">
+
+                                    {/* MOBILE THEME */}
+
+                                    <button
+                                        onClick={
+                                            toggleTheme
+                                        }
+                                        className="
+                                            w-9
+                                            h-9
+                                            rounded-lg
+                                            glass
+                                            flex
+                                            items-center
+                                            justify-center
+                                            transition-all
+                                            duration-300
+                                        "
+                                        aria-label="Toggle theme"
+                                    >
+
+                                        {isDark ? (
+
+                                            <HiSun className="
+                                                text-lg
+                                                text-yellow-400
+                                            " />
+
+                                        ) : (
+
+                                            <HiMoon className="
+                                                text-lg
+                                                text-indigo-500
+                                            " />
+
+                                        )}
+
+                                    </button>
+
+
+                                    {/* MOBILE MENU */}
+
+                                    <DisclosureButton
+                                        className="
+                                            inline-flex
+                                            items-center
+                                            justify-center
+                                            p-2
+                                            rounded-lg
+                                            text-theme-secondary
+                                            hover:text-theme-primary
+                                            hover:bg-black/5
+                                            dark:hover:bg-white/10
+                                            transition-colors
+                                        "
+                                    >
+
+                                        <span className="sr-only">
+                                            Open main menu
+                                        </span>
+
+
+                                        {open ? (
+
+                                            <XMarkIcon className="
+                                                block
+                                                h-5
+                                                w-5
+                                            " />
+
+                                        ) : (
+
+                                            <Bars3Icon className="
+                                                block
+                                                h-5
+                                                w-5
+                                            " />
+
+                                        )}
+
+                                    </DisclosureButton>
+
+                                </div>
+
+                            </div>
+
+                        </div>
+
+
+                        {/* =================================
+                            MOBILE MENU
+                        ================================== */}
+
+                        <DisclosurePanel
+                            className="
+                                lg:hidden
+                                glass
+                                border-t
+                                border-black/10
+                                dark:border-white/10
+                            "
+                        >
+
+                            <div className="
+                                px-4
+                                py-3
+                                space-y-1
+                            ">
+
+                                {navigation.map(
+                                    (item) => {
+
+                                        const isActive =
+                                            isItemActive(
+                                                item
+                                            );
+
+
+                                        return (
+
+                                            <DisclosureButton
+                                                key={
+                                                    item.name
+                                                }
+
+                                                as="button"
+
+                                                onClick={() =>
+                                                    handleNavigation(
+                                                        item
+                                                    )
+                                                }
+
+                                                className={`
+                                                    w-full
+                                                    block
+                                                    text-left
+                                                    px-4
+                                                    py-2.5
+                                                    text-sm
+                                                    font-medium
+                                                    rounded-lg
+                                                    transition-all
+                                                    duration-300
+
+                                                    ${
+                                                        isActive
+
+                                                            ? `
+                                                                bg-primary-500/20
+                                                                text-primary-500
+                                                            `
+
+                                                            : `
+                                                                text-theme-secondary
+                                                                hover:bg-black/5
+                                                                dark:hover:bg-white/5
+                                                                hover:text-theme-primary
+                                                            `
+                                                    }
+                                                `}
+                                            >
+
+                                                {
+                                                    item.name
+                                                }
+
+                                            </DisclosureButton>
+
+                                        );
+
+                                    }
+                                )}
+
+
+                                {/* GAME */}
+
+                                <DisclosureButton
+                                    as="button"
+                                    onClick={() =>
+                                        setShowGame(
+                                            true
+                                        )
+                                    }
+                                    className="
+                                        w-full
+                                        flex
+                                        items-center
+                                        gap-2
+                                        px-4
+                                        py-2.5
+                                        text-sm
+                                        font-medium
+                                        rounded-lg
+                                        transition-all
+                                        duration-300
+                                        text-theme-secondary
+                                        hover:bg-black/5
+                                        dark:hover:bg-white/5
+                                        hover:text-theme-primary
+                                    "
+                                >
+
+                                    <IoGameController className="text-lg" />
+
+                                    <span>
+                                        Play Game
+                                    </span>
+
+                                    <span className="
+                                        ml-auto
+                                        px-2
+                                        py-0.5
+                                        bg-primary-500/20
+                                        text-primary-500
+                                        text-xs
+                                        rounded-full
+                                    ">
+
+                                        New
+
+                                    </span>
+
+                                </DisclosureButton>
+
+
+                                {/* DOWNLOAD CV */}
+
+                                <a
+                                    href={
+                                        cvFile
+                                    }
+
+                                    download="Hossein-Alavi-CV.pdf"
+
+                                    className="
+                                        flex
+                                        items-center
+                                        justify-center
+                                        gap-2
+                                        mt-3
+                                        px-4
+                                        py-2.5
+                                        bg-gradient-to-r
+                                        from-primary-500
+                                        to-primary-600
+                                        text-white
+                                        text-sm
+                                        font-semibold
+                                        rounded-lg
+                                    "
+                                >
+
+                                    <HiDownload className="text-base" />
+
+                                    <span>
+                                        Download CV
+                                    </span>
+
+                                </a>
+
+                            </div>
+
+                        </DisclosurePanel>
+
+                    </>
+
+                )}
+
+            </Disclosure>
+
+
+            {/* =============================================
+                GAME MODAL
+            ============================================== */}
+
+            {showGame && (
+
+                <DinoGame
+                    onClose={() =>
+                        setShowGame(
+                            false
+                        )
+                    }
+                />
+
+            )}
+
+        </>
+
+    );
 
 }
