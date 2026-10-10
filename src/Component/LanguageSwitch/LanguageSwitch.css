@@ -13,20 +13,28 @@
 
     padding: 0 0.16rem;
 
-    border: 1px solid rgb(0 0 0 / 0.065);
+    border:
+        1px solid
+        rgb(0 0 0 / 0.065);
 
-    border-radius: 0.5rem;
+    border-radius:
+        0.5rem;
 
-    background: transparent;
+    background:
+        transparent;
 
-    direction: ltr;
+    direction:
+        ltr;
 
-    flex-shrink: 0;
+    flex-shrink:
+        0;
 }
 
 
-.dark .language-switch-mini {
-    border-color: rgb(255 255 255 / 0.08);
+.dark
+.language-switch-mini {
+    border-color:
+        rgb(255 255 255 / 0.08);
 }
 
 
@@ -39,30 +47,44 @@
     align-items: center;
     justify-content: center;
 
-    min-width: 1.65rem;
-    height: 1.2rem;
+    min-width:
+        1.65rem;
 
-    padding: 0 0.22rem;
+    height:
+        1.2rem;
 
-    border: 0;
+    padding:
+        0 0.22rem;
 
-    border-radius: 0.34rem;
+    border:
+        0;
 
-    background: transparent;
+    border-radius:
+        0.34rem;
 
-    color: #a1a1aa;
+    background:
+        transparent;
 
-    font-family: inherit;
+    color:
+        #a1a1aa;
 
-    font-size: 0.55rem;
+    font-family:
+        inherit;
 
-    font-weight: 700;
+    font-size:
+        0.55rem;
 
-    line-height: 1;
+    font-weight:
+        700;
 
-    letter-spacing: 0.025em;
+    line-height:
+        1;
 
-    cursor: pointer;
+    letter-spacing:
+        0.025em;
+
+    cursor:
+        pointer;
 
     transition:
         color 160ms ease,
@@ -71,8 +93,10 @@
 }
 
 
-.dark .language-switch-mini-button {
-    color: #71717a;
+.dark
+.language-switch-mini-button {
+    color:
+        #71717a;
 }
 
 
@@ -80,18 +104,26 @@
    HOVER
 ========================================================= */
 
-.language-switch-mini-button:hover:not(:disabled) {
-    color: #52525b;
+.language-switch-mini-button:hover:not(
+    :disabled
+) {
+    color:
+        #52525b;
 
-    background: rgb(0 0 0 / 0.035);
+    background:
+        rgb(0 0 0 / 0.035);
 }
 
 
 .dark
-.language-switch-mini-button:hover:not(:disabled) {
-    color: #d4d4d8;
+.language-switch-mini-button:hover:not(
+    :disabled
+) {
+    color:
+        #d4d4d8;
 
-    background: rgb(255 255 255 / 0.04);
+    background:
+        rgb(255 255 255 / 0.04);
 }
 
 
@@ -100,17 +132,21 @@
 ========================================================= */
 
 .language-switch-mini-button-active {
-    color: rgb(34 197 94);
+    color:
+        rgb(34 197 94);
 
-    background: rgb(34 197 94 / 0.065);
+    background:
+        rgb(34 197 94 / 0.065);
 }
 
 
 .dark
 .language-switch-mini-button-active {
-    color: rgb(34 197 94);
+    color:
+        rgb(34 197 94);
 
-    background: rgb(34 197 94 / 0.075);
+    background:
+        rgb(34 197 94 / 0.075);
 }
 
 
@@ -119,19 +155,24 @@
 ========================================================= */
 
 .language-switch-mini-divider {
-    width: 1px;
+    width:
+        1px;
 
-    height: 0.62rem;
+    height:
+        0.62rem;
 
-    flex-shrink: 0;
+    flex-shrink:
+        0;
 
-    background: rgb(0 0 0 / 0.075);
+    background:
+        rgb(0 0 0 / 0.075);
 }
 
 
 .dark
 .language-switch-mini-divider {
-    background: rgb(255 255 255 / 0.09);
+    background:
+        rgb(255 255 255 / 0.09);
 }
 
 
@@ -140,9 +181,11 @@
 ========================================================= */
 
 .language-switch-mini-button:disabled {
-    opacity: 0.25;
+    opacity:
+        0.25;
 
-    cursor: default;
+    cursor:
+        default;
 }
 
 
@@ -155,7 +198,8 @@
         1px solid
         rgb(34 197 94 / 0.5);
 
-    outline-offset: 1px;
+    outline-offset:
+        1px;
 }
 
 
@@ -163,23 +207,31 @@
    MOBILE
 ========================================================= */
 
-@media (max-width: 640px) {
+@media (
+    max-width: 640px
+) {
 
     .language-switch-mini {
-        height: 1.55rem;
+        height:
+            1.55rem;
 
-        border-radius: 0.45rem;
+        border-radius:
+            0.45rem;
     }
 
 
     .language-switch-mini-button {
-        min-width: 1.5rem;
+        min-width:
+            1.5rem;
 
-        height: 1.15rem;
+        height:
+            1.15rem;
 
-        padding: 0 0.18rem;
+        padding:
+            0 0.18rem;
 
-        font-size: 0.52rem;
+        font-size:
+            0.52rem;
     }
 
 }

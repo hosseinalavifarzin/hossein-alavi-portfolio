@@ -46,7 +46,8 @@ function LanguageSwitch({
 
         if (
             availableLanguages &&
-            typeof availableLanguages === 'object'
+            typeof availableLanguages ===
+                'object'
         ) {
 
             return Boolean(
@@ -64,7 +65,7 @@ function LanguageSwitch({
 
 
     // =====================================================
-    // SWITCH LANGUAGE
+    // CHANGE LANGUAGE
     // =====================================================
 
     const changeLanguage = (
@@ -95,7 +96,9 @@ function LanguageSwitch({
         const parts =
             location.pathname
                 .split('/')
-                .filter(Boolean);
+                .filter(
+                    Boolean
+                );
 
 
         const blogIndex =
@@ -119,8 +122,10 @@ function LanguageSwitch({
 
 
             if (
-                currentLanguage === 'fa' ||
-                currentLanguage === 'en'
+                currentLanguage ===
+                    'fa' ||
+                currentLanguage ===
+                    'en'
             ) {
 
                 parts[
@@ -160,10 +165,15 @@ function LanguageSwitch({
 
         <div
             className="language-switch-mini"
+
             role="group"
+
             aria-label="Language"
+
             dir="ltr"
         >
+
+            {/* FARSI */}
 
             <button
                 type="button"
@@ -207,6 +217,8 @@ function LanguageSwitch({
                 aria-hidden="true"
             />
 
+
+            {/* ENGLISH */}
 
             <button
                 type="button"

@@ -1887,7 +1887,7 @@ function BlogPost() {
 
 
                         <Link
-                            to="/blog/en"
+                            to={`/blog/${language}`}
                             className="
                                 btn-primary
                                 inline-flex

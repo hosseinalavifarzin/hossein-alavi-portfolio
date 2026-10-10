@@ -13,14 +13,20 @@ import Blog from './page/Blog/Blog';
 import BlogPost from './page/BlogPost/BlogPost';
 import ProjectDetails from './page/ProjectDetails/ProjectDetails';
 
-import { ThemeProvider } from './context/ThemeContext';
-import { LanguageProvider } from './context/LanguageContext';
+import {
+    ThemeProvider
+} from './context/ThemeContext';
+
+import {
+    LanguageProvider
+} from './context/LanguageContext';
 
 
 function App() {
 
     return (
         <ThemeProvider>
+
             <LanguageProvider>
 
                 <BrowserRouter>
@@ -29,15 +35,24 @@ function App() {
 
                         <Route
                             path="/"
-                            element={<MainHome />}
+                            element={
+                                <MainHome />
+                            }
                         />
+
 
                         <Route
                             path="/portfolio"
-                            element={<Home />}
+                            element={
+                                <Home />
+                            }
                         />
 
-                        {/* Default blog language = Persian */}
+
+                        {/* =================================
+                            DEFAULT BLOG LANGUAGE = FARSI
+                        ================================== */}
+
                         <Route
                             path="/blog"
                             element={
@@ -48,19 +63,28 @@ function App() {
                             }
                         />
 
+
                         <Route
                             path="/blog/:language"
-                            element={<Blog />}
+                            element={
+                                <Blog />
+                            }
                         />
+
 
                         <Route
                             path="/blog/:language/:slug"
-                            element={<BlogPost />}
+                            element={
+                                <BlogPost />
+                            }
                         />
+
 
                         <Route
                             path="/projects/:projectId"
-                            element={<ProjectDetails />}
+                            element={
+                                <ProjectDetails />
+                            }
                         />
 
                     </Routes>
@@ -68,6 +92,7 @@ function App() {
                 </BrowserRouter>
 
             </LanguageProvider>
+
         </ThemeProvider>
     );
 

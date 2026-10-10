@@ -36,12 +36,8 @@ import {
 import DinoGame from '../Game/DinoGame';
 
 
-// =========================================================
-// CV
-// =========================================================
-
 const cvFile =
-    `${process.env.PUBLIC_URL}/hossein-alavi-cv.pdf`;
+    `${process.env.PUBLIC_URL}/Hossein-Alavi-CV.pdf`;
 
 
 // =========================================================
@@ -59,14 +55,16 @@ const navigation = [
     {
         name: 'Portfolio',
         type: 'route',
-        to: '/portfolio',
-        activePrefix: '/portfolio'
+        to: '/portfolio'
     },
 
     {
         name: 'Blog',
         type: 'route',
-        to: '/blog/en',
+
+        // Default Blog language = Persian
+        to: '/blog/fa',
+
         activePrefix: '/blog'
     },
 
@@ -86,24 +84,32 @@ const navigation = [
 
 
 // =========================================================
-// SMOOTH SCROLL
+// SCROLL TO SECTION
 // =========================================================
 
-const scrollToSection = (sectionId) => {
+const scrollToSection = (
+    sectionId
+) => {
 
     const section =
-        document.getElementById(sectionId);
+        document.getElementById(
+            sectionId
+        );
+
 
     if (!section) {
         return;
     }
 
 
-    const navbarOffset = 85;
+    const navbarOffset =
+        85;
 
 
     const sectionPosition =
-        section.getBoundingClientRect().top +
+        section
+            .getBoundingClientRect()
+            .top +
         window.pageYOffset -
         navbarOffset;
 
@@ -141,12 +147,14 @@ const ThemeToggle = ({
             glass
         ">
 
-            {/* Light */}
+            {/* LIGHT */}
+
             <button
-                type="button"
                 onClick={() =>
-                    !isDark || toggleTheme()
+                    !isDark ||
+                    toggleTheme()
                 }
+
                 className={`
                     flex
                     items-center
@@ -199,12 +207,14 @@ const ThemeToggle = ({
             </button>
 
 
-            {/* Dark */}
+            {/* DARK */}
+
             <button
-                type="button"
                 onClick={() =>
-                    isDark || toggleTheme()
+                    isDark ||
+                    toggleTheme()
                 }
+
                 className={`
                     flex
                     items-center
@@ -269,16 +279,22 @@ const ThemeToggle = ({
 
 export default function MainNavBar() {
 
-    const [scrolled, setScrolled] =
-        useState(false);
+    const [
+        scrolled,
+        setScrolled
+    ] = useState(false);
 
 
-    const [activeSection, setActiveSection] =
-        useState('home');
+    const [
+        activeSection,
+        setActiveSection
+    ] = useState('home');
 
 
-    const [showGame, setShowGame] =
-        useState(false);
+    const [
+        showGame,
+        setShowGame
+    ] = useState(false);
 
 
     const {
@@ -296,52 +312,7 @@ export default function MainNavBar() {
 
 
     // =====================================================
-    // BLOG LANGUAGE
-    // =====================================================
-
-    const getCurrentBlogLanguage = () => {
-
-        if (
-            location.pathname === '/blog/fa' ||
-            location.pathname.startsWith('/blog/fa/')
-        ) {
-
-            return 'fa';
-
-        }
-
-
-        return 'en';
-
-    };
-
-
-    // =====================================================
-    // ROUTE TARGET
-    // =====================================================
-
-    const getRouteTarget = (item) => {
-
-        if (
-            item.name === 'Blog'
-        ) {
-
-            const blogLanguage =
-                getCurrentBlogLanguage();
-
-
-            return `/blog/${blogLanguage}`;
-
-        }
-
-
-        return item.to;
-
-    };
-
-
-    // =====================================================
-    // HANDLE HASH AFTER NAVIGATION
+    // HASH NAVIGATION
     // =====================================================
 
     useEffect(() => {
@@ -359,17 +330,22 @@ export default function MainNavBar() {
 
 
             const timer =
-                setTimeout(() => {
+                setTimeout(
+                    () => {
 
-                    scrollToSection(
-                        sectionId
-                    );
+                        scrollToSection(
+                            sectionId
+                        );
 
-                }, 50);
+                    },
+                    50
+                );
 
 
             return () =>
-                clearTimeout(timer);
+                clearTimeout(
+                    timer
+                );
 
         }
 
@@ -383,7 +359,7 @@ export default function MainNavBar() {
 
 
     // =====================================================
-    // ACTIVE HOME SECTION
+    // NAVBAR SCROLL STATE
     // =====================================================
 
     useEffect(() => {
@@ -391,7 +367,8 @@ export default function MainNavBar() {
         const handleScroll = () => {
 
             setScrolled(
-                window.scrollY > 50
+                window.scrollY >
+                    50
             );
 
 
@@ -405,15 +382,17 @@ export default function MainNavBar() {
 
 
             const sections = [
+
                 'home',
                 'about',
                 'contact'
+
             ];
 
 
             for (
-                const section
-                of [...sections].reverse()
+                const section of
+                [...sections].reverse()
             ) {
 
                 const element =
@@ -425,7 +404,8 @@ export default function MainNavBar() {
                 if (
                     element &&
                     window.scrollY >=
-                        element.offsetTop - 120
+                        element.offsetTop -
+                        120
                 ) {
 
                     setActiveSection(
@@ -478,7 +458,7 @@ export default function MainNavBar() {
         ) {
 
             navigate(
-                getRouteTarget(item)
+                item.to
             );
 
 
@@ -509,7 +489,7 @@ export default function MainNavBar() {
 
 
     // =====================================================
-    // REAL HREF
+    // HREF
     // =====================================================
 
     const getHref = (
@@ -520,9 +500,7 @@ export default function MainNavBar() {
             item.type === 'route'
         ) {
 
-            return getRouteTarget(
-                item
-            );
+            return item.to;
 
         }
 
@@ -533,7 +511,7 @@ export default function MainNavBar() {
 
 
     // =====================================================
-    // ACTIVE ITEM
+    // ACTIVE NAV ITEM
     // =====================================================
 
     const isItemActive = (
@@ -544,38 +522,41 @@ export default function MainNavBar() {
             item.type === 'route'
         ) {
 
-            const activePrefix =
-                item.activePrefix ||
-                item.to;
+            if (
+                item.activePrefix
+            ) {
+
+                return (
+                    location.pathname ===
+                        item.activePrefix ||
+
+                    location.pathname.startsWith(
+                        `${item.activePrefix}/`
+                    )
+                );
+
+            }
 
 
             return (
-
                 location.pathname ===
-                    activePrefix ||
+                    item.to ||
 
                 location.pathname.startsWith(
-                    `${activePrefix}/`
+                    `${item.to}/`
                 )
-
             );
 
         }
 
 
         return (
-
             location.pathname === '/' &&
             activeSection === item.id
-
         );
 
     };
 
-
-    // =====================================================
-    // RENDER
-    // =====================================================
 
     return (
 
@@ -583,6 +564,7 @@ export default function MainNavBar() {
 
             <Disclosure
                 as="nav"
+
                 className={`
                     fixed
                     top-0
@@ -604,6 +586,10 @@ export default function MainNavBar() {
 
                     <>
 
+                        {/* ===============================
+                            NAVBAR
+                        ================================ */}
+
                         <div className="
                             container
                             mx-auto
@@ -618,14 +604,16 @@ export default function MainNavBar() {
                                 sm:h-20
                             ">
 
-
-                                {/* =================================================
+                                {/* =======================
                                     LOGO
-                                ================================================== */}
+                                ======================== */}
 
                                 <a
                                     href="/"
-                                    onClick={(event) => {
+
+                                    onClick={(
+                                        event
+                                    ) => {
 
                                         event.preventDefault();
 
@@ -641,6 +629,7 @@ export default function MainNavBar() {
                                         });
 
                                     }}
+
                                     className="
                                         flex
                                         items-center
@@ -687,12 +676,8 @@ export default function MainNavBar() {
 
                                         Hossein
 
-                                        <span className="
-                                            text-primary-500
-                                        ">
-
+                                        <span className="text-primary-500">
                                             .
-
                                         </span>
 
                                     </span>
@@ -700,9 +685,9 @@ export default function MainNavBar() {
                                 </a>
 
 
-                                {/* =================================================
-                                    DESKTOP NAVIGATION
-                                ================================================== */}
+                                {/* =======================
+                                    DESKTOP NAV
+                                ======================== */}
 
                                 <div className="
                                     hidden
@@ -726,11 +711,13 @@ export default function MainNavBar() {
                                                     key={
                                                         item.name
                                                     }
+
                                                     href={
                                                         getHref(
                                                             item
                                                         )
                                                     }
+
                                                     onClick={(
                                                         event
                                                     ) => {
@@ -743,14 +730,7 @@ export default function MainNavBar() {
                                                         );
 
                                                     }}
-                                                    aria-current={
-                                                        isActive &&
-                                                        item.type === 'route'
 
-                                                            ? 'page'
-
-                                                            : undefined
-                                                    }
                                                     className={`
                                                         relative
                                                         px-4
@@ -810,17 +790,15 @@ export default function MainNavBar() {
                                     )}
 
 
-                                    {/* =================================================
-                                        GAME
-                                    ================================================== */}
+                                    {/* GAME */}
 
                                     <button
-                                        type="button"
                                         onClick={() =>
                                             setShowGame(
                                                 true
                                             )
                                         }
+
                                         className="
                                             relative
                                             px-4
@@ -839,17 +817,11 @@ export default function MainNavBar() {
                                         "
                                     >
 
-                                        <IoGameController
-                                            className="
-                                                text-lg
-                                            "
-                                        />
-
+                                        <IoGameController className="text-lg" />
 
                                         <span>
                                             Game
                                         </span>
-
 
                                         <span className="
                                             absolute
@@ -867,9 +839,9 @@ export default function MainNavBar() {
                                 </div>
 
 
-                                {/* =================================================
+                                {/* =======================
                                     DESKTOP ACTIONS
-                                ================================================== */}
+                                ======================== */}
 
                                 <div className="
                                     hidden
@@ -882,17 +854,20 @@ export default function MainNavBar() {
                                         isDark={
                                             isDark
                                         }
+
                                         toggleTheme={
                                             toggleTheme
                                         }
                                     />
 
 
-                                    {/* CV */}
-
                                     <a
-                                        href={cvFile}
+                                        href={
+                                            cvFile
+                                        }
+
                                         download="Hossein-Alavi-CV.pdf"
+
                                         className="
                                             flex
                                             items-center
@@ -912,12 +887,7 @@ export default function MainNavBar() {
                                         "
                                     >
 
-                                        <HiDownload
-                                            className="
-                                                text-lg
-                                            "
-                                        />
-
+                                        <HiDownload className="text-lg" />
 
                                         <span>
                                             Download CV
@@ -928,9 +898,9 @@ export default function MainNavBar() {
                                 </div>
 
 
-                                {/* =================================================
+                                {/* =======================
                                     MOBILE ACTIONS
-                                ================================================== */}
+                                ======================== */}
 
                                 <div className="
                                     flex
@@ -939,13 +909,11 @@ export default function MainNavBar() {
                                     gap-2
                                 ">
 
-                                    {/* Mobile Theme */}
-
                                     <button
-                                        type="button"
                                         onClick={
                                             toggleTheme
                                         }
+
                                         className="
                                             w-9
                                             h-9
@@ -957,33 +925,28 @@ export default function MainNavBar() {
                                             transition-all
                                             duration-300
                                         "
+
                                         aria-label="Toggle theme"
                                     >
 
                                         {isDark ? (
 
-                                            <HiSun
-                                                className="
-                                                    text-lg
-                                                    text-yellow-400
-                                                "
-                                            />
+                                            <HiSun className="
+                                                text-lg
+                                                text-yellow-400
+                                            " />
 
                                         ) : (
 
-                                            <HiMoon
-                                                className="
-                                                    text-lg
-                                                    text-indigo-500
-                                                "
-                                            />
+                                            <HiMoon className="
+                                                text-lg
+                                                text-indigo-500
+                                            " />
 
                                         )}
 
                                     </button>
 
-
-                                    {/* Mobile Menu Button */}
 
                                     <DisclosureButton
                                         className="
@@ -1000,34 +963,26 @@ export default function MainNavBar() {
                                         "
                                     >
 
-                                        <span className="
-                                            sr-only
-                                        ">
-
+                                        <span className="sr-only">
                                             Open main menu
-
                                         </span>
 
 
                                         {open ? (
 
-                                            <XMarkIcon
-                                                className="
-                                                    block
-                                                    h-5
-                                                    w-5
-                                                "
-                                            />
+                                            <XMarkIcon className="
+                                                block
+                                                h-5
+                                                w-5
+                                            " />
 
                                         ) : (
 
-                                            <Bars3Icon
-                                                className="
-                                                    block
-                                                    h-5
-                                                    w-5
-                                                "
-                                            />
+                                            <Bars3Icon className="
+                                                block
+                                                h-5
+                                                w-5
+                                            " />
 
                                         )}
 
@@ -1040,9 +995,9 @@ export default function MainNavBar() {
                         </div>
 
 
-                        {/* =====================================================
+                        {/* ===============================
                             MOBILE MENU
-                        ====================================================== */}
+                        ================================ */}
 
                         <DisclosurePanel
                             className="
@@ -1075,32 +1030,15 @@ export default function MainNavBar() {
                                                 key={
                                                     item.name
                                                 }
-                                                as="a"
-                                                href={
-                                                    getHref(
+
+                                                as="button"
+
+                                                onClick={() =>
+                                                    handleNavigation(
                                                         item
                                                     )
                                                 }
-                                                onClick={(
-                                                    event
-                                                ) => {
 
-                                                    event.preventDefault();
-
-
-                                                    handleNavigation(
-                                                        item
-                                                    );
-
-                                                }}
-                                                aria-current={
-                                                    isActive &&
-                                                    item.type === 'route'
-
-                                                        ? 'page'
-
-                                                        : undefined
-                                                }
                                                 className={`
                                                     w-full
                                                     block
@@ -1143,18 +1081,17 @@ export default function MainNavBar() {
                                 )}
 
 
-                                {/* =================================================
-                                    MOBILE GAME
-                                ================================================== */}
+                                {/* GAME */}
 
                                 <DisclosureButton
                                     as="button"
-                                    type="button"
+
                                     onClick={() =>
                                         setShowGame(
                                             true
                                         )
                                     }
+
                                     className="
                                         w-full
                                         flex
@@ -1174,17 +1111,11 @@ export default function MainNavBar() {
                                     "
                                 >
 
-                                    <IoGameController
-                                        className="
-                                            text-lg
-                                        "
-                                    />
-
+                                    <IoGameController className="text-lg" />
 
                                     <span>
                                         Play Game
                                     </span>
-
 
                                     <span className="
                                         ml-auto
@@ -1203,13 +1134,15 @@ export default function MainNavBar() {
                                 </DisclosureButton>
 
 
-                                {/* =================================================
-                                    MOBILE CV
-                                ================================================== */}
+                                {/* CV */}
 
                                 <a
-                                    href={cvFile}
+                                    href={
+                                        cvFile
+                                    }
+
                                     download="Hossein-Alavi-CV.pdf"
+
                                     className="
                                         flex
                                         items-center
@@ -1228,12 +1161,7 @@ export default function MainNavBar() {
                                     "
                                 >
 
-                                    <HiDownload
-                                        className="
-                                            text-base
-                                        "
-                                    />
-
+                                    <HiDownload className="text-base" />
 
                                     <span>
                                         Download CV
@@ -1252,9 +1180,9 @@ export default function MainNavBar() {
             </Disclosure>
 
 
-            {/* =========================================================
-                GAME MODAL
-            ========================================================== */}
+            {/* =============================================
+                GAME
+            ============================================== */}
 
             {showGame && (
 
