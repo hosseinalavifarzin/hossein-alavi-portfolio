@@ -1,5 +1,5 @@
 {
-  "category": "problem-framing",
+  "category": "user-research",
   "featured": false,
   "author": "Hossein Alavi",
   "fa": {
@@ -12,5 +12,6 @@
     "body": ""
   },
   "slug": "product-design-diary-study",
-  "cover": "/blog/media/diary-study_-real-life-user-insights.webp"
+  "cover": "/blog/media/diary-study_-real-life-user-insights.webp",
+  "publishedAt": "2026-10-11"
 }
