@@ -1,1300 +1,724 @@
 import {
-
     useEffect,
-
     useMemo,
-
     useState
-
 } from 'react';
 
-
-
 import {
-
     Link,
-
     Navigate,
-
     useParams
-
 } from 'react-router-dom';
 
-
-
 import {
-
     HiArrowLeft,
-
     HiArrowRight,
-
     HiCalendar,
-
     HiClock,
-
     HiSearch,
-
     HiX
-
 } from 'react-icons/hi';
 
-
-
 import MainNavBar from '../../Component/MainNavBar/MainNavBar';
-
 import Footer from '../../Component/footer/Footer';
-
-
 
 import blogPosts from '../../generated/blogPosts.json';
 
-
-
 import {
-
     BLOG_CATEGORIES,
-
     getBlogCategoryLabel
-
 } from '../../data/blogCategories';
-
-
 
 import './Blog.css';
 
 
-
-
-
 const BASE_URL =
-
     'https://hosseinalavifarzin.ir';
 
 
-
+function normalizeSearchText(value = '') {
+    return String(value)
+        .normalize('NFKC')
+        .replace(/[\u064B-\u065F\u0670\u06D6-\u06ED]/g, '')
+        .replace(/[يى]/g, 'ی')
+        .replace(/ك/g, 'ک')
+        .replace(/[ۀة]/g, 'ه')
+        .replace(/[\u200C\u200D]/g, ' ')
+        .toLocaleLowerCase()
+        .replace(/\s+/g, ' ')
+        .trim();
+}
 
 
 function getReadTimeLabel(
-
     minutes,
-
     language
-
 ) {
-
     if (!minutes) {
-
         return '';
-
     }
-
-
 
     if (language === 'fa') {
-
         const number =
-
             new Intl.NumberFormat(
-
                 'fa-IR'
-
             ).format(
-
                 minutes
-
             );
 
-
-
         return `${number} دقیقه`;
-
     }
 
-
-
     return `${minutes} min`;
-
 }
-
-
-
 
 
 function formatDate(
-
     date,
-
     language
-
 ) {
-
     if (!date) {
-
         return '';
-
     }
-
-
 
     try {
-
         const value =
-
             new Date(
-
                 `${date}T00:00:00Z`
-
             );
 
-
-
         return new Intl.DateTimeFormat(
-
             language === 'fa'
-
                 ? 'fa-IR'
-
                 : 'en-US',
-
             {
-
                 year: 'numeric',
-
                 month: 'short',
-
                 day: 'numeric',
-
                 timeZone: 'UTC'
-
             }
-
         ).format(
-
             value
-
         );
-
     } catch (error) {
-
         return date;
-
     }
-
 }
-
-
-
 
 
 function setMeta(
-
     selector,
-
     attributes
-
 ) {
-
     let element =
-
         document.head.querySelector(
-
             selector
-
         );
-
-
 
     if (!element) {
-
         element =
-
             document.createElement(
-
                 'meta'
-
             );
-
-
 
         document.head.appendChild(
-
             element
-
         );
-
     }
 
-
-
     Object.entries(
-
         attributes
-
     ).forEach(
-
         ([key, value]) => {
-
             element.setAttribute(
-
                 key,
-
                 value
-
             );
-
         }
-
     );
-
 }
-
-
-
 
 
 function setCanonical(
-
     href
-
 ) {
-
     let canonical =
-
         document.head.querySelector(
-
             'link[rel="canonical"]'
-
         );
-
-
 
     if (!canonical) {
-
         canonical =
-
             document.createElement(
-
                 'link'
-
             );
 
-
-
         canonical.rel =
-
             'canonical';
 
-
-
         document.head.appendChild(
-
             canonical
-
         );
-
     }
 
-
-
     canonical.href =
-
         href;
-
 }
-
-
-
 
 
 function setLanguageAlternates() {
-
     document.head
-
         .querySelectorAll(
-
             'link[data-blog-index-hreflang="true"]'
-
         )
-
         .forEach(
-
             (element) => {
-
                 element.remove();
-
             }
-
         );
-
-
 
     const addAlternate = (
-
         language,
-
         href
-
     ) => {
-
         const link =
-
             document.createElement(
-
                 'link'
-
             );
 
-
-
         link.rel =
-
             'alternate';
 
-
-
         link.hreflang =
-
             language;
 
-
-
         link.href =
-
             href;
 
-
-
         link.setAttribute(
-
             'data-blog-index-hreflang',
-
             'true'
-
         );
-
-
 
         document.head.appendChild(
-
             link
-
         );
-
     };
 
-
-
     addAlternate(
-
         'en',
-
         `${BASE_URL}/blog/en/`
-
     );
 
-
-
     addAlternate(
-
         'fa',
-
         `${BASE_URL}/blog/fa/`
-
     );
-
-
 
     addAlternate(
-
         'x-default',
-
         `${BASE_URL}/blog/fa/`
-
     );
-
 }
-
-
-
 
 
 function BlogCard({
-
     post,
-
     language
-
 }) {
-
     const isPersian =
-
         language === 'fa';
 
-
-
     const content =
-
         post?.[language];
 
-
-
     if (!content) {
-
         return null;
-
     }
 
-
-
     const category =
-
         getBlogCategoryLabel(
-
             post.category,
-
             language
-
         );
 
-
-
     return (
-
         <article className="blog-card">
-
             <Link
-
                 to={`/blog/${language}/${post.slug}`}
-
                 className="blog-card-link"
-
             >
-
                 <div className="blog-card-media">
-
                     <div className="blog-card-image">
-
                         {post.cover ? (
-
                             <img
-
                                 src={post.cover}
-
                                 alt={content.title}
-
                                 loading="lazy"
-
                                 decoding="async"
-
                             />
-
                         ) : (
-
                             <div className="blog-card-placeholder">
-
                                 <span>
-
                                     H.
-
                                 </span>
-
                             </div>
-
                         )}
-
                     </div>
-
                 </div>
-
-
 
                 <div className="blog-card-content">
-
                     <div className="blog-card-meta">
-
                         <span className="blog-card-category">
-
                             <span
-
                                 className="blog-card-category-dot"
-
                                 aria-hidden="true"
-
                             />
 
-
-
                             <span>
-
                                 {category}
-
                             </span>
-
                         </span>
-
-
 
                         {content.readTimeMinutes && (
-
                             <span className="blog-card-read-time">
-
                                 <HiClock />
 
-
-
                                 <span>
-
                                     {getReadTimeLabel(
-
                                         content.readTimeMinutes,
-
                                         language
-
                                     )}
-
                                 </span>
-
                             </span>
-
                         )}
-
                     </div>
-
-
 
                     <h2 className="blog-card-title">
-
                         {content.title}
-
                     </h2>
 
-
-
                     {content.description && (
-
                         <p className="blog-card-description">
-
                             {content.description}
-
                         </p>
-
                     )}
 
-
-
                     <div className="blog-card-footer">
-
                         <div className="blog-card-footer-left">
-
                             {post.publishedAt && (
-
                                 <span className="blog-card-date">
-
                                     <HiCalendar />
 
-
-
                                     <span>
-
                                         {formatDate(
-
                                             post.publishedAt,
-
                                             language
-
                                         )}
-
                                     </span>
-
                                 </span>
-
                             )}
-
                         </div>
 
-
-
                         <span className="blog-card-action">
-
                             <span>
-
                                 {
-
                                     isPersian
-
                                         ? 'مطالعه مقاله'
-
                                         : 'Read article'
-
                                 }
-
                             </span>
-
-
 
                             <span className="blog-card-action-icon">
-
                                 {isPersian ? (
-
                                     <HiArrowLeft />
-
                                 ) : (
-
                                     <HiArrowRight />
-
                                 )}
-
                             </span>
-
                         </span>
-
                     </div>
-
                 </div>
-
             </Link>
-
         </article>
-
     );
-
 }
 
 
-
-
-
-
-
 function Blog() {
-
     const {
-
         language
-
     } = useParams();
 
-
-
     const validLanguage =
-
         language === 'fa' ||
-
         language === 'en';
 
-
-
     const isPersian =
-
         language === 'fa';
 
-
-
     const direction =
-
         isPersian
-
             ? 'rtl'
-
             : 'ltr';
 
-
-
     const [
-
         activeCategory,
-
         setActiveCategory
-
     ] = useState('all');
 
-
+    const [
+        searchInput,
+        setSearchInput
+    ] = useState('');
 
     const [
-
         searchQuery,
-
         setSearchQuery
-
     ] = useState('');
 
 
-
-
-
     const availablePosts =
-
         useMemo(
-
             () => {
-
                 if (!validLanguage) {
-
                     return [];
-
                 }
 
-
-
                 return blogPosts.filter(
-
                     (post) => {
-
                         const content =
-
                             post?.[language];
 
-
-
                         return Boolean(
-
                             content &&
-
                             content.enabled !== false &&
-
                             content.title
-
                         );
-
                     }
-
                 );
-
             },
-
             [
-
                 language,
-
                 validLanguage
-
             ]
-
         );
-
-
-
 
 
     const filteredPosts =
-
         useMemo(
-
             () => {
-
                 const normalizedSearch =
+                    normalizeSearchText(
+                        searchQuery
+                    );
 
-                    searchQuery
-
-                        .trim()
-
-                        .toLocaleLowerCase(
-
-                            isPersian
-
-                                ? 'fa-IR'
-
-                                : 'en-US'
-
-                        );
-
-
+                const searchTerms =
+                    normalizedSearch
+                        .split(' ')
+                        .filter(Boolean);
 
                 return availablePosts.filter(
-
                     (post) => {
+                        if (searchTerms.length > 0) {
+                            const content =
+                                post?.[language] || {};
 
-                        const categoryMatches =
+                            const category =
+                                getBlogCategoryLabel(
+                                    post.category,
+                                    language
+                                );
 
+                            const searchableText =
+                                normalizeSearchText(
+                                    [
+                                        content.title,
+                                        content.description,
+                                        content.body,
+                                        category
+                                    ]
+                                        .filter(Boolean)
+                                        .join(' ')
+                                );
+
+                            return searchTerms.every(
+                                (term) =>
+                                    searchableText.includes(
+                                        term
+                                    )
+                            );
+                        }
+
+                        return (
                             activeCategory === 'all' ||
-
-                            post.category ===
-
-                                activeCategory;
-
-
-
-                        if (!categoryMatches) {
-
-                            return false;
-
-                        }
-
-
-
-                        if (!normalizedSearch) {
-
-                            return true;
-
-                        }
-
-
-
-                        const content =
-
-                            post?.[language] || {};
-
-
-
-                        const category =
-
-                            getBlogCategoryLabel(
-
-                                post.category,
-
-                                language
-
-                            );
-
-
-
-                        const searchableText = [
-
-                            content.title,
-
-                            content.description,
-
-                            content.body,
-
-                            category
-
-                        ]
-
-                            .filter(Boolean)
-
-                            .join(' ')
-
-                            .toLocaleLowerCase(
-
-                                isPersian
-
-                                    ? 'fa-IR'
-
-                                    : 'en-US'
-
-                            );
-
-
-
-                        return searchableText.includes(
-
-                            normalizedSearch
-
+                            post.category === activeCategory
                         );
-
                     }
-
                 );
-
             },
-
             [
-
                 availablePosts,
-
                 activeCategory,
-
                 searchQuery,
-
-                language,
-
-                isPersian
-
+                language
             ]
-
         );
-
-
-
 
 
     const hasSearch =
-
         Boolean(
-
             searchQuery.trim()
-
         );
 
 
+    const submitSearch = (
+        event
+    ) => {
+        event.preventDefault();
 
+        const nextSearch =
+            searchInput.trim();
 
+        setSearchQuery(
+            nextSearch
+        );
 
-    const resetFilters = () => {
+        if (nextSearch) {
+            setActiveCategory(
+                'all'
+            );
+        }
 
-        setActiveCategory('all');
-
-        setSearchQuery('');
-
+        requestAnimationFrame(
+            () => {
+                document
+                    .getElementById(
+                        'blog-results'
+                    )
+                    ?.scrollIntoView({
+                        behavior:
+                            'smooth',
+                        block:
+                            'start'
+                    });
+            }
+        );
     };
 
 
+    const clearSearch = () => {
+        setSearchInput('');
+        setSearchQuery('');
+    };
 
+
+    const selectCategory = (
+        categoryId
+    ) => {
+        setActiveCategory(
+            categoryId
+        );
+
+        /*
+         * Search is global.
+         * Selecting a topic returns the page to category browsing.
+         */
+        setSearchInput('');
+        setSearchQuery('');
+    };
+
+
+    const resetFilters = () => {
+        setActiveCategory(
+            'all'
+        );
+
+        setSearchInput('');
+        setSearchQuery('');
+    };
 
 
     useEffect(
-
         () => {
-
-            setActiveCategory(
-
-                'all'
-
-            );
-
-
-
-            setSearchQuery(
-
-                ''
-
-            );
-
+            resetFilters();
         },
-
         [
-
             language
-
         ]
-
     );
 
 
-
-
-
     useEffect(
-
         () => {
-
             if (!validLanguage) {
-
                 return;
-
             }
-
-
 
             document.documentElement.lang =
-
                 language;
 
-
-
             document.documentElement.dir =
-
                 'ltr';
-
         },
-
         [
-
             language,
-
             validLanguage
-
         ]
-
     );
-
-
-
 
 
     useEffect(
-
         () => {
-
             if (!validLanguage) {
-
                 return;
-
             }
 
-
-
             const title =
-
                 isPersian
-
                     ? 'بلاگ طراحی محصول | حسین علوی'
-
                     : 'Product Design Blog | Hossein Alavi';
 
-
-
             const description =
-
                 isPersian
-
                     ? 'یادداشت‌ها و مقاله‌های حسین علوی درباره طراحی محصول، تحقیق کاربر، تعریف مسئله، تفکر محصول و سیستم‌های طراحی.'
-
                     : 'Articles and notes by Hossein Alavi about product design, user research, problem framing, product thinking, and design systems.';
 
-
-
             const canonical =
-
                 `${BASE_URL}/blog/${language}/`;
 
-
-
             document.title =
-
                 title;
 
-
-
             setCanonical(
-
                 canonical
-
             );
 
-
-
             setMeta(
-
                 'meta[name="description"]',
-
                 {
-
                     name:
-
                         'description',
 
-
-
                     content:
-
                         description
-
                 }
-
             );
 
-
-
             setMeta(
-
                 'meta[name="robots"]',
-
                 {
-
                     name:
-
                         'robots',
 
-
-
                     content:
-
                         'index, follow, max-image-preview:large'
-
                 }
-
             );
 
-
-
             setMeta(
-
                 'meta[property="og:type"]',
-
                 {
-
                     property:
-
                         'og:type',
 
-
-
                     content:
-
                         'website'
-
                 }
-
             );
 
-
-
             setMeta(
-
                 'meta[property="og:title"]',
-
                 {
-
                     property:
-
                         'og:title',
 
-
-
                     content:
-
                         title
-
                 }
-
             );
 
-
-
             setMeta(
-
                 'meta[property="og:description"]',
-
                 {
-
                     property:
-
                         'og:description',
 
-
-
                     content:
-
                         description
-
                 }
-
             );
 
-
-
             setMeta(
-
                 'meta[property="og:url"]',
-
                 {
-
                     property:
-
                         'og:url',
 
-
-
                     content:
-
                         canonical
-
                 }
-
             );
 
-
-
             setMeta(
-
                 'meta[name="twitter:card"]',
-
                 {
-
                     name:
-
                         'twitter:card',
 
-
-
                     content:
-
                         'summary_large_image'
-
                 }
-
             );
 
-
-
             setMeta(
-
                 'meta[name="twitter:title"]',
-
                 {
-
                     name:
-
                         'twitter:title',
 
-
-
                     content:
-
                         title
-
                 }
-
             );
-
-
 
             setMeta(
-
                 'meta[name="twitter:description"]',
-
                 {
-
                     name:
-
                         'twitter:description',
 
-
-
                     content:
-
                         description
-
                 }
-
             );
 
-
-
             setLanguageAlternates();
-
         },
-
         [
-
             language,
-
             validLanguage,
-
             isPersian
-
         ]
-
     );
-
-
-
 
 
     if (!validLanguage) {
-
         return (
-
             <Navigate
-
                 to="/blog/fa"
-
                 replace
-
             />
-
         );
-
     }
-
-
-
 
 
     return (
         <main className="blog-page min-h-screen bg-theme-primary">
-            <div lang="en" dir="ltr">
+            <div
+                lang="en"
+                dir="ltr"
+            >
                 <MainNavBar />
             </div>
 
@@ -1312,24 +736,20 @@ function Blog() {
                         <div className="max-w-6xl mx-auto">
                             <form
                                 className="blog-search blog-hero-search"
-                                onSubmit={(event) => {
-                                    event.preventDefault();
-
-                                    document
-                                        .getElementById('blog-results')
-                                        ?.scrollIntoView({
-                                            behavior: 'smooth',
-                                            block: 'start'
-                                        });
-                                }}
+                                onSubmit={
+                                    submitSearch
+                                }
                             >
                                 <input
                                     type="search"
-                                    value={searchQuery}
-                                    onChange={(event) =>
-                                        setSearchQuery(
-                                            event.target.value
-                                        )
+                                    value={
+                                        searchInput
+                                    }
+                                    onChange={
+                                        (event) =>
+                                            setSearchInput(
+                                                event.target.value
+                                            )
                                     }
                                     placeholder={
                                         isPersian
@@ -1343,12 +763,12 @@ function Blog() {
                                     }
                                 />
 
-                                {hasSearch && (
+                                {searchInput && (
                                     <button
                                         type="button"
                                         className="blog-search-clear"
-                                        onClick={() =>
-                                            setSearchQuery('')
+                                        onClick={
+                                            clearSearch
                                         }
                                         aria-label={
                                             isPersian
@@ -1369,11 +789,16 @@ function Blog() {
                                             : 'Search'
                                     }
                                 >
-                                    <HiSearch aria-hidden="true" />
+                                    <HiSearch
+                                        aria-hidden="true"
+                                    />
+
                                     <span>
-                                        {isPersian
-                                            ? 'جستجو'
-                                            : 'Search'}
+                                        {
+                                            isPersian
+                                                ? 'جستجو'
+                                                : 'Search'
+                                        }
                                     </span>
                                 </button>
                             </form>
@@ -1390,18 +815,25 @@ function Blog() {
                                 {BLOG_CATEGORIES.map(
                                     (category) => {
                                         const active =
-                                            activeCategory === category.id;
+                                            activeCategory ===
+                                            category.id &&
+                                            !hasSearch;
 
                                         return (
                                             <button
-                                                key={category.id}
+                                                key={
+                                                    category.id
+                                                }
                                                 type="button"
                                                 role="tab"
-                                                aria-selected={active}
-                                                onClick={() =>
-                                                    setActiveCategory(
-                                                        category.id
-                                                    )
+                                                aria-selected={
+                                                    active
+                                                }
+                                                onClick={
+                                                    () =>
+                                                        selectCategory(
+                                                            category.id
+                                                        )
                                                 }
                                                 className={`blog-topic-tab ${
                                                     active
@@ -1410,7 +842,12 @@ function Blog() {
                                                 }`}
                                             >
                                                 <span className="blog-topic-tab-label">
-                                                    {category[language] || category.en}
+                                                    {
+                                                        category[
+                                                            language
+                                                        ] ||
+                                                        category.en
+                                                    }
                                                 </span>
                                             </button>
                                         );
@@ -1432,9 +869,15 @@ function Blog() {
                                     {filteredPosts.map(
                                         (post) => (
                                             <BlogCard
-                                                key={post.slug}
-                                                post={post}
-                                                language={language}
+                                                key={
+                                                    post.slug
+                                                }
+                                                post={
+                                                    post
+                                                }
+                                                language={
+                                                    language
+                                                }
                                             />
                                         )
                                     )}
@@ -1447,24 +890,40 @@ function Blog() {
                                     />
 
                                     <h3>
-                                        {isPersian
-                                            ? 'مطلبی پیدا نشد'
-                                            : 'No articles found'}
+                                        {
+                                            hasSearch
+                                                ? (
+                                                    isPersian
+                                                        ? 'مطلبی برای این جستجو پیدا نشد'
+                                                        : 'No articles matched your search'
+                                                )
+                                                : (
+                                                    isPersian
+                                                        ? 'مطلبی پیدا نشد'
+                                                        : 'No articles found'
+                                                )
+                                        }
                                     </h3>
 
                                     <p>
-                                        {isPersian
-                                            ? 'عبارت دیگری را امتحان کن یا فیلترها را پاک کن.'
-                                            : 'Try another phrase or clear the current filters.'}
+                                        {
+                                            isPersian
+                                                ? 'عبارت دیگری را امتحان کن یا فیلترها را پاک کن.'
+                                                : 'Try another phrase or clear the current filters.'
+                                        }
                                     </p>
 
                                     <button
                                         type="button"
-                                        onClick={resetFilters}
+                                        onClick={
+                                            resetFilters
+                                        }
                                     >
-                                        {isPersian
-                                            ? 'پاک کردن فیلترها'
-                                            : 'Clear filters'}
+                                        {
+                                            isPersian
+                                                ? 'پاک کردن فیلترها'
+                                                : 'Clear filters'
+                                        }
                                     </button>
                                 </div>
                             )}
@@ -1473,16 +932,15 @@ function Blog() {
                 </section>
             </div>
 
-            <div lang="en" dir="ltr">
+            <div
+                lang="en"
+                dir="ltr"
+            >
                 <Footer />
             </div>
         </main>
     );
-
 }
-
-
-
 
 
 export default Blog;
